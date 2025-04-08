@@ -12,6 +12,7 @@
   --tamaña-bold: bold;
   --tamaño-regular: 500;
   --tamaño-black: 900;
+  --sombra: 0px 4px 3px rgba(1, 0, 0, 0.165);
 }
 
 .wrapper {
@@ -40,4 +41,5 @@
   background: var(--naranja);
   color: var(--blanco);
   font-weight: var(--tamaña-bold);
+  box-shadow: var(--sombra);
 }
