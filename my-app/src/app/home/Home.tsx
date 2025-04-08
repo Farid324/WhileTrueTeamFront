@@ -5,15 +5,30 @@ import Navbar from '../components/navbar/Navbar';
 import FiltersBar from '../components/filters/FiltersBar';
 import Footer from '../components/footer/Footer';
 import LoginModal from '../components/auth/LoginModal';
+import PasswordRecoveryModal from '../components/auth/PasswordRecoveryModal';
+import CodeVerificationModal from '../components/auth/CodeVerificationModal';
 import styles from './Home.module.css';
 
 export default function Home() {
-  const [mostrarModal, setMostrarModal] = useState(false);
+  // Controla qué modal se debe mostrar
+  const [modalState, setModalState] = useState<'login' | 'passwordRecovery' | 'codeVerification' | null>(null);
+
+  const handleLoginSubmit = () => {
+    setModalState('passwordRecovery');
+  };
+
+  const handlePasswordRecoverySubmit = () => {
+    setModalState('codeVerification');
+  };
+
+  const handleClose = () => {
+    setModalState(null);
+  };
 
   return (
     <div className={styles.container}>
       <header className={styles.headerTop}>
-        <Navbar onLoginClick={() => setMostrarModal(true)} />
+        <Navbar onLoginClick={() => setModalState('login')} />
       </header>
 
       <header className={styles.headerFilters}>
@@ -30,7 +45,10 @@ export default function Home() {
         <Footer />
       </footer>
 
-      {mostrarModal && <LoginModal onClose={() => setMostrarModal(false)} />}
+      {/* Mostrar los modales según el estado */}
+      {modalState === 'login' && <LoginModal onClose={handleClose} onLoginSubmit={handleLoginSubmit} />}
+      {modalState === 'passwordRecovery' && <PasswordRecoveryModal onClose={handleClose} onPasswordRecoverySubmit={handlePasswordRecoverySubmit} />}
+      {modalState === 'codeVerification' && <CodeVerificationModal onClose={handleClose} />}
     </div>
   );
 }
