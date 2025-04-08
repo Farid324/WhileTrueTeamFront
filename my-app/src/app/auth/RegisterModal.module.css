@@ -55,7 +55,7 @@
 .button {
   width: 100%;
   padding: 0.8rem;
-  background-color: #22333B;
+  background-color: hsl(37, 98%, 53%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -98,4 +98,24 @@
 .input:focus {
   outline: none;
   border-color: #5E503F;
+}
+.form label {
+  color: black;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #11295B; /* nuevo borde azul oscuro */
+  border-radius: 8px; /* más redondeado */
+  font-size: 0.95rem;
+  color: #333; /* color del texto del input */
+}
+
+.input::placeholder {
+  color: #555; /* gris oscuro para placeholder */
 }

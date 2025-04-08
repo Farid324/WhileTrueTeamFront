@@ -5,27 +5,47 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
     <div className={styles.overlay}>
       <div className={styles.modal}>
         <h2>Registrarse</h2>
-        
-        {/* Botón de registro con Google */}
-        <button className={styles.socialButton}>
-          <span className={styles.googleIcon}>G</span>
-          Registrarse con Google
-        </button>
 
-        <div className={styles.separator}>o</div>
+        <form action="/api/register" method="POST" className={styles.form}>
+          <label htmlFor="name">Nombre completo</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Nombre completo"
+            className={styles.input}
+            required
+          />
 
-        <div className={styles.terms}>
-          <input type="checkbox" id="terms" />
-          <label htmlFor="terms">He leído y acepto los Términos y condiciones</label>
-        </div>
+          <label htmlFor="email">Correo electrónico</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Correo electrónico"
+            className={styles.input}
+            required
+          />
 
-        <button className={styles.registerButton}>Registrarse</button>
+          <label htmlFor="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Contraseña"
+            className={styles.input}
+            required
+          />
 
-        <div className={styles.loginPrompt}>
-          ¿Ya tienes una cuenta? <button className={styles.loginLink}>Iniciar sesión</button>
-        </div>
+          <div className={styles.terms}>
+            <input type="checkbox" id="terms" name="terms" required />
+            <label htmlFor="terms">He leído y acepto los Términos y condiciones</label>
+          </div>
 
-        <button className={styles.close} onClick={onClose}>Cerrar</button>
+          <button type="submit" className={styles.button}>Registrarse</button>
+        </form>
+
+        <button className={styles.close} onClick={onClose}>✕</button>
       </div>
     </div>
   );
