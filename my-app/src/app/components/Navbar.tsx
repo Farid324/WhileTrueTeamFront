@@ -1,7 +1,11 @@
-// === src/app/components/Navbar.tsx ===
 import styles from './Navbar.module.css';
 
-export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
+interface NavbarProps {
+  onLoginClick: () => void;
+  onRegisterClick: () => void;
+}
+
+export default function Navbar({ onLoginClick, onRegisterClick }: NavbarProps) {
   return (
     <div className={styles.navbarWrapper}>
       <nav className={styles.navbar}>
@@ -11,10 +15,9 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
           <button>Botón1</button>
           <button>Botón1</button>
           <button>Botón1</button>
-          <button>Botón1</button>
         </div>
         <div className={styles.auth}>
-          <button className={styles.register}>Registrarse</button>
+          <button className={styles.register} onClick={onRegisterClick}>Registrarse</button>
           <button className={styles.login} onClick={onLoginClick}>Iniciar Sesión</button>
         </div>
       </nav>

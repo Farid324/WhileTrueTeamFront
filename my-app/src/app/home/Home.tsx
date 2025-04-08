@@ -1,19 +1,22 @@
 'use client';
-
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import FiltersBar from '../components/FiltersBar';
 import Footer from '../components/Footer';
 import LoginModal from './LoginModal';
 import styles from './Home.module.css';
+import RegisterModal from '../auth/RegisterModal';
 
 export default function Home() {
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
 
   return (
     <div className={styles.container}>
       <header className={styles.headerTop}>
-        <Navbar onLoginClick={() => setMostrarModal(true)} />
+        <Navbar 
+          onLoginClick={() => setActiveModal('login')}
+          onRegisterClick={() => setActiveModal('register')}
+        />
       </header>
 
       <header className={styles.headerFilters}>
@@ -30,7 +33,13 @@ export default function Home() {
         <Footer />
       </footer>
 
-      {mostrarModal && <LoginModal onClose={() => setMostrarModal(false)} />}
+      {activeModal === 'login' && (
+        <LoginModal onClose={() => setActiveModal(null)} />
+      )}
+
+      {activeModal === 'register' && (
+        <RegisterModal onClose={() => setActiveModal(null)} />
+      )}
     </div>
   );
 }
