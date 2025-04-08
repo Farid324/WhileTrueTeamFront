@@ -1,31 +1,9 @@
-/*import styles from './FiltersBar.module.css';
-
-export default function FiltersBar() {
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.scrollContainer}>
-        <span className={styles.active}>Filtro 1</span>
-        <span>Filtro 1</span>
-        <span>Filtro 1</span>
-        <span>Filtro 1</span>
-        <span>Filtro 1</span>
-        <span>Filtro 1</span>
-        <span>Filtro 1</span>
-       
-      </div>
-      <div className={styles.controls}>
-        <button className={styles.arrow}>&gt;</button>
-        <button className={styles.filtros}>Filtros</button>
-      </div>
-    </div>
-  );
-} */
-  import styles from './FiltersBar.module.css';
+import styles from './FiltersBar.module.css';
 
   export default function FiltersBar() {
     return (
-      <div className={`${styles.wrapper} flex justify-around items-center px-4 py-2 shadow-sm`}>
-        <div className="flex gap-16 overflow-x-auto scrollbar-hide">
+      <div className={`${styles.wrapper} flex justify-center items-center px-4 py-2 shadow-sm`}>
+        <div className="flex gap-16 overflow-x-auto scrollbar-hide text-[rgba(0,0,0,0.64)]">
           <span className={`${styles.active} cursor-pointer whitespace-nowrap`}>Filtro 1</span>
           <span className="cursor-pointer whitespace-nowrap">Filtro 1</span>
           <span className="cursor-pointer whitespace-nowrap">Filtro 1</span>
