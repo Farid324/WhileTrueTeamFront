@@ -159,6 +159,20 @@ export default function Services() {
                 bolivianos con jurisdicción en la ciudad de La Paz.
               </p>
             </section>
+
+            <section className={styles.serviceSection}>
+              <h2>Contacto</h2>
+              <p>
+                Si tienes consultas, sugerencias o deseas reportar un problema, puedes comunicarte con nosotros a través
+                de los siguientes medios oficiales:
+              </p>
+              <ul className={styles.features}>
+                <li>📧 Correo: soporte@redibo.com.bo</li>
+                <li>📞 WhatsApp: (+591) 70000000</li>
+                <li>📍 Dirección: America, Edificio REDIBO, Cochabamba - Bolivia</li>
+                <li>🕓 Horario: Lunes a viernes de 08:30 a 18:30</li>
+              </ul>
+            </section>
           </div>
         </div>
       </main>
