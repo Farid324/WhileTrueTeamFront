@@ -106,6 +106,22 @@ export default function Services() {
                 <li>Gestión de incidentes</li>
               </ul>
             </section>
+
+            <section className={styles.serviceSection}>
+              <h2>Cancelaciones y Reembolsos</h2>
+              <p>
+                En REDIBO entendemos que pueden surgir imprevistos. Por ello, ofrecemos políticas claras de cancelación.
+                Los Renters pueden cancelar sus reservas hasta 48 horas antes del inicio del alquiler con un reembolso
+                completo, excluyendo la comisión de servicio. Cancelaciones dentro de las 48 horas previas recibirán
+                un 50% de reembolso, y si la cancelación ocurre en las últimas 12 horas, no se otorgará reembolso salvo
+                casos justificados como emergencias verificadas.
+              </p>
+              <p>
+                Los Hosts también deben actuar con responsabilidad. Si cancelan sin motivo justificado, pueden recibir
+                sanciones como menor visibilidad en la plataforma o suspensión. Los reembolsos se procesan en un plazo
+                de 3 a 7 días hábiles, dependiendo del método de pago utilizado.
+              </p>
+            </section>
           </div>
         </div>
       </main>
