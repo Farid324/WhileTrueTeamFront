@@ -22,19 +22,36 @@ export default function Services() {
         </div>
       </header>
 
+      <header className={styles.headerFilters}>
+        <div className={styles.filtersContainer}>
+          <div className={styles.filters}>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+            <span className={styles.filterItem}>Filtro 1</span>
+          </div>
+          <button className={styles.filtersButton}>Filtros</button>
+        </div>
+      </header>
 
       <main className={styles.main}>
         <div className={styles.contentLayout}>
           <aside className={styles.sidebar}>
             <ul className={styles.menu}>
-              <li className={styles.menuItem}>Catálogo de Servicios</li>
-              <li className={styles.menuItem}>Alquiler de Vehículos</li>
-              <li className={styles.menuItem}>Administración de Flota</li>
-              <li className={styles.menuItem}>Seguros y Asistencia</li>
-              <li className={styles.menuItem}>Mantenimiento</li>
-              <li className={styles.menuItem}>Servicios Premium</li>
-              <li className={styles.menuItem}>Soporte Técnico</li>
-              <li className={styles.menuItem}>Preguntas Frecuentes</li>
+              <li className={styles.menuItem}>Introducción</li>
+              <li className={styles.menuItem}>Registro y Cuenta</li>
+              <li className={styles.menuItem}>Obligaciones del Host</li>
+              <li className={styles.menuItem}>Obligaciones del renter</li>
+              <li className={styles.menuItem}>Pagos y Comisiones</li>
+              <li className={styles.menuItem}>Cancelaciones y Reembolsos</li>
+              <li className={styles.menuItem}>Seguro y Responsabilidad</li>
+              <li className={styles.menuItem}>Conducta prohibida</li>
+              <li className={styles.menuItem}>Ley Aplicable y Resolución de conflictos</li>
+              <li className={styles.menuItem}>Contacto</li>
             </ul>
           </aside>
           
