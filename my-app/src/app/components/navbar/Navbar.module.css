@@ -12,6 +12,13 @@
   --tamaño-regular: 500;
   --tamaño-black: 900;
   --sombra: 0px 4px 3px rgba(1, 0, 0, 0.165);
+  --width: 33rem;
+  --height: 28.43rem;
+  --H1: 2.488rem;
+  --H2: 2.074rem;
+  --H3: 1.728rem;
+  --H4: 1.44rem;
+  --H5: 1.2rem;
 }
 
 .navbarWrapper {
