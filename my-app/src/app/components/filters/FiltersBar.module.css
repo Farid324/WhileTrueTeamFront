@@ -1,20 +1,3 @@
-
-:root {
-  --negro: #000000;
-  --azul-oscuro: #11295B;
-  --naranja: #FCA311;
-  --naranja-46: rgba(252, 163, 17, 0.46);
-  --hueso: #E4D5C1;
-  --blanco: #FFFFFF;
-  --rojo: #F85959;
-  --verde: #219653;
-  --fuente-principal: 'Inter', sans-serif;
-  --tamaña-bold: bold;
-  --tamaño-regular: 500;
-  --tamaño-black: 900;
-  --sombra: 0px 4px 3px rgba(1, 0, 0, 0.165);
-}
-
 .wrapper {
   background: var(--blanco);
   font-family: var(--fuente-principal);

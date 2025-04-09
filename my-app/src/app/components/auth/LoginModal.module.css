@@ -1,31 +1,12 @@
-:root {
-  --negro: #000000;
-  --azul-oscuro: #11295B;
-  --naranja: #FCA311;
-  --naranja-46: rgba(252, 163, 17, 0.46);
-  --hueso: #E4D5C1;
-  --blanco: #FFFFFF;
-  --rojo: #F85959;
-  --verde: #219653;
-  --fuente-principal: 'Inter', sans-serif;
-  --tamaña-bold: bold;
-  --tamaño-regular: 500;
-  --tamaño-black: 900;
-  --sombra: 0px 4px 3px rgba(1, 0, 0, 0.165);
-  --H1: 2.488rem;
-  --H2: 2.074rem;
-  --H3: 1.728rem;
-  --H4: 1.44rem;
-  --H5: 1.2rem;
-}
 
+/*
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +17,7 @@
   background: var(--blanco);
   padding: 2.5rem;
   border-radius: 35px;
-  width: 33rem;
+  width: 34rem;
   height: auto;
   box-shadow: 0 0px 20px rgba(0, 0, 0, 0.72);
 }
@@ -69,35 +50,47 @@
   text-transform: uppercase;
 }
 
-.textofuera {
-  margin-bottom: 2rem;
-  border: 2px solid var(--azul-oscuro);
+.inputBase {
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--negro);
   border-radius: 0.5rem;
   display: flex;
-  flex-direction: column;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-.textoinputfuera {
+.iconoCorreo {
+  color: var(--azul-oscuro);
+  width: 30px;
+  height: 30px;
+  margin: 1rem 0 1rem 1rem;
+
+}
+.textoCC {
   font-family: var(--fuente-principal);
   color: var(--azul-oscuro);
   font-size: 0.8rem;
   font-weight: var(--tamaña-bold);
-  text-indent: 2rem;
-  
+  text-indent: 1rem;
+  margin-top: 0.5rem;
 }
 
+.iconoContrasena {
+  color: var(--azul-oscuro);
+  width: 30px;
+  height: 30px;
+  margin: 1rem 0 1rem 1rem;
+
+}
 .input {
   width: 100%;
   height: 1rem;
   padding: 1rem;
   border-radius: 0.5rem;
-  /*border: 1.5px solid black;*/
-  font-size: 0.95rem;
+  //font-size: 0.95rem;
   font-family: var(--fuente-principal);
   font-weight: var(--tamaña-bold);
   color: var(--azul-oscuro);
   outline: none;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
 }
 
 .input::placeholder {
@@ -108,26 +101,52 @@
 
 .button {
   width: 100%;
-  padding: 0.9rem;
-  background-color: var(--naranja-46);
-  color: white;
+  padding: 1.0rem;
+  background-color: rgba(252, 163, 17, 0.5);
+  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.25);
+  color: var(--blanco);
   border: none;
-  border-radius: 2rem;
-  font-size: 1.1rem;
-  font-family: var(--fuente-principal);
-  font-weight: var(--tamaña-bold);
-  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 40px;
   cursor: pointer;
   margin-top: 1rem;
 }
 
 .close {
+  color: var(--azul-oscuro);
+  width: 100%;
+  cursor: pointer;
+  font-weight: var(--tamaño-black);
+  height: 30;
+  display: block;
+  margin-left: auto;
+  width: fit-content;
+}
+
+.recuperarContrasena {
   background: none;
   border: none;
-  color: #555;
+  color: var(--azul-oscuro);
   text-decoration: underline;
   cursor: pointer;
   width: 100%;
-  font-family: var(--fuente-principal);
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  transition: color 0.2s;
 }
+.recuperarContrasena:hover {
+  color: var(--naranja);
+}
+
+.text1 {
+  text-align: center;
+  color: var(--azul-oscuro);
+}
+.registrarse {
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.registrarse:hover {
+  color: var(--naranja);
+}
+*/
