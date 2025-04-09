@@ -122,6 +122,20 @@ export default function Services() {
                 de 3 a 7 días hábiles, dependiendo del método de pago utilizado.
               </p>
             </section>
+
+            <section className={styles.serviceSection}>
+              <h2>Seguro y Responsabilidad</h2>
+              <p>
+                Todos los vehículos publicados en REDIBO deben contar con SOAT vigente. Además, recomendamos a los Hosts
+                contar con seguro complementario contra daños y robos. El Renter es responsable por el uso correcto del
+                vehículo y debe respetar todas las normativas de tránsito vigentes en Bolivia.
+              </p>
+              <p>
+                En caso de accidente, el Renter debe reportar inmediatamente a Tránsito, al Host y a REDIBO. La
+                responsabilidad financiera ante daños será evaluada según el informe oficial y el tipo de seguro
+                contratado por el Host. REDIBO actúa como intermediario, pero no cubre daños ni actúa como aseguradora.
+              </p>
+            </section>
           </div>
         </div>
       </main>
