@@ -149,6 +149,16 @@ export default function Services() {
                 y en casos graves será reportado a las autoridades competentes del Estado Plurinacional de Bolivia.
               </p>
             </section>
+
+            <section className={styles.serviceSection}>
+              <h2>Ley Aplicable y Resolución de Conflictos</h2>
+              <p>
+                Estos Términos y Condiciones se rigen por la normativa vigente en Bolivia, en especial el Código Civil
+                y la Ley General de Transporte. Ante cualquier disputa, REDIBO fomentará la resolución mediante
+                mediación. Si no se llega a un acuerdo, el caso podrá ser presentado ante los tribunales ordinarios
+                bolivianos con jurisdicción en la ciudad de La Paz.
+              </p>
+            </section>
           </div>
         </div>
       </main>
