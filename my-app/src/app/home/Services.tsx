@@ -6,8 +6,8 @@ export default function Services() {
   return (
     <div className={styles.container}>
       <header className={styles.headerTop}>
-        <div className={styles.logo}>REDIBO</div>
-        <nav className={styles.navigation}>
+        <div className={styles.navigation}>
+          <div className={styles.logo}>REDIBO</div>
           <div className={styles.buttons}>
             <button className={styles.navButton}>Botón1</button>
             <button className={styles.navButton}>Botón1</button>
@@ -16,14 +16,10 @@ export default function Services() {
             <button className={styles.navButton}>Botón1</button>
           </div>
           <div className={styles.authButtons}>
-            <Link href="/registro">
-              <button className={styles.registerButton}>Registrarse</button>
-            </Link>
-            <Link href="/login">
-              <button className={styles.loginButton}>Iniciar Sesión</button>
-            </Link>
+            <button className={styles.registerButton}>Registrarse</button>
+            <button className={styles.loginButton}>Iniciar Sesión</button>
           </div>
-        </nav>
+        </div>
       </header>
 
       <header className={styles.headerFilters}>
@@ -46,14 +42,16 @@ export default function Services() {
         <div className={styles.contentLayout}>
           <aside className={styles.sidebar}>
             <ul className={styles.menu}>
-              <li className={styles.menuItem}>Catálogo de Servicios</li>
-              <li className={styles.menuItem}>Alquiler de Vehículos</li>
-              <li className={styles.menuItem}>Administración de Flota</li>
-              <li className={styles.menuItem}>Seguros y Asistencia</li>
-              <li className={styles.menuItem}>Mantenimiento</li>
-              <li className={styles.menuItem}>Servicios Premium</li>
-              <li className={styles.menuItem}>Soporte Técnico</li>
-              <li className={styles.menuItem}>Preguntas Frecuentes</li>
+              <li className={styles.menuItem}>Introducción</li>
+              <li className={styles.menuItem}>Registro y Cuenta</li>
+              <li className={styles.menuItem}>Obligaciones del Host</li>
+              <li className={styles.menuItem}>Obligaciones del renter</li>
+              <li className={styles.menuItem}>Pagos y Comisiones</li>
+              <li className={styles.menuItem}>Cancelaciones y Reembolsos</li>
+              <li className={styles.menuItem}>Seguro y Responsabilidad</li>
+              <li className={styles.menuItem}>Conducta prohibida</li>
+              <li className={styles.menuItem}>Ley Aplicable y Resolución de conflictos</li>
+              <li className={styles.menuItem}>Contacto</li>
             </ul>
           </aside>
           
@@ -115,11 +113,9 @@ export default function Services() {
       </main>
       
       <footer className={styles.footer}>
-        <div className={styles.termsContainer}>
-          <Link href="/terminos">
-            <span className={styles.footerLink}>Términos y condiciones</span>
-          </Link>
-        </div>
+        <Link href="/terminos">
+          <span className={styles.footerLink}>Términos y condiciones</span>
+        </Link>
       </footer>
     </div>
   );
