@@ -136,6 +136,19 @@ export default function Services() {
                 contratado por el Host. REDIBO actúa como intermediario, pero no cubre daños ni actúa como aseguradora.
               </p>
             </section>
+            
+            <section className={styles.serviceSection}>
+              <h2>Conducta Prohibida</h2>
+              <p>
+                Para asegurar una experiencia segura, REDIBO prohíbe estrictamente las siguientes conductas:
+                uso de información falsa, uso de vehículos para fines ilícitos, daño intencional al vehículo,
+                conducta ofensiva hacia otros usuarios, y evasión de pagos o políticas.
+              </p>
+              <p>
+                Cualquier usuario que infrinja estas normas puede ser suspendido temporal o permanentemente,
+                y en casos graves será reportado a las autoridades competentes del Estado Plurinacional de Bolivia.
+              </p>
+            </section>
           </div>
         </div>
       </main>
