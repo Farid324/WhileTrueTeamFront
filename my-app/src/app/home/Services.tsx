@@ -6,8 +6,8 @@ export default function Services() {
   return (
     <div className={styles.container}>
       <header className={styles.headerTop}>
-        <div className={styles.logo}>REDIBO</div>
-        <nav className={styles.navigation}>
+        <div className={styles.navigation}>
+          <div className={styles.logo}>REDIBO</div>
           <div className={styles.buttons}>
             <button className={styles.navButton}>Botón1</button>
             <button className={styles.navButton}>Botón1</button>
@@ -16,14 +16,10 @@ export default function Services() {
             <button className={styles.navButton}>Botón1</button>
           </div>
           <div className={styles.authButtons}>
-            <Link href="/registro">
-              <button className={styles.registerButton}>Registrarse</button>
-            </Link>
-            <Link href="/login">
-              <button className={styles.loginButton}>Iniciar Sesión</button>
-            </Link>
+            <button className={styles.registerButton}>Registrarse</button>
+            <button className={styles.loginButton}>Iniciar Sesión</button>
           </div>
-        </nav>
+        </div>
       </header>
 
       <header className={styles.headerFilters}>
@@ -115,11 +111,9 @@ export default function Services() {
       </main>
       
       <footer className={styles.footer}>
-        <div className={styles.termsContainer}>
-          <Link href="/terminos">
-            <span className={styles.footerLink}>Términos y condiciones</span>
-          </Link>
-        </div>
+        <Link href="/terminos">
+          <span className={styles.footerLink}>Términos y condiciones</span>
+        </Link>
       </footer>
     </div>
   );
