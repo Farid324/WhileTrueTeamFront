@@ -148,14 +148,15 @@ export default function Services() {
             <section className={styles.serviceSection}>
               <h2>Contacto</h2>
               <p>
-                Si tienes consultas, sugerencias o deseas reportar un problema, puedes comunicarte con nosotros a través
-                de los siguientes medios oficiales:
+                Si tienes consultas, sugerencias o deseas reportar un problema, puedes comunicarte con nosotros a través de los siguientes medios oficiales:
               </p>
               <ul className={styles.features}>
-                <li>📧 Correo: soporte@redibo.com.bo</li>
-                <li>📞 WhatsApp: (+591) 70000000</li>
-                <li>📍 Dirección: America, Edificio REDIBO, Cochabamba - Bolivia</li>
-                <li>🕓 Horario: Lunes a viernes de 08:30 a 18:30</li>
+                <li>📧 Correo: <a href="mailto:soporte@redibo.com.bo">soporte@redibo.com.bo</a></li>
+                <li>📞 WhatsApp: <a href="https://wa.me/59170000000" target="_blank" rel="noopener noreferrer">(+591) 70000000</a></li>
+                <li>📍 Dirección: <a href="https://www.google.com/maps?q=Edificio+REDIBO,+Cochabamba,+Bolivia" target="_blank" rel="noopener noreferrer">
+                  America, Edificio REDIBO, Cochabamba - Bolivia</a>
+                </li>
+                <li>⏰ Horario: Lunes a viernes de 08:30 a 18:30</li>
               </ul>
             </section>
           </div>
