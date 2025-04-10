@@ -7,7 +7,7 @@ import Footer from '../components/footer/Footer';
 import LoginModal from '../components/auth/LoginModal';
 import styles from './Home.module.css';
 
-export default function Home() {
+export default function HomePage() {
   const [mostrarModal, setMostrarModal] = useState(false);
 
   return (
