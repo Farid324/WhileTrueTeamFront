@@ -22,21 +22,6 @@ export default function Services() {
         </div>
       </header>
 
-      <header className={styles.headerFilters}>
-        <div className={styles.filtersContainer}>
-          <div className={styles.filters}>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-            <span className={styles.filterItem}>Filtro 1</span>
-          </div>
-          <button className={styles.filtersButton}>Filtros</button>
-        </div>
-      </header>
 
       <main className={styles.main}>
         <div className={styles.contentLayout}>
