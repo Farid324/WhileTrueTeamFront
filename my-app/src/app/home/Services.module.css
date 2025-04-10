@@ -242,6 +242,7 @@
 .introduction {
   line-height: 1.6;
   margin-bottom: 2rem;
+  color: var(--negro);
 }
 
 .serviceSection {
@@ -256,6 +257,7 @@
 .serviceSection p {
   line-height: 1.6;
   margin-bottom: 1rem;
+  color: var(--negro);
 }
 
 .features {
@@ -266,6 +268,7 @@
 
 .features li {
   margin-bottom: 0.5rem;
+  color: var(--negro); 
 }
 
 /* Footer */
@@ -315,6 +318,7 @@
 .termSection p {
   line-height: 1.6;
   margin-bottom: 1rem;
+  color: var(--negro);
 }
 
 /* Responsive Adjustments */
