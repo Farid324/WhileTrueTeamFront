@@ -2,7 +2,7 @@
 
 import styles from './CodeVerificationModal.module.css';
 
-const CodeVerificationModal = ({ onClose }: { onClose: () => void }) => {
+const CodeVerificationModal = ({ onClose, onCodeVerificationSubmit }: { onClose: () => void, onCodeVerificationSubmit: () => void  }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -12,7 +12,7 @@ const CodeVerificationModal = ({ onClose }: { onClose: () => void }) => {
 
         <input className={styles.input} type="text" placeholder="___ ___ ___ ___ ___ ___" maxLength={6} />
 
-        <button className={styles.button}>Siguiente</button>
+        <button className={styles.button} onClick={onCodeVerificationSubmit}>Siguiente</button>
         <button className={styles.close} onClick={onClose}>Atras</button>
       </div>
     </div>

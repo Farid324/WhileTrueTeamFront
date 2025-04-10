@@ -7,11 +7,12 @@ import Footer from '../components/footer/Footer';
 import LoginModal from '../components/auth/LoginModal';
 import PasswordRecoveryModal from '../components/auth/PasswordRecoveryModal';
 import CodeVerificationModal from '../components/auth/CodeVerificationModal';
+import NewPasswordModal from '../components/auth/NewPasswordModal';
 import styles from './Home.module.css';
 
 export default function Home() {
   // Controla qué modal se debe mostrar
-  const [modalState, setModalState] = useState<'login' | 'passwordRecovery' | 'codeVerification' | null>(null);
+  const [modalState, setModalState] = useState<'login' | 'passwordRecovery' | 'codeVerification' | 'newPassword' | null>(null);
 
   const handleLoginSubmit = () => {
     setModalState('passwordRecovery');
@@ -19,6 +20,10 @@ export default function Home() {
 
   const handlePasswordRecoverySubmit = () => {
     setModalState('codeVerification');
+  };
+
+  const handleCodeVerificationSubmit = () => {
+    setModalState('newPassword'); // <-- aquí cambia el modal
   };
 
   const handleClose = () => {
@@ -48,7 +53,10 @@ export default function Home() {
       {/* Mostrar los modales según el estado */}
       {modalState === 'login' && <LoginModal onClose={handleClose} onLoginSubmit={handleLoginSubmit} />}
       {modalState === 'passwordRecovery' && <PasswordRecoveryModal onClose={handleClose} onPasswordRecoverySubmit={handlePasswordRecoverySubmit} />}
-      {modalState === 'codeVerification' && <CodeVerificationModal onClose={handleClose} />}
+      {modalState === 'codeVerification' && <CodeVerificationModal onClose={handleClose} onCodeVerificationSubmit={handleCodeVerificationSubmit} />}
+      {modalState === 'newPassword' && (<NewPasswordModal onClose={handleClose} onPasswordRecoverySubmit={function (): void {
+        throw new Error('Function not implemented.');
+      } } />)}
     </div>
   );
 }
