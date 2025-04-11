@@ -44,18 +44,42 @@ export default function Services() {
           <div className={styles.content}>
             <h1 className={styles.title}>Servicios REDIBO</h1>
             <p className={styles.introduction}>
-              REDIBO ofrece soluciones integrales para conectar propietarios de vehículos con personas
-              interesadas en alquilarlos, garantizando una experiencia segura y confiable para ambas partes.
-              Descubre nuestros servicios diseñados para satisfacer tus necesidades.
+                REDIBO es un servicio en línea diseñado para conectar propietarios de vehículos ("Hosts") con personas interesadas en alquilar
+                autos ("Renters"). Nuestra misión es proporcionar una experiencia segura, cómoda y eficiente para el alquiler de vehículos, 
+                asegurando que todas las transacciones sean claras y equitativas para ambas partes. A través de nuestra tecnología 
+                innovadora, facilitamos el proceso de reserva, pago y comunicación, asegurando que cada alquiler sea una experiencia 
+                satisfactoria y confiable.
             </p>
             
             <section className={styles.termSection} id="registro">
               <h2>Registro y Cuenta</h2>
+              <p><strong> Requisitos para Hosts:</strong></p>
+             
+              <ul className={styles.features}>
+                <li>Ser mayor de 21 años</li>
+                <li>Poseer un vehículo con documentación en regla</li>
+                <li>Contar con SOAT vigente</li>
+                <li>Presentar cédula de identidad o pasaporte válido</li>
+                <li>Proporcionar documentación que acredite la propiedad del vehículo</li>
+              </ul>
+              <p><strong>Requisitos para Renters:</strong></p>
+
+              <ul className={styles.features}>
+                <li>Ser mayor de 21 años</li>
+                <li>Licencia de conducir válida con al menos 2 años de antigüedad</li>
+                <li>Documento de identidad oficial (cédula o pasaporte)</li>
+                <li>Método de pago válido registrado en la plataforma</li>
+              </ul>
+              
               <p>
-                Para utilizar REDIBO, los usuarios deben registrarse proporcionando información personal verídica. El usuario es responsable de mantener la confidencialidad de su cuenta y contraseña. Cualquier actividad sospechosa debe ser notificada de inmediato a REDIBO.
+                <strong>Veracidad de la Información:</strong> Todos los usuarios se comprometen a proporcionar información 
+                veraz y actualizada. REDIBO se reserva el derecho de verificar la identidad y documentación de los 
+                usuarios, pudiendo solicitar documentación adicional cuando lo considere necesario.
               </p>
+              
               <p>
-                No se permite la creación de cuentas falsas ni el uso de cuentas de terceros sin autorización. REDIBO se reserva el derecho de suspender cuentas que infrinjan nuestras políticas.
+                <strong>Protección de Cuenta:</strong> Cada usuario es responsable de mantener la confidencialidad
+                de sus credenciales de acceso y de todas las actividades realizadas bajo su cuenta.
               </p>
             </section>
 

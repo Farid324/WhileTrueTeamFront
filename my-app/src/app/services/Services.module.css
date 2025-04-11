@@ -344,11 +344,19 @@
   margin-top: 2rem;
 }
 
+
 .termSection p {
   line-height: 1.6;
   margin-bottom: 1rem;
   color: var(--negro);
+  font-weight: var(--tamaño-regular);
 }
+
+.termSection p strong {
+  color: var(--negro);
+  font-weight: var(--tamaña-bold);
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
