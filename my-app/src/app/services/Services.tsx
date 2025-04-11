@@ -103,9 +103,19 @@ export default function Services() {
                 <li>Ha recibido mantenimiento regular según especificaciones del fabricante</li>
                 <li>Cuenta con seguro obligatorio vigente (SOAT)</li>
                 </ul>
-              
 
-
+              <p><strong>Mantenimiento del vehículo:</strong></p>
+              <p>El Host debe:</p>
+              <ul className={styles.features}>
+              <li>Ser puntual en la entrega y recepción del vehículo</li>
+                <li>Realizar una inspección documentada del estado del vehículo con el Renter</li>
+                <li>Entregar el vehículo con el tanque de combustible lleno</li>
+                <li>Proporcionar toda la documentación necesaria para circular legalmente</li>
+                </ul>
+                <p>
+                <strong>Disponibilidad y comunicación:</strong> El Host debe mantener actualizado su calendario
+                de disponibilidad y responder a las solicitudes y mensajes en un plazo máximo de 24 horas.
+              </p>
 
 
 
