@@ -57,7 +57,37 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
 */
 'use client';
 
+////////////back///////////
+import { useState } from 'react';
+import { login } from '@/libs/authServices'; // Importa tu servicio
+///////////////////////////
 export default function LoginModal({ onClose }: { onClose: () => void }) {
+  
+  ////////////Back//////////////
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  //Efecto de boton cuando no escribes en los inputs correo y contraseña
+  const isButtonDisabled = !email || !password;
+  const [hasLoginError, setHasLoginError] = useState(false);
+
+  const handleLogin = async () => {
+    try {
+      const result = await login(email, password);
+      console.log('Login exitoso:', result);
+      setError('');
+      setHasLoginError(false);
+      // Puedes hacer algo con el resultado aquí, como guardar el token o redirigir
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      setError('Los datos no son validos.');
+      setHasLoginError(true);
+    }
+  };
+  /////////////////////////////////
+
+
   return (
     <div className="fixed inset-0 flex justify-center items-center z-[9999] bg-black/20">
       <div className="w-[34rem] h-auto shadow-[0_0px_20px_rgba(0,0,0,0.72)] p-10 rounded-[35px] bg-[var(--blanco)]">
@@ -85,36 +115,44 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             Iniciar sesión
           </span>
         </h1>
-
-        <div className="flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mb-6 rounded-lg border-2 border-solid border-[var(--negro)]">
+        {/*borde correo*/}
+        <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mb-6 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
+          {/*icono correo*/}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="text-[var(--azul-oscuro)] w-[30px] h-[30px] ml-4 mr-0 my-4"
+            className={`${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'} w-[30px] h-[30px] ml-4 mr-0 my-4`}
           >
             <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
             <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
           </svg>
           <div className="flex flex-col w-full">
-            <h4 className="text-[var(--azul-oscuro)] text-[0.8rem] font-[var(--tamaña-bold)] indent-[1rem] mt-2" style={{ fontFamily: 'var(--fuente-principal)' }}>
+            {/*text correo*/}
+            <h4 className={`${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'} text-[0.8rem] font-[var(--tamaña-bold)] indent-[1rem] mt-2`} style={{ fontFamily: 'var(--fuente-principal)' }}>
               Correo
             </h4>
+            {/*input correo*/}
             <input
               type="text"
               placeholder="Ingrese correo electrónico"
-              className="w-full h-4 text-[var(--azul-oscuro)] p-4 rounded-lg"
+              className={`w-full h-4 p-4 rounded-lg ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
+              ////////////////back////////////////
+              value = {email}
+              onChange={(e) => setEmail(e.target.value)}
+              //////////////////////////////////////
               style={{ fontFamily: 'var(--fuente-principal)', fontWeight: 'var(--tamaña-bold)', outline: 'none' }}
             />
           </div>
         </div>
-
-        <div className="flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mb-6 rounded-lg border-2 border-solid border-[var(--negro)]">
+        {/*borde contraseña*/}
+        <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mb-6 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
+          {/*icono correo*/}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="text-[var(--azul-oscuro)] w-[30px] h-[30px] ml-4 mr-0 my-4"
+            className={`${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'} w-[30px] h-[30px] ml-4 mr-0 my-4`}
           >
             <path
               fillRule="evenodd"
@@ -123,22 +161,53 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             />
           </svg>
           <div className="flex flex-col w-full">
-            <h4 className="text-[var(--azul-oscuro)] text-[0.8rem] font-[var(--tamaña-bold)] indent-[1rem] mt-2" style={{ fontFamily: 'var(--fuente-principal)' }}>
+            <h4 className={`${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'} text-[0.8rem] font-[var(--tamaña-bold)] indent-[1rem] mt-2`} style={{ fontFamily: 'var(--fuente-principal)' }}>
               Contraseña
             </h4>
             <input
               type="password"
               placeholder="Ingrese contraseña"
-              className="w-full h-4 text-[var(--azul-oscuro)] p-4 rounded-lg"
+              className={`w-full h-4 p-4 rounded-lg ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
+              ////////////////back////////////////
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              ////////////////////////////////////
               style={{ fontFamily: 'var(--fuente-principal)', fontWeight: 'var(--tamaña-bold)', outline: 'none' }}
             />
           </div>
+          <svg xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="currentColor" 
+            className="text-[var(--azul-opaco)] w-[30px] h-[30px] ml-0 mr-4 my-4">
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+            <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+          </svg>
+
+
         </div>
 
-        <button className="w-full bg-[rgba(252,163,17,0.5)] shadow-[0_0px_4px_rgba(0,0,0,0.25)] text-[var(--blanco)] cursor-pointer mt-4 p-4 rounded-[40px] border-none font-[var(--tamaña-bold)]" style={{ fontFamily: 'var(--fuente-principal)' }}>
+        <button 
+          ////////////////back////////////////
+          onClick={handleLogin}
+
+          //Llamada al boton
+          disabled={isButtonDisabled}
+          ////////////////back////////////////
+          className={`w-full 
+          ${isButtonDisabled 
+            ? 'bg-[rgba(252,163,17,0.5)] cursor-not-allowed' 
+            : 'bg-[var(--naranja)] hover:scale-95 hover:bg-[var(--naranja)]'}
+          shadow-[0_0px_4px_rgba(0,0,0,0.25)] 
+          text-[var(--blanco)] cursor-pointer 
+          mt-4 mb-4 p-4 rounded-[40px] 
+          border-none font-[var(--tamaña-bold)]
+          transition-all duration-300 ease-in-out`} 
+          style={{ fontFamily: 'var(--fuente-principal)' }}>
           Iniciar sesión
         </button>
 
+        {error && <p className="text-[var(--rojo)] text-center font-[var(--tamaña-bold)]">{error}</p>}
+        
         <button
           className="text-[var(--azul-oscuro)] underline cursor-pointer w-full transition-colors duration-200 my-4 border-none"
           onClick={onClose}
@@ -148,7 +217,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
         >
           Recuperar Contraseña
         </button>
-
+        
         <h5 className="text-center text-[var(--azul-oscuro)]" style={{ fontFamily: 'var(--fuente-principal)' }}>
           ¿No tienes una cuenta?{' '}
           <button
