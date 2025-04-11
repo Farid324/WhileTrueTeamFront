@@ -211,15 +211,13 @@
   flex: 0 0 220px; 
   background-color: var(--hueso);
   padding: 1rem;
-  margin-left: -20px; 
+  margin-left: -20px;
   position: sticky;
-  top: 230px; 
+  top: 100px; 
   height: fit-content;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-
 
 .menu {
   list-style: none;
@@ -241,17 +239,18 @@
   transition: background-color 0.2s;
 }
 
-.menu-naranja {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  z-index: 1000; /* opcional, para que esté por encima de otros elementos */
-}
-
 
 .menuItem:hover {
   background-color: var(--naranja-46);
+}
+
+.menuItem a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.menuItem a:hover {
+  text-decoration: underline;
 }
 
 .content {
@@ -267,7 +266,7 @@
   text-align: center;
   color: #000000; 
   margin-bottom: 1rem;
-  padding-top: 2rem; /* O añade este padding superior */
+  padding-top: 2rem; 
   
 }
 
@@ -346,7 +345,7 @@
   font-size: 1.8rem; 
   text-align: left;
   font-weight: bold;
-  color: var(--negro); /* Cambiado de var(--naranja) a var(--negro) */
+  color: var(--negro); 
   margin-bottom: 1rem;
   margin-top: 2rem;
 }
@@ -375,3 +374,17 @@
     width: 100%;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+.features a {
+  text-decoration: underline;
+  color: var(--azul-oscuro); 
+}
+
+.features a:hover {
+  color: var(--naranja); 
+}
+

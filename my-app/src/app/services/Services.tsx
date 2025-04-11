@@ -25,28 +25,29 @@ export default function Services() {
       
       <main className={styles.main}>
         <div className={styles.contentLayout}>
-          {/* SIDEBAR - Modificado para que tenga el estilo visto en la imagen 1 */}
+          {/* SIDEBAR */}
           <aside className={styles.sidebar}>
-            <ul className={styles.menu}>
-              <li className={styles.menuItem}><a href="#introduccion">Introducción</a></li>
-              <li className={styles.menuItem}><a href="#registro">Registro y Cuenta</a></li>
-              <li className={styles.menuItem}><a href="#host">Obligaciones del Host</a></li>
-              <li className={styles.menuItem}><a href="#renter">Obligaciones del Renter</a></li>
-              <li className={styles.menuItem}><a href="#pagos">Pagos y Comisiones</a></li>
-              <li className={styles.menuItem}><a href="#cancelaciones">Cancelaciones y Reembolsos</a></li>
-              <li className={styles.menuItem}><a href="#seguro">Seguro y Responsabilidad</a></li>
-              <li className={styles.menuItem}><a href="#conducta">Conducta Prohibida</a></li>
-              <li className={styles.menuItem}><a href="#leyes">Ley Aplicable y Resolución de Conflictos</a></li>
-              <li className={styles.menuItem}><a href="#contacto">Contacto</a></li>
-            </ul>
+            <nav>
+              <ul className={styles.menu}>
+                <li className={styles.menuItem}><a href="#introduccion">Introducción</a></li>
+                <li className={styles.menuItem}><a href="#registro">Registro y Cuenta</a></li>
+                <li className={styles.menuItem}><a href="#host">Obligaciones del Host</a></li>
+                <li className={styles.menuItem}><a href="#renter">Obligaciones del Renter</a></li>
+                <li className={styles.menuItem}><a href="#pagos">Pagos y Comisiones</a></li>
+                <li className={styles.menuItem}><a href="#cancelaciones">Cancelaciones y Reembolsos</a></li>
+                <li className={styles.menuItem}><a href="#seguro">Seguro y Responsabilidad</a></li>
+                <li className={styles.menuItem}><a href="#conducta">Conducta Prohibida</a></li>
+                <li className={styles.menuItem}><a href="#leyes">Ley Aplicable y Resolución de Conflictos</a></li>
+                <li className={styles.menuItem}><a href="#contacto">Contacto</a></li>
+              </ul>
+            </nav>
           </aside>
               
           
           <div className={styles.content}>
             <h1 className={styles.title}>Términos y Condiciones REDIBO</h1>
-            <p><strong>
-            <p ><strong>Última Actualización: 10 Marzo 2025</strong></p>
-            </strong></p>
+            <p><strong>Última Actualización: 10 Marzo 2025</strong></p>
+
              
            
         
@@ -130,7 +131,7 @@ export default function Services() {
                 <li>Cuenta con seguro obligatorio vigente (SOAT)</li>
                 </ul>
 
-              <p><strong>Mantenimiento del vehículo:</strong></p>
+              <p><strong>Entrega y documentación:</strong></p>
               <p>El Host debe:</p>
               <ul className={styles.features}>
               <li>Ser puntual en la entrega y recepción del vehículo</li>
