@@ -203,6 +203,7 @@
 }
 
 /* Updated Sidebar - Now with cream background and new styling */
+<<<<<<< HEAD
 :root {
   --negro: #000000;
   --azul-oscuro: #11295B;
@@ -408,6 +409,8 @@
 }
 
 /* Updated Sidebar - Now with cream background and new styling */
+=======
+>>>>>>> 6da8aa707963e1573c6eb05197f6f3b79caa551f
 .sidebar {
   flex: 0 0 250px;
   background-color: var(--crema);
@@ -537,6 +540,7 @@
     flex: none;
     width: 100%;
   }
+<<<<<<< HEAD
 }
 
 
@@ -669,4 +673,6 @@
 
 
   }
+=======
+>>>>>>> 6da8aa707963e1573c6eb05197f6f3b79caa551f
 }

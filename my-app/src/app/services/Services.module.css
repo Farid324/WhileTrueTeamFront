@@ -1,0 +1,363 @@
+:root {
+  --negro: #000000;
+  --azul-oscuro: #11295B;
+  --naranja: #FCA311;
+  --naranja-46: rgba(252, 163, 17, 0.46);
+  --hueso: #E4D5C1;
+  --blanco: #FFFFFF;
+  --rojo: #F85959;
+  --verde: #219653;
+  --fuente-principal: 'Inter', sans-serif;
+  --tamaña-bold: bold;
+  --tamaño-regular: 500;
+  --tamaño-black: 900;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Top */
+.headerTop {
+  font-family: var(--fuente-principal);
+  background: var(--blanco);
+  padding: 1rem 10rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: var(--tamaño-black);
+  color: var(--naranja);
+  text-shadow: 0px 2px 6px #0000008e;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+}
+
+.navButton {
+  color: var(--azul-oscuro);
+  font-weight: var(--tamaño-regular);
+  margin: 0;
+  padding: 0.2rem 2.8rem;
+  border: 2px solid #00000033;
+  border-radius: 0px;
+  background: var(--blanco);
+  cursor: pointer;
+  position: relative;
+}
+
+.navButton:first-child {
+  border-radius: 50px 0px 0px 50px;
+  border-right: none;
+}
+
+.navButton:first-child::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background-color: #00000033;
+}
+
+.navButton:not(:first-child):not(:last-child) {
+  border-right: none;
+  border-left: none;
+  position: relative;
+}
+
+.navButton:not(:first-child):not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 0;
+  height: 50%;
+  width: 1px;
+  background-color: #00000033;
+}
+
+.navButton:not(:first-child):not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background-color: #00000033;
+}
+
+.navButton:last-child {
+  border-radius: 0px 50px 50px 0px;
+  border-left: none;
+  position: relative;
+}
+
+.navButton:last-child::before {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 0;
+  height: 50%;
+  width: 1px;
+  background-color: #00000033;
+}
+
+.authButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.registerButton {
+  background: var(--naranja-46);
+  font-weight: var(--tamaño-regular);
+  color: var(--azul-oscuro);
+  border-radius: 20px 0 0 20px;
+  padding: 0.4rem 2rem;
+  border: none;
+  cursor: pointer;
+}
+
+.loginButton {
+  background: var(--naranja);
+  font-weight: var(--tamaña-bold);
+  border-radius: 0 20px 20px 0;
+  padding: 0.4rem 1rem;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Header Filters */
+.headerFilters {
+  background-color: var(--blanco);
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.filtersContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filterItem {
+  color: #555;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filterItem:first-child {
+  color: var(--naranja);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.filtersButton {
+  background: var(--naranja);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  background: white;
+  padding: 1rem;
+}
+
+.contentLayout {
+  display: flex;
+  align-items: flex-start; 
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sidebar {
+  flex: 0 0 220px; 
+  background-color: var(--hueso);
+  padding: 1rem;
+  margin-left: -20px; 
+  position: sticky;
+  top: 100px; 
+  height: fit-content;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuItem {
+  padding: 0.4rem 0.75rem; 
+  margin-bottom: 0.3rem; 
+  font-size: 0.95rem;
+  line-height: 1.2; 
+  background-color: transparent;
+  cursor: pointer;
+  color: var(--azul-oscuro);
+  text-decoration: none;
+  border-radius: 4px;
+  display: block;
+  transition: background-color 0.2s;
+}
+
+.menu-naranja {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 1000; /* opcional, para que esté por encima de otros elementos */
+}
+
+
+.menuItem:hover {
+  background-color: var(--naranja-46);
+}
+
+.content {
+  flex: 1;
+  background: white;
+  padding: 2rem;
+  border-radius: 4px;
+}
+
+.title {
+  font-size: 2.4rem; 
+  font-weight: bold;
+  text-align: center;
+  color: #000000; 
+  margin-bottom: 2rem;
+}
+
+.introduction {
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--negro);
+}
+
+.serviceSection {
+  margin-bottom: 2rem;
+}
+
+.serviceSection h2 {
+  color: var(--naranja);
+  margin-bottom: 1rem;
+}
+
+.serviceSection p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--negro);
+}
+
+.features {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.features li {
+  margin-bottom: 0.5rem;
+  color: var(--negro); 
+}
+
+/* Footer */
+.footer {
+  padding: 1rem;
+  background: var(--hueso);
+  text-align: right;
+  font-family: var(--fuente-principal);
+}
+
+.footerLink {
+  color: black;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Terms and Conditions Page */
+.termsContainer {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.termsTitle {
+  font-size: 1.8rem;
+  color: var(--azul-oscuro);
+  margin-bottom: 1.5rem;
+}
+
+.termsText {
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.termSection {
+  margin-bottom: 2rem;
+}
+
+.termSection h2 {
+  font-size: 1.8rem; 
+  text-align: center;
+  font-weight: bold;
+  color: var(--naranja); 
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.termSection p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--negro);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .contentLayout {
+    flex-direction: column;
+  }
+    
+  .sidebar {
+    flex: none;
+    width: 100%;
+  }
+}

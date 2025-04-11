@@ -1,6 +1,6 @@
 import React from 'react';
-import ServicesPage from '../../app/home/Services';
+import Services from './Services'; 
 
-export default function Services() {
-  return <ServicesPage />;
+export default function Page() {
+  return <Services />; 
 }
