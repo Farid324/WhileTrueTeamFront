@@ -74,7 +74,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z"
           />
         </svg>
-
+    
         <h1 className="text-center text-[var(--azul-oscuro)] text-[1.44rem] font-medium leading-normal mb-4" style={{ fontFamily: 'var(--fuente-principal)', textShadow: '2px 2px 4px rgba(0,0,0,0.4)' }}>
           Bienvenido a <br />
           <span className="text-[var(--naranja)] font-[var(--tamaño-black)] text-[2.488rem]" style={{ fontFamily: 'var(--fuente-principal)', textShadow: '1px 2px 2px rgba(0,0,0,0.3)' }}>
