@@ -14,7 +14,10 @@ export default function UserPerfilPage() {
 
         <form method="PUT" className="space-y-6 max-w-2xl">
           <Inputlabel id="Nombre" label="Nombre Completo" type="Text" placeholder="Example"/>
-          
+          <Inputlabel id="Email" label="Email" type="Text" placeholder="Example@gmail.com" />
+          <Inputlabel id="Contraseña" label="Contraseña" type="Text" placeholder="*************" />
+          <Inputlabel id="Documento ID" label="Documendo de Identidad" type="Text" placeholder="Example" />
+          <Inputlabel id="Licencia" label="Licencia de Conducir" type="Text" placeholder="Example" />
 
           <div className="flex justify-end gap-4 pt-4">
             <button
