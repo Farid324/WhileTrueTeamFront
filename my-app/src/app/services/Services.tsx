@@ -85,12 +85,31 @@ export default function Services() {
 
             <section className={styles.termSection} id="host">
               <h2>Obligaciones del Host</h2>
-              <p>
-                Los Hosts deben garantizar que los vehículos ofrecidos estén en buen estado mecánico, cuenten con todos los documentos requeridos por la normativa boliviana (incluyendo el SOAT vigente) y que la información publicada sea precisa.
-              </p>
-              <p>
-                Asimismo, los Hosts deben responder con prontitud a solicitudes de alquiler, mantener sus calendarios actualizados y cumplir con las reservas aceptadas. Cualquier incumplimiento puede conllevar sanciones por parte de REDIBO.
-              </p>
+              <p><strong>Precisión en la información del vehículo:</strong></p>
+              <p>El Host debe proporcionar información precisa y actualizada sobre su vehículo, incluyendo:</p>
+              <ul className={styles.features}>
+              <li>Marca, modelo y año</li>
+              <li>Características principales y estado del vehículo</li>
+              <li>Kilometraje actual</li>
+              <li>Fotografías recientes y representativas</li>
+              <li>Requisitos específicos de uso</li>
+             </ul>
+              
+             <p><strong>Mantenimiento del vehículo:</strong></p>
+              <p>El Host debe garantizar que su vehículo:</p>
+              <ul className={styles.features}>
+                <li>Está en condiciones óptimas de funcionamiento</li>
+                <li>Cumple con todas las normativas técnicas vigentes</li>
+                <li>Ha recibido mantenimiento regular según especificaciones del fabricante</li>
+                <li>Cuenta con seguro obligatorio vigente (SOAT)</li>
+                </ul>
+              
+
+
+
+
+
+              
             </section>
 
             <section className={styles.termSection} id="renter">
