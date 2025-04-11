@@ -196,6 +196,7 @@
 
 .contentLayout {
   display: flex;
+  align-items: flex-start; 
   gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -203,9 +204,12 @@
 
 .sidebar {
   flex: 0 0 250px;
-  background-color: #fff;
+  background-color: var(--hueso);
   padding: 1rem;
+  border-radius: 8px;
+  margin-top: 5rem;
 }
+
 
 .menu {
   list-style: none;
@@ -214,16 +218,20 @@
 }
 
 .menuItem {
+  display: block;
   padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
-  background-color: #f5f5f5;
+  background-color: transparent;
   border-radius: 4px;
+  color: var(--azul-oscuro);
+  font-weight: 500;
+  text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
 }
 
 .menuItem:hover {
-  background-color: #eaeaea;
+  background-color: var(--naranja-46);
 }
 
 .content {

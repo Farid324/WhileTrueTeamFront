@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import styles from './Services.module.css';
@@ -21,20 +22,22 @@ export default function Services() {
           </div>
         </div>
       </header>
-
-
+      
       <main className={styles.main}>
         <div className={styles.contentLayout}>
+          {/* SIDEBAR */}
           <aside className={styles.sidebar}>
             <ul className={styles.menu}>
-              <li className={styles.menuItem}>Catálogo de Servicios</li>
-              <li className={styles.menuItem}>Alquiler de Vehículos</li>
-              <li className={styles.menuItem}>Administración de Flota</li>
-              <li className={styles.menuItem}>Seguros y Asistencia</li>
-              <li className={styles.menuItem}>Mantenimiento</li>
-              <li className={styles.menuItem}>Servicios Premium</li>
-              <li className={styles.menuItem}>Soporte Técnico</li>
-              <li className={styles.menuItem}>Preguntas Frecuentes</li>
+              <li><a href="#introduccion" className={styles.menuItem}>Introducción</a></li>
+              <li><a href="#registro" className={styles.menuItem}>Registro y Cuenta</a></li>
+              <li><a href="#host" className={styles.menuItem}>Obligaciones del Host</a></li>
+              <li><a href="#renter" className={styles.menuItem}>Obligaciones del Renter</a></li>
+              <li><a href="#pagos" className={styles.menuItem}>Pagos y Comisiones</a></li>
+              <li><a href="#cancelaciones" className={styles.menuItem}>Cancelaciones y Reembolsos</a></li>
+              <li><a href="#seguro" className={styles.menuItem}>Seguro y Responsabilidad</a></li>
+              <li><a href="#conducta" className={styles.menuItem}>Conducta Prohibida</a></li>
+              <li><a href="#leyes" className={styles.menuItem}>Ley Aplicable y Resolución de Conflictos</a></li>
+              <li><a href="#contacto" className={styles.menuItem}>Contacto</a></li>
             </ul>
           </aside>
           
@@ -46,53 +49,47 @@ export default function Services() {
               Descubre nuestros servicios diseñados para satisfacer tus necesidades.
             </p>
             
-            <section className={styles.serviceSection}>
-              <h2>Alquiler de Vehículos</h2>
+            <section className={styles.termSection} id="registro">
+              <h2>Registro y Cuenta</h2>
               <p>
-                Nuestro servicio principal permite a los propietarios listar sus vehículos para alquiler
-                y a los arrendatarios encontrar opciones que se ajusten a sus necesidades. Facilitamos
-                todo el proceso desde la reserva hasta la devolución del vehículo.
+                Para utilizar REDIBO, los usuarios deben registrarse proporcionando información personal verídica. El usuario es responsable de mantener la confidencialidad de su cuenta y contraseña. Cualquier actividad sospechosa debe ser notificada de inmediato a REDIBO.
               </p>
-              <ul className={styles.features}>
-                <li>Búsqueda personalizada de vehículos</li>
-                <li>Sistema de reservas intuitivo</li>
-                <li>Verificación de usuarios</li>
-                <li>Proceso de pago seguro</li>
-                <li>Evaluaciones y reseñas</li>
-              </ul>
-            </section>
-            
-            <section className={styles.serviceSection}>
-              <h2>Administración de Flota</h2>
               <p>
-                Para propietarios con múltiples vehículos, ofrecemos herramientas avanzadas de gestión
-                que permiten monitorear el estado, disponibilidad y rentabilidad de cada unidad.
+                No se permite la creación de cuentas falsas ni el uso de cuentas de terceros sin autorización. REDIBO se reserva el derecho de suspender cuentas que infrinjan nuestras políticas.
               </p>
-              <ul className={styles.features}>
-                <li>Panel de control centralizado</li>
-                <li>Seguimiento GPS de vehículos</li>
-                <li>Reportes de rendimiento</li>
-                <li>Programación de mantenimiento</li>
-                <li>Gestión de documentos</li>
-              </ul>
-            </section>
-            
-            <section className={styles.serviceSection}>
-              <h2>Seguros y Asistencia</h2>
-              <p>
-                Proporcionamos cobertura integral y asistencia en carretera para garantizar
-                tranquilidad durante todo el proceso de alquiler.
-              </p>
-              <ul className={styles.features}>
-                <li>Seguros contra daños y robos</li>
-                <li>Asistencia 24/7 en carretera</li>
-                <li>Servicio de grúa</li>
-                <li>Vehículo de reemplazo</li>
-                <li>Gestión de incidentes</li>
-              </ul>
             </section>
 
-            <section className={styles.serviceSection}>
+            <section className={styles.termSection} id="host">
+              <h2>Obligaciones del Host</h2>
+              <p>
+                Los Hosts deben garantizar que los vehículos ofrecidos estén en buen estado mecánico, cuenten con todos los documentos requeridos por la normativa boliviana (incluyendo el SOAT vigente) y que la información publicada sea precisa.
+              </p>
+              <p>
+                Asimismo, los Hosts deben responder con prontitud a solicitudes de alquiler, mantener sus calendarios actualizados y cumplir con las reservas aceptadas. Cualquier incumplimiento puede conllevar sanciones por parte de REDIBO.
+              </p>
+            </section>
+
+            <section className={styles.termSection} id="renter">
+              <h2>Obligaciones del Renter</h2>
+              <p>
+                Los Renters deben utilizar los vehículos de forma responsable, respetando las leyes de tránsito y devolviéndolos en las condiciones acordadas. Está prohibido usar los vehículos para fines ilícitos o actividades riesgosas.
+              </p>
+              <p>
+                En caso de daño o accidente, el Renter debe reportarlo inmediatamente al Host y a REDIBO. El Renter será responsable por cualquier daño causado si no se encuentra cubierto por el seguro correspondiente.
+              </p>
+            </section>
+
+            <section className={styles.termSection} id="pagos">
+              <h2>Pagos y Comisiones</h2>
+              <p>
+                REDIBO cobra una comisión por cada transacción completada en la plataforma. Los precios mostrados a los Renters incluyen esta comisión, que es destinada al mantenimiento, soporte y mejora continua del sistema.
+              </p>
+              <p>
+                Todos los pagos se realizan mediante canales seguros habilitados por REDIBO. Los Hosts recibirán el pago correspondiente por el alquiler después de descontar la comisión y una vez verificada la finalización exitosa del servicio.
+              </p>
+            </section>
+
+            <section className={styles.termSection} id="cancelaciones">
               <h2>Cancelaciones y Reembolsos</h2>
               <p>
                 En REDIBO entendemos que pueden surgir imprevistos. Por ello, ofrecemos políticas claras de cancelación.
@@ -108,7 +105,7 @@ export default function Services() {
               </p>
             </section>
 
-            <section className={styles.serviceSection}>
+            <section className={styles.termSection} id="seguro">
               <h2>Seguro y Responsabilidad</h2>
               <p>
                 Todos los vehículos publicados en REDIBO deben contar con SOAT vigente. Además, recomendamos a los Hosts
@@ -122,7 +119,7 @@ export default function Services() {
               </p>
             </section>
             
-            <section className={styles.serviceSection}>
+            <section className={styles.termSection} id="conducta">
               <h2>Conducta Prohibida</h2>
               <p>
                 Para asegurar una experiencia segura, REDIBO prohíbe estrictamente las siguientes conductas:
@@ -135,7 +132,7 @@ export default function Services() {
               </p>
             </section>
 
-            <section className={styles.serviceSection}>
+            <section className={styles.termSection} id="leyes">
               <h2>Ley Aplicable y Resolución de Conflictos</h2>
               <p>
                 Estos Términos y Condiciones se rigen por la normativa vigente en Bolivia, en especial el Código Civil
@@ -145,7 +142,7 @@ export default function Services() {
               </p>
             </section>
 
-            <section className={styles.serviceSection}>
+            <section className={styles.termSection} id="contacto">
               <h2>Contacto</h2>
               <p>
                 Si tienes consultas, sugerencias o deseas reportar un problema, puedes comunicarte con nosotros a través de los siguientes medios oficiales:
