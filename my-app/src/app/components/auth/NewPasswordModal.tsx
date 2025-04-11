@@ -2,22 +2,47 @@
 
 import styles from './NewPasswordModal.module.css';
 
-const NewPassrwordModal = ({ onClose, onPasswordRecoverySubmit }: { onClose: () => void, onPasswordRecoverySubmit: () => void }) => {
+const NewPasswordModal = ({ onClose, onPasswordRecoverySubmit }: { onClose: () => void, onPasswordRecoverySubmit: () => void }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h2 className={styles.title}>Recupera tu contraseña de <span className={styles.brand}>REDIBO</span>
-        </h2>
-        <p className={styles.text}>CÓDIGO DE VERIFICACIÓN CORRECTO.Por favor estableca una nueva contraseña .</p>
+        {/* Título */}
+        <h1 className={styles.tituloPrincipal}>
+          Recupera tu contraseña de <br />
+          <span className={styles.tituloRedibo}>REDIBO</span>
+        </h1>
+        <p className={styles.texto}>CÓDIGO DE VERIFICACIÓN CORRECTO. Por favor establece una nueva contraseña.</p>
 
-        <input className={styles.input} type="nueva contraseña" placeholder="Nueva contraseña" />
-        <input className={styles.input} type="confirmar contraseña" placeholder="Confirmar contraseña" />
+        {/* Input: Nueva contraseña */}
+        <div className={styles.textofuera}>
+          <h4 className={styles.textoinputfuera}>Contraseña</h4>
+          <input
+            className={styles.input}
+            type="password"
+            placeholder="Nueva contraseña"
+          />
+        </div>
 
-        <button className={styles.button} onClick={onPasswordRecoverySubmit}>Siguiente</button>
-        <button className={styles.close} onClick={onClose}>Atrás</button>
+        {/* Input: Confirmar contraseña */}
+        <div className={styles.textofuera}>
+          <h4 className={styles.textoinputfuera}>Confirmar contraseña</h4>
+          <input
+            className={styles.input}
+            type="password"
+            placeholder="Confirmar contraseña"
+          />
+        </div>
+
+        {/* Botones */}
+        <button className={styles.button} onClick={onPasswordRecoverySubmit}>
+          Confirmar
+        </button>
+        <button className={styles.close} onClick={onClose}>
+          Cancelar
+        </button>
       </div>
     </div>
   );
 };
 
-export default NewPassrwordModal;
+export default NewPasswordModal;
