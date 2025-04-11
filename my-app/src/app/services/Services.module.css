@@ -25,7 +25,12 @@
   background: var(--blanco);
   padding: 1rem 10rem;
   border-bottom: 2px solid rgba(0, 0, 0, 0.05);
-}
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+} 
 
 .logo {
   font-size: 2rem;
@@ -208,7 +213,7 @@
   padding: 1rem;
   margin-left: -20px; 
   position: sticky;
-  top: 250px; 
+  top: 230px; 
   height: fit-content;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -261,7 +266,9 @@
   font-weight: bold;
   text-align: center;
   color: #000000; 
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  padding-top: 2rem; /* O añade este padding superior */
+  
 }
 
 .introduction {
