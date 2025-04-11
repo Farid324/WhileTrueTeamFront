@@ -40,6 +40,7 @@ export default function Services() {
               <li><a href="#contacto" className={styles.menuItem}>Contacto</a></li>
             </ul>
           </aside>
+         
           
           <div className={styles.content}>
             <h1 className={styles.title}>Servicios REDIBO</h1>
@@ -121,26 +122,76 @@ export default function Services() {
 
               
             </section>
-
+              
             <section className={styles.termSection} id="renter">
-              <h2>Obligaciones del Renter</h2>
+              
+            <h2>Obligaciones del Renter</h2>
+            <p><strong>Uso adecuado del vehículo:</strong></p>
+             <p>El Renter se compromete a:</p>
+              <ul className={styles.features}>
+                <li>Utilizar el vehículo solo para los fines acordados</li>
+                <li>No exceder el límite de kilometraje establecido (si aplica)</li>
+                <li>No permitir que personas no autorizadas conduzcan el vehículo</li>
+                <li>No transportar más pasajeros que los permitidos por el fabricante</li>
+                <li>No utilizar el vehículo para actividades ilegales o peligrosas</li>
+              </ul>
+              
+              <p><strong>Cuidado del vehículo:</strong></p>
+              <p>El Renter debe:</p>
+              <ul className={styles.features}>
+                <li>Mantener el vehículo limpio y en buen estado</li>
+                <li>Estacionar en lugares seguros</li>
+                <li>Notificar inmediatamente al Host y a REDIBO de cualquier problema mecánico</li>
+                <li>No realizar modificaciones al vehículo</li>
+                <li>Devolver el vehículo con el mismo nivel de combustible que lo recibió</li>
+              </ul>
+              
+              <p><strong>Respeto a las normas de tránsito:</strong></p>
+              <p>El Renter es responsable de:</p>
+              <ul className={styles.features}>
+                <li>Cumplir todas las leyes y regulaciones de tránsito</li>
+                <li>Pagar cualquier multa o sanción derivada de infracciones cometidas durante el periodo de alquiler</li>
+                <li>Utilizar el cinturón de seguridad y asegurar que todos los pasajeros lo utilicen</li>
+              </ul>
+              
               <p>
-                Los Renters deben utilizar los vehículos de forma responsable, respetando las leyes de tránsito y devolviéndolos en las condiciones acordadas. Está prohibido usar los vehículos para fines ilícitos o actividades riesgosas.
-              </p>
-              <p>
-                En caso de daño o accidente, el Renter debe reportarlo inmediatamente al Host y a REDIBO. El Renter será responsable por cualquier daño causado si no se encuentra cubierto por el seguro correspondiente.
+                <strong>Devolución puntual:</strong> El Renter debe devolver el vehículo en la fecha, hora y lugar acordados,
+                salvo acuerdo explícito con el Host para extender el periodo.
               </p>
             </section>
-
             <section className={styles.termSection} id="pagos">
+           
               <h2>Pagos y Comisiones</h2>
-              <p>
-                REDIBO cobra una comisión por cada transacción completada en la plataforma. Los precios mostrados a los Renters incluyen esta comisión, que es destinada al mantenimiento, soporte y mejora continua del sistema.
-              </p>
-              <p>
-                Todos los pagos se realizan mediante canales seguros habilitados por REDIBO. Los Hosts recibirán el pago correspondiente por el alquiler después de descontar la comisión y una vez verificada la finalización exitosa del servicio.
-              </p>
+              <h3>Estructura de precios:</h3>
+              <ul className={styles.features}>
+                <li>Los Hosts establecen libremente el precio diario de alquiler de sus vehículos</li>
+                <li>REDIBO cobra una comisión del 15% sobre el precio total del alquiler al Host</li>
+                <li>Los Renters pagan una tarifa de servicio del 10% adicional al precio establecido</li>
+              </ul>
+              
+              <h3>Método de pago:</h3>
+              <ul className={styles.features}>
+                <li>Todos los pagos se realizan a través de la plataforma REDIBO</li>
+                <li>Se aceptan tarjetas de crédito, débito y transferencias bancarias</li>
+                <li>No se permiten pagos directos entre Host y Renter</li>
+              </ul>
+              
+              <h3>Depósito de seguridad:</h3>
+              <ul className={styles.features}>
+                <li>Se requiere un depósito de seguridad para cada alquiler</li>
+                <li>El monto es determinado por el valor del vehículo y la duración del alquiler</li>
+                <li>Se bloquea en la tarjeta del Renter al momento de la reserva</li>
+                <li>Se libera automáticamente 7 días después de finalizado el alquiler si no hay reclamaciones</li>
+              </ul>
+              
+              <h3>Facturación:</h3>
+              <ul className={styles.features}>
+                <li>REDIBO emitirá factura electrónica por el servicio de intermediación</li>
+                <li>Los Hosts son responsables de cumplir con sus obligaciones fiscales por los ingresos generados</li>
+              </ul>
             </section>
+            
+        
 
             <section className={styles.termSection} id="cancelaciones">
               <h2>Cancelaciones y Reembolsos</h2>
