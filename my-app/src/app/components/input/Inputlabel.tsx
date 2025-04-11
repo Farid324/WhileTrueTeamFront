@@ -1,24 +1,25 @@
-// components/input/Inputlabel.tsx
 import React from "react";
 
-const Inputlabel: React.FC = () => {
+interface InputlabelProps {
+  id: string;
+  label: string;
+  type: string;
+  placeholder: string;
+  img?: string; // si piensas usar una imagen en el futuro
+}
+
+const Inputlabel: React.FC<InputlabelProps> = ({ id, label, type, placeholder }) => {
   return (
-    <div className="flex flex-col w-full">
-      <h4
-        className="text-[var(--azul-oscuro)] text-[0.8rem] font-[var(--tamaña-bold)] indent-[1rem] mt-2"
-        style={{ fontFamily: "var(--fuente-principal)" }}
-      >
-        Correo
-      </h4>
+    <div>
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
       <input
-        type="text"
-        placeholder="Ingrese correo electrónico"
-        className="w-full h-4 text-[var(--azul-oscuro)] p-4 rounded-lg"
-        style={{
-          fontFamily: "var(--fuente-principal)",
-          fontWeight: "var(--tamaña-bold)",
-          outline: "none",
-        }}
+        id={id}
+        name={id}
+        type={type}
+        placeholder={placeholder}
+        className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
     </div>
   );
