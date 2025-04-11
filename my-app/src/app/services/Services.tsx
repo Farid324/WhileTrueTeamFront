@@ -25,36 +25,61 @@ export default function Services() {
       
       <main className={styles.main}>
         <div className={styles.contentLayout}>
-          {/* SIDEBAR */}
+          {/* SIDEBAR - Modificado para que tenga el estilo visto en la imagen 1 */}
           <aside className={styles.sidebar}>
             <ul className={styles.menu}>
-              <li><a href="#introduccion" className={styles.menuItem}>Introducción</a></li>
-              <li><a href="#registro" className={styles.menuItem}>Registro y Cuenta</a></li>
-              <li><a href="#host" className={styles.menuItem}>Obligaciones del Host</a></li>
-              <li><a href="#renter" className={styles.menuItem}>Obligaciones del Renter</a></li>
-              <li><a href="#pagos" className={styles.menuItem}>Pagos y Comisiones</a></li>
-              <li><a href="#cancelaciones" className={styles.menuItem}>Cancelaciones y Reembolsos</a></li>
-              <li><a href="#seguro" className={styles.menuItem}>Seguro y Responsabilidad</a></li>
-              <li><a href="#conducta" className={styles.menuItem}>Conducta Prohibida</a></li>
-              <li><a href="#leyes" className={styles.menuItem}>Ley Aplicable y Resolución de Conflictos</a></li>
-              <li><a href="#contacto" className={styles.menuItem}>Contacto</a></li>
+              <li className={styles.menuItem}><a href="#introduccion">Introducción</a></li>
+              <li className={styles.menuItem}><a href="#registro">Registro y Cuenta</a></li>
+              <li className={styles.menuItem}><a href="#host">Obligaciones del Host</a></li>
+              <li className={styles.menuItem}><a href="#renter">Obligaciones del Renter</a></li>
+              <li className={styles.menuItem}><a href="#pagos">Pagos y Comisiones</a></li>
+              <li className={styles.menuItem}><a href="#cancelaciones">Cancelaciones y Reembolsos</a></li>
+              <li className={styles.menuItem}><a href="#seguro">Seguro y Responsabilidad</a></li>
+              <li className={styles.menuItem}><a href="#conducta">Conducta Prohibida</a></li>
+              <li className={styles.menuItem}><a href="#leyes">Ley Aplicable y Resolución de Conflictos</a></li>
+              <li className={styles.menuItem}><a href="#contacto">Contacto</a></li>
             </ul>
           </aside>
-         
+              
           
           <div className={styles.content}>
-            <h1 className={styles.title}>Servicios REDIBO</h1>
-            <p className={styles.introduction}>
+            <h1 className={styles.title}>Términos y Condiciones REDIBO</h1>
+            <p><strong>
+            <p ><strong>Última Actualización: 10 Marzo 2025</strong></p>
+            </strong></p>
+             
+           
+        
+          
+            <section className={styles.termSection} id="descripcion">
+            <h2>Descripcion de la Plataforma</h2>
+
+              <p>
                 REDIBO es un servicio en línea diseñado para conectar propietarios de vehículos ("Hosts") con personas interesadas en alquilar
                 autos ("Renters"). Nuestra misión es proporcionar una experiencia segura, cómoda y eficiente para el alquiler de vehículos, 
                 asegurando que todas las transacciones sean claras y equitativas para ambas partes. A través de nuestra tecnología 
                 innovadora, facilitamos el proceso de reserva, pago y comunicación, asegurando que cada alquiler sea una experiencia 
                 satisfactoria y confiable.
-            </p>
+              </p>
+            </section>
+
+
+
+
+            
+            <section className={styles.termSection} id="introduccion">
+              <h2>Introducción</h2>
+              <p>
+                Estos Términos y Condiciones establecen las reglas y regulaciones para el uso de REDIBO. Al acceder o utilizar nuestros servicios, los usuarios acuerdan cumplir con todas las disposiciones aquí descritas. El incumplimiento de estos términos puede resultar en la suspensión o terminación de la cuenta del usuario, además de otras acciones legales según corresponda.
+              </p>
+              <p>
+                REDIBO es la Plataforma de una empresa registrada en Bolivia que opera como una plataforma intermediaria que facilita la conexión entre Hosts y Arrendatarios. No somos responsables por la calidad, seguridad o legalidad de los vehículos listados, ni garantizamos la exactitud de la información proporcionada por los usuarios.
+              </p>
+            </section>
             
             <section className={styles.termSection} id="registro">
               <h2>Registro y Cuenta</h2>
-              <p><strong> Requisitos para Hosts:</strong></p>
+              <p><strong>Requisitos para Hosts:</strong></p>
              
               <ul className={styles.features}>
                 <li>Ser mayor de 21 años</li>
@@ -117,10 +142,6 @@ export default function Services() {
                 <strong>Disponibilidad y comunicación:</strong> El Host debe mantener actualizado su calendario
                 de disponibilidad y responder a las solicitudes y mensajes en un plazo máximo de 24 horas.
               </p>
-
-
-
-              
             </section>
               
             <section className={styles.termSection} id="renter">
@@ -160,23 +181,23 @@ export default function Services() {
               </p>
             </section>
             <section className={styles.termSection} id="pagos">
-           
+            
               <h2>Pagos y Comisiones</h2>
-              <h3>Estructura de precios:</h3>
+              <p><strong>Estructura de precios:</strong></p>
               <ul className={styles.features}>
                 <li>Los Hosts establecen libremente el precio diario de alquiler de sus vehículos</li>
                 <li>REDIBO cobra una comisión del 15% sobre el precio total del alquiler al Host</li>
                 <li>Los Renters pagan una tarifa de servicio del 10% adicional al precio establecido</li>
               </ul>
               
-              <h3>Método de pago:</h3>
+              <p><strong>Método de pago:</strong></p>
               <ul className={styles.features}>
                 <li>Todos los pagos se realizan a través de la plataforma REDIBO</li>
                 <li>Se aceptan tarjetas de crédito, débito y transferencias bancarias</li>
                 <li>No se permiten pagos directos entre Host y Renter</li>
               </ul>
               
-              <h3>Depósito de seguridad:</h3>
+              <p><strong>Depósito de seguridad:</strong></p>
               <ul className={styles.features}>
                 <li>Se requiere un depósito de seguridad para cada alquiler</li>
                 <li>El monto es determinado por el valor del vehículo y la duración del alquiler</li>
@@ -184,7 +205,7 @@ export default function Services() {
                 <li>Se libera automáticamente 7 días después de finalizado el alquiler si no hay reclamaciones</li>
               </ul>
               
-              <h3>Facturación:</h3>
+              <p><strong>Facturación:</strong></p>
               <ul className={styles.features}>
                 <li>REDIBO emitirá factura electrónica por el servicio de intermediación</li>
                 <li>Los Hosts son responsables de cumplir con sus obligaciones fiscales por los ingresos generados</li>

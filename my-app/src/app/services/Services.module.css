@@ -208,7 +208,7 @@
   padding: 1rem;
   margin-left: -20px; 
   position: sticky;
-  top: 100px; 
+  top: 250px; 
   height: fit-content;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -337,13 +337,12 @@
 
 .termSection h2 {
   font-size: 1.8rem; 
-  text-align: center;
+  text-align: left;
   font-weight: bold;
-  color: var(--naranja); 
+  color: var(--negro); /* Cambiado de var(--naranja) a var(--negro) */
   margin-bottom: 1rem;
   margin-top: 2rem;
 }
-
 
 .termSection p {
   line-height: 1.6;
