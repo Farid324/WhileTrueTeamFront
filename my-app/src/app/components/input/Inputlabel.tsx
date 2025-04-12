@@ -5,22 +5,42 @@ interface InputlabelProps {
   label: string;
   type: string;
   placeholder: string;
-  img?: string; // si piensas usar una imagen en el futuro
+  icono?: React.ReactNode;
+  className?: string;
+  readOnly?: boolean; // <-- Nuevo para permitir solo lectura
 }
 
-const Inputlabel: React.FC<InputlabelProps> = ({ id, label, type, placeholder }) => {
+const Inputlabel: React.FC<InputlabelProps> = ({
+  id,
+  label,
+  type,
+  placeholder,
+  icono,
+  className,
+  readOnly = false, // <-- Por defecto editable
+}) => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
         {label}
       </label>
-      <input
-        id={id}
-        name={id}
-        type={type}
-        placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
+      <div className="relative w-full">
+        <input
+          id={id}
+          name={id}
+          type={type}
+          placeholder={placeholder}
+          readOnly={readOnly} // <-- Aplicamos aquí
+          className={`w-full border border-[#11295B] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#11295B] ${className} shadow-[0_4px_10px_rgba(0,0,0,0.4)] pl-10 ${
+            readOnly ? "bg-gray-100 cursor-not-allowed" : ""
+          }`} // <-- Si es readOnly, fondo gris claro y cursor de no permitido
+        />
+        {icono && (
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#11295B]">
+            {icono}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
