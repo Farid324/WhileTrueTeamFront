@@ -2,7 +2,7 @@
 
 import Inputlabel from "../../components/input/Inputlabel";
 import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
-//import Button from "@/app/components/botons/botons";
+import Button from "@/app/components/botons/botons";
 import UserIcon from "@/app/components/Icons/User";
 import MailIcon from "@/app/components/Icons/Email";
 import CalendarIcon from "@/app/components/Icons/Calendar";
@@ -97,13 +97,13 @@ export default function UserPerfilPage() {
 
             {/* Botón cancelar */}
             <div className="flex justify-center gap-6 pt-4 w-full">
-              {/*<Button
+              <Button
                 id="Cancelar Perfil"
                 color="bg-white text-[#FCA311] border-2 border-gray-300 px-6 py-3 rounded-md hover:bg-[#FCA311] hover:text-white shadow-[0_4px_10px_rgba(0,0,0,0.4)] transition-all w-full md:w-52"
                 type="button"
                 Guardar="Cancelar"
                 deshabilitado={false}
-              />*/}
+              />
             </div>
 
           </form>
