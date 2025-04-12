@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: rgb(255, 255, 255);
 }
 
 .body {
   flex-grow: 1;
-  background: white;
-  padding: 1rem;
+  padding: 2rem;
 }
 
 .title {
@@ -15,12 +15,12 @@
   margin-bottom: 1rem;
 }
   
-  .loginBtn {
+.loginBtn {
     background-color: #1e40af;
     color: white;
     padding: 0.6rem 1.2rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
+}
   

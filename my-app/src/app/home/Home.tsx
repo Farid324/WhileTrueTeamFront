@@ -1,13 +1,14 @@
 'use client';
 import { useState } from 'react';
-import Navbar from '../components/Navbar';
-import FiltersBar from '../components/FiltersBar';
-import Footer from '../components/Footer';
-import LoginModal from './LoginModal';
+import Navbar from '../components/navbar/Navbar';
+import FiltersBar from '../components/filters/FiltersBar';
+import Footer from '../components/footer/Footer';
+import LoginModal from '../components/auth/LoginModal';
 import styles from './Home.module.css';
-import RegisterModal from '../auth/RegisterModal';
+import RegisterModal from '../components/auth/authregistro/RegisterModal';
 
-export default function Home() {
+
+export default function HomePage() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
 
   return (
