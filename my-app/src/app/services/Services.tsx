@@ -1,9 +1,35 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from './Services.module.css';
 
 export default function Services() {
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        rootMargin: '0px 0px -60% 0px',
+        threshold: 0.2
+      }
+    );
+  
+    sections.forEach(section => observer.observe(section));
+  
+    return () => {
+      sections.forEach(section => observer.unobserve(section));
+    };
+  }, []);
+  
+
   return (
     <div className={styles.container}>
       <header className={styles.headerTop}>
@@ -29,16 +55,36 @@ export default function Services() {
           <aside className={styles.sidebar}>
             <nav>
               <ul className={styles.menu}>
-                <li className={styles.menuItem}><a href="#introduccion">Introducción</a></li>
-                <li className={styles.menuItem}><a href="#registro">Registro y Cuenta</a></li>
-                <li className={styles.menuItem}><a href="#host">Obligaciones del Host</a></li>
-                <li className={styles.menuItem}><a href="#renter">Obligaciones del Renter</a></li>
-                <li className={styles.menuItem}><a href="#pagos">Pagos y Comisiones</a></li>
-                <li className={styles.menuItem}><a href="#cancelaciones">Cancelaciones y Reembolsos</a></li>
-                <li className={styles.menuItem}><a href="#seguro">Seguro y Responsabilidad</a></li>
-                <li className={styles.menuItem}><a href="#conducta">Conducta Prohibida</a></li>
-                <li className={styles.menuItem}><a href="#leyes">Ley Aplicable y Resolución de Conflictos</a></li>
-                <li className={styles.menuItem}><a href="#contacto">Contacto</a></li>
+                <li className={`${styles.menuItem} ${activeSection === 'introduccion' ? styles.active : ''}`}>
+                  <a href="#introduccion">Introducción</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'registro' ? styles.active : ''}`}>
+                  <a href="#registro">Registro y Cuenta</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'host' ? styles.active : ''}`}>
+                  <a href="#host">Obligaciones del Host</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'renter' ? styles.active : ''}`}>
+                  <a href="#renter">Obligaciones del Renter</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'pagos' ? styles.active : ''}`}>
+                  <a href="#pagos">Pagos y Comisiones</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'cancelaciones' ? styles.active : ''}`}>
+                  <a href="#cancelaciones">Cancelaciones y Reembolsos</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'seguro' ? styles.active : ''}`}>
+                  <a href="#seguro">Seguro y Responsabilidad</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'conducta' ? styles.active : ''}`}>
+                  <a href="#conducta">Conducta Prohibida</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'leyes' ? styles.active : ''}`}>
+                  <a href="#leyes">Ley Aplicable y Resolución de Conflictos</a>
+                </li>
+                <li className={`${styles.menuItem} ${activeSection === 'contacto' ? styles.active : ''}`}>
+                  <a href="#contacto">Contacto</a>
+                </li>
               </ul>
             </nav>
           </aside>
@@ -46,8 +92,7 @@ export default function Services() {
           
           <div className={styles.content}>
             <h1 className={styles.title}>Términos y Condiciones REDIBO</h1>
-            <p><strong>Última Actualización: 10 Marzo 2025</strong></p>
-
+            <p className={styles.update}>Última Actualización: 10 Marzo 2025</p>
              
            
         

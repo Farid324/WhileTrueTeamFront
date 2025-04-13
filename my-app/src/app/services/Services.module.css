@@ -199,6 +199,8 @@
   padding: 1rem;
 }
 
+
+
 .contentLayout {
   display: flex;
   align-items: flex-start; 
@@ -208,10 +210,10 @@
 }
 
 .sidebar {
-  flex: 0 0 220px; 
+  flex: 0 0 260px; 
   background-color: var(--hueso);
-  padding: 1rem;
-  margin-left: -20px;
+  padding: 2.2rem;
+  margin-left: -70px;
   position: sticky;
   top: 100px; 
   height: fit-content;
@@ -339,6 +341,7 @@
 
 .termSection {
   margin-bottom: 2rem;
+  scroll-margin-top: 104.4px;
 }
 
 .termSection h2 {
@@ -387,4 +390,20 @@ html {
 .features a:hover {
   color: var(--naranja); 
 }
+
+.active {
+  background-color: var(--naranja-46);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.update {
+  color: var(--negro);
+  font-weight: var(--tamaño-regular);
+  font-size: 0.85rem; 
+  margin-bottom: 1.5rem;
+  }
+
+
+
 
