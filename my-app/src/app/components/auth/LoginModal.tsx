@@ -71,6 +71,8 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   //Efecto de boton cuando no escribes en los inputs correo y contraseña
   const isButtonDisabled = !email || !password;
   const [hasLoginError, setHasLoginError] = useState(false);
+  //Efecto de boton de activar o desactivar poder ver la contraseña
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -165,7 +167,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
               Contraseña
             </h4>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Ingrese contraseña"
               className={`w-full h-4 p-4 rounded-lg ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
               ////////////////back////////////////
@@ -175,19 +177,52 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
               style={{ fontFamily: 'var(--fuente-principal)', fontWeight: 'var(--tamaña-bold)', outline: 'none' }}
             />
           </div>
-          <svg xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 24 24" 
-            fill="currentColor" 
-            className="text-[var(--azul-opaco)] w-[30px] h-[30px] ml-0 mr-4 my-4">
-            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-            <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
-          </svg>
+          {password ? (
+            showPassword ? (
+              // OJO TACHADO (activo)
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                onClick={() => setShowPassword(false)}
+                className="w-[30px] h-[30px] ml-0 mr-4 my-4 text-[var(--azul-oscuro)] cursor-pointer hover:scale-110 transition-all duration-200"
+              >
+                <path d="M2.808 1.393 1.393 2.808l2.74 2.739C2.447 7.36 1.123 9.36.528 10.5a1.5 1.5 0 0 0 0 1.5C3.028 16.5 7.5 20.25 12 20.25c2.045 0 3.984-.745 5.748-1.964l3.444 3.444 1.414-1.415-19.798-19.8zM9.26 7.844l1.591 1.591a3 3 0 0 0 3.713 3.713l1.591 1.591a5.25 5.25 0 0 1-6.895-6.895z" />
+                <path d="M12.004 3.75c4.97 0 9.185 3.223 10.675 7.69a1.762 1.762 0 0 1 0 1.113 11.606 11.606 0 0 1-2.81 4.36l-2.681-2.681a5.25 5.25 0 0 0-6.643-6.643L7.645 5.498A11.384 11.384 0 0 1 12.004 3.75z" />
+              </svg>
+            ) : (
+              // OJO NORMAL (activo)
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                onClick={() => setShowPassword(true)}
+                className="w-[30px] h-[30px] ml-0 mr-4 my-4 text-[var(--azul-oscuro)] cursor-pointer hover:scale-110 transition-all duration-200"
+              >
+                <path d="M1.5 12s3.75-6.75 10.5-6.75S22.5 12 22.5 12s-3.75 6.75-10.5 6.75S1.5 12 1.5 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            )
+          ) : (
+            // OJO DESACTIVADO (sin texto)
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-[30px] h-[30px] ml-0 mr-4 my-4 text-[rgba(0,0,0,0.2)] cursor-not-allowed transition-all duration-200"
+            >
+              <path d="M1.5 12s3.75-6.75 10.5-6.75S22.5 12 22.5 12s-3.75 6.75-10.5 6.75S1.5 12 1.5 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          )}
+ 
+
 
 
         </div>
 
         <button 
-          ////////////////back////////////////
+          ////////////////back///////////////
           onClick={handleLogin}
 
           //Llamada al boton
