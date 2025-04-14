@@ -11,7 +11,9 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   const [password, setPassword] = useState('');
 
   //Correo dominio//
-  const [errorAtSymbol, setErrorAtSymbol] = useState('');
+  const [errorBeforeAt, setErrorBeforeAt] = useState('');
+
+  const [errorAtSymbol, setErrorAtSymbol] = useState(''); //Validacion del @
 
   const [errorDomain, setErrorDomain] = useState('');
 
@@ -30,10 +32,12 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
     setError('');
     setErrorPasswordLength('');
     //añadi recien 
+    setErrorBeforeAt('');
     setError('');
     setErrorPasswordLength('');
     setErrorDomain('');
     setErrorAtSymbol('');
+    
 
     
     //Dominio
@@ -47,12 +51,21 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       '@icloud.com', 
       '@proton.me'
     ];
-    //añadi recien
+    //validar el signo @
     if (!email.includes('@')) {
       setErrorAtSymbol('Incluye un signo @ en el correo electrónico.');
       setHasLoginError(true);
       return;
     }
+
+    // Validar que contenga texto antes del @
+    const atIndex = email.indexOf('@');
+    if (atIndex <= 0) {
+      setErrorBeforeAt('Ingresa nombre de usuario antes del signo @');
+      setHasLoginError(true);
+      return;
+    }
+
     
     const emailDomain = email.substring(email.indexOf('@'));
   
@@ -145,9 +158,9 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
         </div>
 
         {errorDomain && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorDomain}</p>)}
-        {errorAtSymbol && (
-          <p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorAtSymbol}</p>
-        )}
+        {errorAtSymbol && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorAtSymbol}</p>)}
+        {errorBeforeAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorBeforeAt}</p>)}
+
 
 
         {/*borde contraseña*/}
