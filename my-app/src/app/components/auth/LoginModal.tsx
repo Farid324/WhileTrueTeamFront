@@ -68,19 +68,33 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const [errorPasswordLength, setErrorPasswordLength] = useState('');
+
   //Efecto de boton cuando no escribes en los inputs correo y contraseña
   const isButtonDisabled = !email || !password;
   const [hasLoginError, setHasLoginError] = useState(false);
+
   //Efecto de boton de activar o desactivar poder ver la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
+    setError('');
+  setErrorPasswordLength('');
+
+  // Validar longitud
+  if (password.length < 8 || password.length > 25) {
+    setErrorPasswordLength('La cantidad mínima es de 8 caracteres y el máximo es de 25 caracteres.');
+    setHasLoginError(true);
+    return; // si no cumple longitud, NO INTENTAR loguear
+  }
+
     try {
       const result = await login(email, password);
       console.log('Login exitoso:', result);
       setError('');
       setHasLoginError(false);
       // Puedes hacer algo con el resultado aquí, como guardar el token o redirigir
+      
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       setError('Los datos no son validos.');
@@ -168,27 +182,35 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             </h4>
             <input
               type={showPassword ? 'text' : 'password'}
+              
               placeholder="Ingrese contraseña"
-              className={`w-full h-4 p-4 rounded-lg ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
+              className={`w-full h-4 p-4 rounded-lg  ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
               ////////////////back////////////////
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 25) {
+                  setPassword(value);
+                }
+              }}
               ////////////////////////////////////
               style={{ fontFamily: 'var(--fuente-principal)', fontWeight: 'var(--tamaña-bold)', outline: 'none' }}
             />
           </div>
-          {password ? (
-            showPassword ? (
+
+          {password ? ( showPassword ? (
               // OJO TACHADO (activo)
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 onClick={() => setShowPassword(false)}
-                className="w-[30px] h-[30px] ml-0 mr-4 my-4 text-[var(--azul-oscuro)] cursor-pointer hover:scale-110 transition-all duration-200"
+                className={`w-[30px] h-[30px] ml-0 mr-4 my-4 text-[var(--azul-oscuro)] cursor-pointer hover:scale-110 transition-all duration-200 ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
               >
-                <path d="M2.808 1.393 1.393 2.808l2.74 2.739C2.447 7.36 1.123 9.36.528 10.5a1.5 1.5 0 0 0 0 1.5C3.028 16.5 7.5 20.25 12 20.25c2.045 0 3.984-.745 5.748-1.964l3.444 3.444 1.414-1.415-19.798-19.8zM9.26 7.844l1.591 1.591a3 3 0 0 0 3.713 3.713l1.591 1.591a5.25 5.25 0 0 1-6.895-6.895z" />
-                <path d="M12.004 3.75c4.97 0 9.185 3.223 10.675 7.69a1.762 1.762 0 0 1 0 1.113 11.606 11.606 0 0 1-2.81 4.36l-2.681-2.681a5.25 5.25 0 0 0-6.643-6.643L7.645 5.498A11.384 11.384 0 0 1 12.004 3.75z" />
+                <path d="M1.5 12s3.75-6.75 10.5-6.75S22.5 12 22.5 12s-3.75 6.75-10.5 6.75S1.5 12 1.5 12z" />
+                <circle cx="12" cy="12" r="5" className="text-[var(--blanco)]"/>
+                <circle cx="12" cy="12" r="3" className={`text-[var(--azul-oscuro)] ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}/>
+                <line x1="6" y1="18" x2="18" y2="6" stroke="currentColor" strokeWidth="2" className={`text-[var(--azul-oscuro)] ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'} `} />
               </svg>
             ) : (
               // OJO NORMAL (activo)
@@ -197,10 +219,11 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 onClick={() => setShowPassword(true)}
-                className="w-[30px] h-[30px] ml-0 mr-4 my-4 text-[var(--azul-oscuro)] cursor-pointer hover:scale-110 transition-all duration-200"
+                className={`w-[30px] h-[30px] ml-0 mr-4 my-4 text-[var(--azul-oscuro)] cursor-pointer hover:scale-110 transition-all duration-200 ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
               >
                 <path d="M1.5 12s3.75-6.75 10.5-6.75S22.5 12 22.5 12s-3.75 6.75-10.5 6.75S1.5 12 1.5 12z" />
-                <circle cx="12" cy="12" r="3" />
+                <circle cx="12" cy="12" r="5" className="text-[var(--blanco)]"/>
+                <circle cx="12" cy="12" r="3" className={`text-[var(--azul-oscuro)] ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}/>
               </svg>
             )
           ) : (
@@ -209,18 +232,20 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="w-[30px] h-[30px] ml-0 mr-4 my-4 text-[rgba(0,0,0,0.2)] cursor-not-allowed transition-all duration-200"
+              className={`w-[30px] h-[30px] ml-0 mr-4 my-4 ${hasLoginError ? 'text-[rgba(248,89,89,0.5)]' : 'text-[var(--azul-opaco)]'} cursor-not-allowed transition-all duration-200`}
             >
               <path d="M1.5 12s3.75-6.75 10.5-6.75S22.5 12 22.5 12s-3.75 6.75-10.5 6.75S1.5 12 1.5 12z" />
-              <circle cx="12" cy="12" r="3" />
+              <circle cx="12" cy="12" r="5" className="text-[var(--blanco)]"/>
+              <circle cx="12" cy="12" r="3" className={`${hasLoginError ? 'text-[rgba(248,89,89,0.5)]' : 'text-[var(--azul-opaco)]'}`}/>
             </svg>
           )}
- 
-
-
-
+  
         </div>
-
+        {errorPasswordLength && (
+            <p className="text-[var(--rojo)] text-center font-[var(--tamaña-bold)] mt-2">
+        {errorPasswordLength}
+            </p>
+        )}
         <button 
           ////////////////back///////////////
           onClick={handleLogin}
