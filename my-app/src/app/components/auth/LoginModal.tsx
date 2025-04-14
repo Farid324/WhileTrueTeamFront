@@ -82,11 +82,11 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   setErrorPasswordLength('');
 
   // Validar longitud
-  if (password.length < 8 || password.length > 25) {
+  /*if (password.length < 8 || password.length > 25) {
     setErrorPasswordLength('La cantidad mínima es de 8 caracteres y el máximo es de 25 caracteres.');
     setHasLoginError(true);
     return; // si no cumple longitud, NO INTENTAR loguear
-  }
+  }*/
 
     try {
       const result = await login(email, password);
@@ -97,8 +97,10 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      setError('Los datos no son validos.');
+      setError(error?.response?.data?.message || 'Error al iniciar sesión.');
       setHasLoginError(true);
+      /*setError('Los datos no son validos.');
+      setHasLoginError(true);*/
     }
   };
   /////////////////////////////////
