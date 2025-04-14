@@ -85,6 +85,16 @@
 .terms input {
   margin: 0;
 }
+.termsLink {
+  color: #FCA311; /* Color naranja */
+  text-decoration: none;
+  margin-left: 0.2rem;
+}
+
+.termsLink:hover {
+  text-decoration: underline;
+}
+
 
 /* Botón de cerrar */
 .close {

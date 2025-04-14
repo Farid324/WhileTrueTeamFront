@@ -303,7 +303,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
           <div className={styles.terms}>
             <input type="checkbox" id="terms" name="terms" required />
             <label htmlFor="terms">
-              He leído y acepto los Términos y condiciones
+            He leído y acepto los <a href="/terms" className={styles.termsLink}>Términos y condiciones</a>
             </label>
           </div> 
             
@@ -315,7 +315,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             Registrarse
           </button>
         </form>
-
+          
         <button className={styles.close} onClick={onClose}>
           ✕
         </button>
