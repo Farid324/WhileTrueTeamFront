@@ -219,3 +219,25 @@
   margin-left: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.8rem; /* Espacio pequeño debajo del botón */
+}
+
+.loginLabel {
+  font-size: 0.75rem; /* Más pequeño */
+  color: #11295B;
+  text-align: center;
+}
+
+.loginLink {
+  color: #FCA311;
+  font-weight: bold;
+  text-decoration: none;
+  margin-left: 0.2rem;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}

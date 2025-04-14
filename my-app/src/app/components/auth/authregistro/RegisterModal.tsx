@@ -315,7 +315,11 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             Registrarse
           </button>
         </form>
-          
+        <div className={styles.loginContainer}>
+               <label className={styles.loginLabel}>
+               ¿Ya tienes cuenta? <a href="/login" className={styles.loginLink}>Iniciar Sesión</a>
+           </label>
+            </div> 
         <button className={styles.close} onClick={onClose}>
           ✕
         </button>
