@@ -6,7 +6,7 @@ const PasswordRecoveryModal = ({ onClose, onPasswordRecoverySubmit }: { onClose:
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h2 className={styles.title}>Recupera tu contraseña de <span className={styles.brand}>REDIBO</span>
+        <h2 className={styles.title}>Recupera tu contraseña de <br /> <span className={styles.brand}>REDIBO</span>
         </h2>
         <p className={styles.text}>Ingresa el correo con el que te registraste en REDIBO.</p>
 

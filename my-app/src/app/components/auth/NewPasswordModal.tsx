@@ -15,7 +15,7 @@ const NewPasswordModal = ({ onClose, onPasswordRecoverySubmit }: { onClose: () =
 
         {/* Input: Nueva contraseña */}
         <div className={styles.textofuera}>
-          <h4 className={styles.textoinputfuera}>Contraseña</h4>
+          {/*<h4 className={styles.textoinputfuera}>Contraseña</h4>*/}
           <input
             className={styles.input}
             type="password"
@@ -25,7 +25,7 @@ const NewPasswordModal = ({ onClose, onPasswordRecoverySubmit }: { onClose: () =
 
         {/* Input: Confirmar contraseña */}
         <div className={styles.textofuera}>
-          <h4 className={styles.textoinputfuera}>Confirmar contraseña</h4>
+          {/*<h4 className={styles.textoinputfuera}>Confirmar contraseña</h4>*/}
           <input
             className={styles.input}
             type="password"
