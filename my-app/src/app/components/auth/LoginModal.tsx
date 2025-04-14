@@ -11,6 +11,8 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   const [password, setPassword] = useState('');
 
   //Correo dominio//
+  const [errorAtSymbol, setErrorAtSymbol] = useState('');
+
   const [errorDomain, setErrorDomain] = useState('');
 
   const [error, setError] = useState('');
@@ -27,6 +29,12 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   const handleLogin = async () => {
     setError('');
     setErrorPasswordLength('');
+    //añadi recien 
+    setError('');
+    setErrorPasswordLength('');
+    setErrorDomain('');
+    setErrorAtSymbol('');
+
     
     //Dominio
     setErrorDomain('');
@@ -39,6 +47,13 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       '@icloud.com', 
       '@proton.me'
     ];
+    //añadi recien
+    if (!email.includes('@')) {
+      setErrorAtSymbol('Incluye un signo @ en el correo electrónico.');
+      setHasLoginError(true);
+      return;
+    }
+    
     const emailDomain = email.substring(email.indexOf('@'));
   
     if (!allowedDomains.includes(emailDomain)) {
@@ -130,6 +145,9 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
         </div>
 
         {errorDomain && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorDomain}</p>)}
+        {errorAtSymbol && (
+          <p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorAtSymbol}</p>
+        )}
 
 
         {/*borde contraseña*/}
