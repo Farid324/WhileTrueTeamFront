@@ -1,6 +1,7 @@
 import React from 'react';
-import Services from './Services'; 
+import Terminos from './Terminos';
 
 export default function Page() {
-  return <Services />; 
+  return <Terminos />;
 }
+

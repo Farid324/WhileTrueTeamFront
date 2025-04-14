@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import styles from './Services.module.css';
+import styles from './Terminos.module.css';
 
-export default function Services() {
+export default function Terminos() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   useEffect(() => {
