@@ -1,60 +1,3 @@
-/*
-'use client';
-import styles from './LoginModal.module.css';
-
-export default function LoginModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <svg  viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className={styles.close} onClick={onClose}>
-          <path fill-rule="evenodd" d="M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504 738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512 828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496 285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512 195.2 285.696a64 64 0 0 1 0-90.496z" clip-rule = "evenodd"/>
-        </svg>
-
-        <h1 className={styles.tituloPrincipal}>
-          Bienvenido a <br />
-          <span className={styles.tituloRedibo}>REDIBO</span> <br />
-          <span className={styles.tituloAzul}>Iniciar sesión</span>
-        </h1>
-
-        <div className={styles.inputBase}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className = {styles.iconoCorreo} >
-            <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-            <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
-          </svg>
-          <div className={styles.inputTexto}>
-            <h4 className={styles.textoCC}>Correo</h4>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Ingrese correo electrónico"
-            />
-          </div>
-        </div>
-
-        <div className={styles.inputBase}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={styles.iconoContrasena}>
-            <path fill-rule="evenodd" d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" clip-rule="evenodd" />
-          </svg>
-          <div className={styles.inputTexto}>
-          <h4 className={styles.textoCC}>Contraseña</h4>
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="Ingrese contraseña"
-          />
-          </div>
-        </div>
-
-        <button className={styles.button}>Iniciar sesión</button>
-        <button className={styles.recuperarContrasena} onClick={onClose}>Recuperar Contraseña</button>
-        <h5 className={styles.text1}>¿No tienes una cuenta? <button className={styles.registrarse} onClick={onClose}>Registrarse</button></h5>
-          Cerrar
-        
-      </div>
-    </div>
-  );
-}
-*/
 'use client';
 
 ////////////back///////////
@@ -66,6 +9,10 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   ////////////Back//////////////
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  //Correo dominio//
+  const [errorDomain, setErrorDomain] = useState('');
+
   const [error, setError] = useState('');
 
   const [errorPasswordLength, setErrorPasswordLength] = useState('');
@@ -79,14 +26,32 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
 
   const handleLogin = async () => {
     setError('');
-  setErrorPasswordLength('');
-
+    setErrorPasswordLength('');
+    
+    //Dominio
+    setErrorDomain('');
+    const allowedDomains = [
+      '@gmail.com', 
+      '@outlook.com', 
+      '@hotmail.com', 
+      '@live.com', 
+      '@yahoo.com', 
+      '@icloud.com', 
+      '@proton.me'
+    ];
+    const emailDomain = email.substring(email.indexOf('@'));
+  
+    if (!allowedDomains.includes(emailDomain)) {
+      setErrorDomain('Introduzca un dominio correcto.');
+      setHasLoginError(true);
+      return; // ⚠️ No intentar loguear si el dominio es incorrecto
+  }
   // Validar longitud
-  /*if (password.length < 8 || password.length > 25) {
+  if (password.length < 8 || password.length > 25) {
     setErrorPasswordLength('La cantidad mínima es de 8 caracteres y el máximo es de 25 caracteres.');
     setHasLoginError(true);
     return; // si no cumple longitud, NO INTENTAR loguear
-  }*/
+  }
 
     try {
       const result = await login(email, password);
@@ -97,10 +62,10 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      setError(error?.response?.data?.message || 'Error al iniciar sesión.');
-      setHasLoginError(true);
-      /*setError('Los datos no son validos.');
+      /*setError(error?.response?.data?.message || 'Error al iniciar sesión.');
       setHasLoginError(true);*/
+      setError('Los datos no son validos.');
+      setHasLoginError(true);
     }
   };
   /////////////////////////////////
@@ -134,7 +99,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           </span>
         </h1>
         {/*borde correo*/}
-        <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mb-6 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
+        <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mt-0 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
           {/*icono correo*/}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -163,8 +128,12 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             />
           </div>
         </div>
+
+        {errorDomain && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorDomain}</p>)}
+
+
         {/*borde contraseña*/}
-        <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mb-6 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
+        <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mt-6 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
           {/*icono correo*/}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -242,12 +211,8 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             </svg>
           )}
   
-        </div>
-        {errorPasswordLength && (
-            <p className="text-[var(--rojo)] text-center font-[var(--tamaña-bold)] mt-2">
-        {errorPasswordLength}
-            </p>
-        )}
+        </div>{errorPasswordLength && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorPasswordLength}</p>)}
+        
         <button 
           ////////////////back///////////////
           onClick={handleLogin}
@@ -261,14 +226,14 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             : 'bg-[var(--naranja)] hover:scale-95 hover:bg-[var(--naranja)]'}
           shadow-[0_0px_4px_rgba(0,0,0,0.25)] 
           text-[var(--blanco)] cursor-pointer 
-          mt-4 mb-4 p-4 rounded-[40px] 
+          mt-6 mb-0 p-4 rounded-[40px] 
           border-none font-[var(--tamaña-bold)]
           transition-all duration-300 ease-in-out`} 
           style={{ fontFamily: 'var(--fuente-principal)' }}>
           Iniciar sesión
         </button>
 
-        {error && <p className="text-[var(--rojo)] text-center font-[var(--tamaña-bold)]">{error}</p>}
+        {error && <p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{error}</p>}
         
         <button
           className="text-[var(--azul-oscuro)] underline cursor-pointer w-full transition-colors duration-200 my-4 border-none"
