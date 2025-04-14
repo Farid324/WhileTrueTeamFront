@@ -11,7 +11,9 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   const [password, setPassword] = useState('');
 
   //Correo dominio//
-  const [errorBeforeAt, setErrorBeforeAt] = useState('');
+  const [errorBeforeAt, setErrorBeforeAt] = useState('');//Validacion que contenga texto antes del @
+
+  const [errorTextAfterAt, setErrorTextAfterAt] = useState('');
 
   const [errorAtSymbol, setErrorAtSymbol] = useState(''); //Validacion del @
 
@@ -33,6 +35,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
     setErrorPasswordLength('');
     //añadi recien 
     setErrorBeforeAt('');
+    setErrorTextAfterAt('');
     setError('');
     setErrorPasswordLength('');
     setErrorDomain('');
@@ -65,6 +68,15 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       setHasLoginError(true);
       return;
     }
+    // Validar que contenga texto después del @
+    const textAfterAt = email.substring(atIndex + 1);
+
+    if (textAfterAt.trim() === '') {
+      setErrorTextAfterAt('Ingresa un dominio después del signo @');
+      setHasLoginError(true);
+      return;
+    }
+
 
     
     const emailDomain = email.substring(email.indexOf('@'));
@@ -160,6 +172,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
         {errorDomain && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorDomain}</p>)}
         {errorAtSymbol && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorAtSymbol}</p>)}
         {errorBeforeAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorBeforeAt}</p>)}
+        {errorTextAfterAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorTextAfterAt}</p>)}
 
 
 
