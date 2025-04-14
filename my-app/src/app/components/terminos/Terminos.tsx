@@ -31,13 +31,20 @@ export default function Terminos() {
   
 
   return (
-    <div className="flex flex-col min-h-screen font-[Inter]">
+    <div className="flex flex-col min-h-screen font-family: var(--fuente-principal)">
       <header className="bg-white px-[10rem] py-4 border-b-[2px] border-black/5 fixed top-0 left-0 right-0 z-[1000]">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <div className="text-2xl font-black text-[#FCA311] drop-shadow-[0px_2px_6px_rgba(0,0,0,0.56)]">
+          <div
+            className="text-[2.1rem] text-[var(--naranja)] font-[var(--tamaño-black)]"
+            style={{
+              fontFamily: 'var(--fuente-principal)',
+              textShadow: '1px 2px 2px rgba(0,0,0,0.3)'
+            }}
+          >
             REDIBO
           </div>
+
 
           {/* Menú Naranja (botones) */}
           <div className="flex">
