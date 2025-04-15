@@ -102,13 +102,14 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       setHasLoginError(false);
       // Puedes hacer algo con el resultado aquí, como guardar el token o redirigir
       
-    } catch (error) {
+    }  catch (error) {
       console.error('Error al iniciar sesión:', error);
       /*setError(error?.response?.data?.message || 'Error al iniciar sesión.');
       setHasLoginError(true);*/
       setError('Los datos no son validos.');
       setHasLoginError(true);
     }
+
   };
   /////////////////////////////////
 
@@ -184,8 +185,8 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
         {errorAtSymbol && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorAtSymbol}</p>)}
         {errorBeforeAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorBeforeAt}</p>)}
         {errorTextAfterAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorTextAfterAt}</p>)}
+        
         {errorEmailLength && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorEmailLength}</p>)}
-
 
         {/*borde contraseña*/}
         <div className={`flex shadow-[2px_2px_4px_rgba(0,0,0,0.4)] mt-6 rounded-lg border-2 border-solid ${hasLoginError ? 'border-[var(--rojo)]' : 'border-[var(--negro)]'}`}>
