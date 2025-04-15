@@ -13,9 +13,11 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   //Correo dominio//
   const [errorBeforeAt, setErrorBeforeAt] = useState('');//Validacion que contenga texto antes del @
 
-  const [errorTextAfterAt, setErrorTextAfterAt] = useState('');
+  const [errorTextAfterAt, setErrorTextAfterAt] = useState('');//Validacion que contenga dominio despues del @
 
   const [errorAtSymbol, setErrorAtSymbol] = useState(''); //Validacion del @
+
+  const [errorEmailLength, setErrorEmailLength] = useState('');
 
   const [errorDomain, setErrorDomain] = useState('');
 
@@ -162,7 +164,16 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
               className={`w-full h-4 p-4 rounded-lg ${hasLoginError ? 'text-[var(--rojo)]' : 'text-[var(--azul-oscuro)]'}`}
               ////////////////back////////////////
               value = {email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 70) {
+                  setEmail(value);
+                  setErrorEmailLength('');
+                } else {
+                  setErrorEmailLength('La cantidad máxima es de 70 caracteres');
+                }
+              }}
+              
               //////////////////////////////////////
               style={{ fontFamily: 'var(--fuente-principal)', fontWeight: 'var(--tamaña-bold)', outline: 'none' }}
             />
@@ -173,7 +184,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
         {errorAtSymbol && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorAtSymbol}</p>)}
         {errorBeforeAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorBeforeAt}</p>)}
         {errorTextAfterAt && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorTextAfterAt}</p>)}
-
+        {errorEmailLength && (<p className="text-[var(--rojo)] text-center text-[0.8rem] font-[var(--tamaña-bold)] mt-1">{errorEmailLength}</p>)}
 
 
         {/*borde contraseña*/}
