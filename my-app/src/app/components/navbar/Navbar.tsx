@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 
-export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
+export default function Navbar({ onLoginClick, onRegisterClick }: { 
+  onLoginClick: () => void; 
+  onRegisterClick: () => void; 
+}) {
   const [activeBtn, setActiveBtn] = useState(0);
 
   return (
@@ -39,7 +42,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
         </div>
 
         <div className="flex justify-center md:justify-end gap-0 w-full md:w-auto">
-          <button className="w-1/2 md:w-auto px-4 md:px-8 py-[0.4rem] rounded-l-[20px] bg-[var(--naranja-46)] font-[var(--tamaño-regular)] text-[var(--azul-oscuro)] shadow-[var(--sombra)] text-sm md:text-base">
+          <button onClick={onRegisterClick} className="w-1/2 md:w-auto px-4 md:px-8 py-[0.4rem] rounded-l-[20px] bg-[var(--naranja-46)] font-[var(--tamaño-regular)] text-[var(--azul-oscuro)] shadow-[var(--sombra)] text-sm md:text-base">
             Registrarse
           </button>
           <button
