@@ -17,7 +17,6 @@
   padding: 2rem;
   border-radius: 12px;
   width: 30rem;
-  /* height: auto; */
   height: fit-content;
   max-height: 90vh;
   overflow-y: auto;
@@ -111,11 +110,6 @@
   text-decoration-thickness: 2px;
   opacity: 0.9;
 }
-
-/* .terms input {
-  margin: 0;
-}
- */
 
 
 /* Botón de cerrar */

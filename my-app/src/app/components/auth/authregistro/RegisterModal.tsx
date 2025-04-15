@@ -198,12 +198,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
       setError("No se pudo conectar al servidor.");
     }
 
-    /* if (!name) {
-      setNameError(true);
-      return;
-    } else {
-      setNameError(false);
-    } */
   };
 
   return (
@@ -212,6 +206,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
         <h2 className={styles.title}>Registrarse</h2>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+          {/* campo nombre completo */}
           <div
             className={`${styles.halfInput} ${
               nameError ? styles.errorInput : ""
@@ -250,8 +245,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                 className={`${styles.input} ${
                   nameError ? styles.errorInput : ""
                 }`}
-                /*className={styles.input}*/
-                /*required*/
               />
             </div>
           </div>
@@ -273,6 +266,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
               <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
             </svg>
 
+            {/* campo correo electronico */}
             <div className={styles.halfInput2}>
               <label
                 htmlFor="email"
@@ -280,14 +274,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
               >
                 Correo electrónico
               </label>
-              {/* <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Correo electrónico"
-                className={styles.input}
-                required
-              /> */}
               <input
                 type="email"
                 id="email"
@@ -301,6 +287,8 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
               />
             </div>
           </div>
+
+          {/* campo contraseña */}
           <div className={styles.passwordRow}>
             <div
               className={`${styles.halfInputC1} ${
@@ -329,14 +317,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                 >
                   Contraseña
                 </label>
-                {/* <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Contraseña"
-                  className={styles.input2}
-                  required
-                /> */}
                 <input
                   type="password"
                   id="password"
@@ -361,6 +341,8 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                   </p>
                 )}
               </div>
+
+              {/* campo confirmar contraseña */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -405,14 +387,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                 >
                   Confirmar Contraseña
                 </label>
-                {/* <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="Confirme su contraseña"
-                  className={styles.input2}
-                  required
-                /> */}
                 <input
                   type="password"
                   id="confirmPassword"
@@ -457,6 +431,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          {/* campo fecha de nacimiento */}
           <div
             className={`${styles.halfInput} ${
               birthError ? styles.errorInput : ""
@@ -483,7 +458,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
               </label>
 
               <div className={styles.birthInputs}>
-                {/* <select name="birthDay" required className={styles.select}> */}
                 <select
                   name="birthDay"
                   className={`${styles.select} ${
@@ -497,7 +471,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                     </option>
                   ))}
                 </select>
-                {/* <select name="birthMonth" required className={styles.select}> */}
                 <select
                   name="birthMonth"
                   className={`${styles.select} ${
@@ -511,7 +484,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                     </option>
                   ))}
                 </select>
-                {/* <select name="birthYear" required className={styles.select}> */}
                 <select
                   name="birthYear"
                   className={`${styles.select} ${
@@ -532,6 +504,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          {/* campo telefono */}
           <div
             className={`${styles.halfInput} ${
               phoneError ? styles.errorInput : ""
@@ -559,15 +532,6 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
               >
                 Teléfono
               </label>
-              {/* <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="Ingrese número de teléfono"
-                pattern="[0-9]{8}"
-                className={styles.input}
-                required
-              /> */}
               <input
                 type="tel"
                 id="phone"
@@ -584,6 +548,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          {/* campo terminos y condiciones */}
           <div className={styles.terms}>
             <input type="checkbox" id="terms" name="terms" />
             <label htmlFor="terms">
@@ -618,10 +583,12 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>
           )}
 
+          {/* BOTON REGISTRARSE */}
           <button type="submit" className={styles.button}>
             Registrarse
           </button>
 
+          {/* campo ya tienes cuenta? */}
           <p
             style={{
               textAlign: "center",
@@ -639,6 +606,8 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             </a>
           </p>
         </form>
+
+        {/* BOTON CERRAR MODAL */}
         <button className={styles.close} onClick={onClose}>
           ✕
         </button>
