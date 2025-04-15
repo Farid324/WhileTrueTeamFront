@@ -117,8 +117,8 @@ export default function Terminos() {
             <section id="descripcion" className="mb-8 scroll-mt-[104.4px]">
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Descripción de la Plataforma</h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4 font-[var(--tamaño-regular)]">
-                REDIBO es un servicio en línea diseñado para conectar propietarios de vehículos ("Hosts") con personas interesadas en alquilar
-                autos ("Renters"). Nuestra misión es proporcionar una experiencia segura, cómoda y eficiente para el alquiler de vehículos, 
+                REDIBO es un servicio en línea diseñado para conectar propietarios de vehículos (&quot;Host&quot;) con personas interesadas en alquilar
+                autos (&quot;Renters&quot;). Nuestra misión es proporcionar una experiencia segura, cómoda y eficiente para el alquiler de vehículos, 
                 asegurando que todas las transacciones sean claras y equitativas para ambas partes. A través de nuestra tecnología 
                 innovadora, facilitamos el proceso de reserva, pago y comunicación, asegurando que cada alquiler sea una experiencia 
                 satisfactoria y confiable.
