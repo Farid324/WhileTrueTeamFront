@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { BellIcon } from "@heroicons/react/24/outline";
 
-// Tipo de notificación
+// Tipo para notificaciones
 type Notification = {
   id: number;
   title: string;
@@ -36,9 +36,9 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      {/* Contenedor central como app móvil */}
-      <div className="w-full max-w-[375px] min-h-screen bg-white relative border border-gray-300 shadow-lg">
+    <div className="flex justify-center bg-white min-h-screen">
+      {/* Contenedor móvil */}
+      <div className="w-full max-w-[375px] min-h-screen relative bg-white border border-black">
         
         {/* Header */}
         <header className="w-full flex flex-col items-center">
@@ -52,12 +52,13 @@ export default function Home() {
               className="relative"
             >
               <BellIcon className="h-7 w-7 text-[#FCA311]" />
+              {/* Circulito rojo indicador */}
               <span className="absolute -top-1 -right-1 bg-red-500 rounded-full h-3 w-3" />
             </button>
           </div>
         </header>
 
-        {/* Notificaciones */}
+        {/* Lista de Notificaciones */}
         {showNotifications && (
           <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[90%] max-w-xs z-40 bg-white border border-gray-200 rounded-lg shadow-lg p-4 space-y-4">
             {notifications.map((notification, index) => (
@@ -70,11 +71,11 @@ export default function Home() {
                 {/* Círculo gris */}
                 <div className="w-12 h-12 bg-gray-400 rounded-full flex-shrink-0" />
 
-                {/* Texto */}
+                {/* Texto de notificación */}
                 <div className="ml-4 flex-1">
-                  <h3 className="font-semibold text-sm">{notification.title}</h3>
-                  <p className="text-[11px] text-gray-600">{notification.date}</p>
-                  <p className="text-[11px] text-gray-600">{notification.message}</p>
+                  <h3 className="font-semibold text-sm text-black">{notification.title}</h3>   {/* Negro */}
+                  <p className="text-[11px] text-black">{notification.date}</p>               {/* Negro */}
+                  <p className="text-[11px] text-black">{notification.message}</p>            {/* Negro */}
                 </div>
               </div>
             ))}
@@ -88,11 +89,11 @@ export default function Home() {
 
         {/* Contenido principal */}
         <main className="pt-24 p-6">
-          <p className="text-center text-gray-600 text-base">
+          <p className="text-center text-gray-600">
             Bienvenido a tu panel de control.
           </p>
         </main>
       </div>
-    </div>
-  );
+    </div>
+  );
 }
