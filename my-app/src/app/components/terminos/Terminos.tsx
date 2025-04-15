@@ -34,7 +34,6 @@ export default function Terminos() {
     <div className="flex flex-col min-h-screen font-family: var(--fuente-principal)">
       <header className="bg-[var(--blanco)] px-[10rem] py-4 border-b-[2px] border-black/5 fixed top-0 left-0 right-0 z-[1000]">
         <div className="flex justify-between items-center">
-          {/* Logo */}
           <div
             className="text-[2.1rem] text-[var(--naranja)] font-[var(--tamaño-black)]"
             style={{
@@ -46,7 +45,6 @@ export default function Terminos() {
           </div>
 
 
-          {/* Menú Naranja (botones) */}
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <button
@@ -62,7 +60,6 @@ export default function Terminos() {
             ))}
           </div>
 
-          {/* Botones de autenticación */}
           <div className="flex gap-2">
             <button className="bg-[var(--naranja-46)] text-[var(--azul-oscuro)] font-[var(--tamaño-regular)] rounded-l-[20px] py-2 px-8 border-none cursor-pointer">
               Registrarse
@@ -77,7 +74,6 @@ export default function Terminos() {
       
       <main className="flex-1 bg-[var(--blanco)] pt-[4.5rem] px-4 md:px-12">
         <div className="flex flex-col md:flex-row items-start gap-8 max-w-[1200px] mx-auto">
-          {/* SIDEBAR */}
           <aside className="flex-none w-full md:w-[260px] bg-[var(--hueso)] p-[2.2rem] md:ml-[-70px] sticky top-[100px] h-fit rounded-[8px] shadow-[var(--sombra)]">
             <nav>
               <ul className="list-none p-0 m-0">
@@ -116,8 +112,7 @@ export default function Terminos() {
             <h1 className="text-[2.4rem] font-[var(--tamaña-bold)] text-center text-[var(--negro)] mb-4">Términos y Condiciones REDIBO</h1>
             <p className="text-sm text-[var(--negro)] font-[var(--tamaño-regular)] mb-6">Última Actualización: 10 Marzo 2025</p>
              
-           
-        
+               
           
             <section id="descripcion" className="mb-8 scroll-mt-[104.4px]">
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Descripción de la Plataforma</h2>
@@ -286,8 +281,6 @@ export default function Terminos() {
             </section>
 
             
-        
-
             <section id="cancelaciones" className="mb-8 scroll-mt-[104.4px]">
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Cancelaciones y Reembolsos</h2>
 
