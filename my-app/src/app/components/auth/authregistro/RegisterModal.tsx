@@ -7,90 +7,64 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+  
     const form = e.target as HTMLFormElement;
-
-    // Acceso seguro a los inputs
-    const name = (
-      form.elements.namedItem("name") as HTMLInputElement
-    ).value.trim();
-    const email = (
-      form.elements.namedItem("email") as HTMLInputElement
-    ).value.trim();
-    const password = (
-      form.elements.namedItem("password") as HTMLInputElement
-    ).value.trim();
-    const confirmPassword = (
-      form.elements.namedItem("confirmPassword") as HTMLInputElement
-    ).value.trim();
-    const phone = (
-      form.elements.namedItem("phone") as HTMLInputElement
-    ).value.trim();
-    const terms = (form.elements.namedItem("terms") as HTMLInputElement)
-      .checked;
-
-    const birthDay = (form.elements.namedItem("birthDay") as HTMLSelectElement)
-      .value;
-    const birthMonth = (
-      form.elements.namedItem("birthMonth") as HTMLSelectElement
-    ).value;
-    const birthYear = (
-      form.elements.namedItem("birthYear") as HTMLSelectElement
-    ).value;
-
-    // Validaciones frontend
+  
+    const name = (form.elements.namedItem("name") as HTMLInputElement).value.trim();
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value.trim();
+    const confirmPassword = (form.elements.namedItem("confirmPassword") as HTMLInputElement).value.trim();
+    const phone = (form.elements.namedItem("phone") as HTMLInputElement).value.trim();
+  
+    const birthDay = (form.elements.namedItem("birthDay") as HTMLSelectElement).value;
+    const birthMonth = (form.elements.namedItem("birthMonth") as HTMLSelectElement).value;
+    const birthYear = (form.elements.namedItem("birthYear") as HTMLSelectElement).value;
+  
     if (!email.includes("@")) {
       setError("El correo debe contener un @");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden");
       return;
     }
-
-    if (!terms) {
-      setError("Debes aceptar los términos y condiciones");
-      return;
-    }
-
+  
     try {
-      // Verificar correo duplicado
-      const existing = await fetch(
-        `http://localhost:3002/users?email=${email}`
-      );
-      const existingUsers = await existing.json();
-
-      if (existingUsers.length > 0) {
-        setError("Este correo ya está registrado");
-        return;
-      }
-
+      const fechaNacimiento = new Date(
+        Number(birthYear),
+        Number(birthMonth) - 1, // Mes en JavaScript empieza desde 0
+        Number(birthDay)
+      ).toISOString(); // Prisma espera ISO format
+  
       const user = {
-        name,
+        nombre_completo: name,
         email,
-        password,
-        phone,
-        birthDate: `${birthDay}/${birthMonth}/${birthYear}`,
+        contraseña: password,
+        fecha_nacimiento: fechaNacimiento,
+        telefono: phone ? parseInt(phone) : null,
       };
-
-      const res = await fetch("http://localhost:3002/users", {
+  
+      const res = await fetch("http://localhost:3001/api/register", { // 👈 URL de tu backend
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
-
+  
       if (res.ok) {
         alert("¡Usuario registrado con éxito!");
         form.reset();
         onClose();
       } else {
-        setError("Hubo un error al registrar. Intenta nuevamente.");
+        const data = await res.json();
+        setError(data.message || "Hubo un error al registrar. Intenta nuevamente.");
       }
     } catch (error) {
+      console.error(error);
       setError("No se pudo conectar al servidor.");
     }
   };
+  
 
   return (
     <div className={styles.overlay}>
@@ -303,10 +277,13 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
           <div className={styles.terms}>
             <input type="checkbox" id="terms" name="terms" required />
             <label htmlFor="terms">
-            He leído y acepto los <a href="/terms" className={styles.termsLink}>Términos y condiciones</a>
+              He leído y acepto los{" "}
+              <a href="/terms" className={styles.termsLink}>
+                Términos y condiciones
+              </a>
             </label>
-          </div> 
-            
+          </div>
+
           {error && (
             <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>
           )}
@@ -316,10 +293,13 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
           </button>
         </form>
         <div className={styles.loginContainer}>
-               <label className={styles.loginLabel}>
-               ¿Ya tienes cuenta? <a href="/login" className={styles.loginLink}>Iniciar Sesión</a>
-           </label>
-            </div> 
+          <label className={styles.loginLabel}>
+            ¿Ya tienes cuenta?{" "}
+            <a href="/login" className={styles.loginLink}>
+              Iniciar Sesión
+            </a>
+          </label>
+        </div>
         <button className={styles.close} onClick={onClose}>
           ✕
         </button>
