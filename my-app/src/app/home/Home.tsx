@@ -23,7 +23,7 @@ export default function Home() {
   };
 
   const handleCodeVerificationSubmit = () => {
-    setModalState('newPassword'); // <-- aquí cambia el modal
+    setModalState('newPassword');
   };
 
   const handleClose = () => {
@@ -51,12 +51,29 @@ export default function Home() {
       </footer>
 
       {/* Mostrar los modales según el estado */}
-      {modalState === 'login' && <LoginModal onClose={handleClose} onLoginSubmit={handleLoginSubmit} />}
-      {modalState === 'passwordRecovery' && <PasswordRecoveryModal onClose={handleClose} onPasswordRecoverySubmit={handlePasswordRecoverySubmit} />}
-      {modalState === 'codeVerification' && <CodeVerificationModal onClose={handleClose} onCodeVerificationSubmit={handleCodeVerificationSubmit} />}
-      {modalState === 'newPassword' && (<NewPasswordModal onClose={handleClose} onPasswordRecoverySubmit={function (): void {
-        throw new Error('Function not implemented.');
-      } } />)}
+      {modalState === 'login' && (
+        <LoginModal onClose={handleClose} onLoginSubmit={handleLoginSubmit} />
+      )}
+      {modalState === 'passwordRecovery' && (
+        <PasswordRecoveryModal
+          onClose={handleClose}
+          onPasswordRecoverySubmit={handlePasswordRecoverySubmit}
+        />
+      )}
+      {modalState === 'codeVerification' && (
+        <CodeVerificationModal
+          onClose={handleClose}
+          onCodeVerificationSubmit={handleCodeVerificationSubmit}
+        />
+      )}
+      {modalState === 'newPassword' && (
+        <NewPasswordModal
+          onClose={handleClose}
+          onPasswordRecoverySubmit={() => {
+            console.log('Contraseña nueva confirmada.');
+          }}
+        />
+      )}
     </div>
   );
 }
