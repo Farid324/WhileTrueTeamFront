@@ -1,4 +1,4 @@
-import Terminos from '@/app/components/terminos/Terminos';
+import Terminos from './Terminos';
 
 export default function Page() {
   return <Terminos />;

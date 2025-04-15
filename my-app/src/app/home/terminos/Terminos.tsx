@@ -1,10 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import Navbar from '@/app/components/navbar/Navbar';
+import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
+import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
+import Footer from '@/app/components/footer/Footer';
 
 
 export default function Terminos() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
 
   useEffect(() => {
     const sections = document.querySelectorAll('section[id]');
@@ -31,8 +35,12 @@ export default function Terminos() {
   
 
   return (
-    <div className="flex flex-col min-h-screen font-family: var(--fuente-principal)">
-      <header className="bg-[var(--blanco)] px-[10rem] py-4 border-b-[2px] border-black/5 fixed top-0 left-0 right-0 z-[1000]">
+    <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
+        <header>
+        <Navbar onLoginClick={() => setActiveModal('login')}
+          onRegisterClick={() => setActiveModal('register')}/>
+        </header>
+      {/*<header className="bg-[var(--blanco)] px-[10rem] py-4 border-b-[2px] border-black/5 fixed top-0 left-0 right-0 z-[1000]">
         <div className="flex justify-between items-center">
           <div
             className="text-[2.1rem] text-[var(--naranja)] font-[var(--tamaño-black)]"
@@ -69,10 +77,10 @@ export default function Terminos() {
             </button>
           </div>
         </div>
-      </header>
+      </header>*/}
 
       
-      <main className="flex-1 bg-[var(--blanco)] pt-[4.5rem] px-4 md:px-12">
+      <main className="flex-1  pt-[4.5rem] px-4 md:px-12">
         <div className="flex flex-col md:flex-row items-start gap-8 max-w-[1200px] mx-auto">
           <aside className="flex-none w-full md:w-[260px] bg-[var(--hueso)] p-[2.2rem] md:ml-[-70px] sticky top-[100px] h-fit rounded-[8px] shadow-[var(--sombra)]">
             <nav>
@@ -372,11 +380,16 @@ export default function Terminos() {
         </div>
       </main>
       
-      <footer className="p-4 bg-[var(--hueso)] text-right font-[var(--fuente-principal)]">
-        <Link href="/terminos">
-          <span className="underline cursor-pointer text-[var(--negro)]">Términos y condiciones</span>
-        </Link>
+      <footer>
+        <Footer/>
       </footer>
+      {activeModal === 'login' && (
+              <LoginModal onClose={() => setActiveModal(null)} />
+            )}
+      
+            {activeModal === 'register' && (
+              <RegisterModal onClose={() => setActiveModal(null)} />
+            )}
     </div>
   );
 }

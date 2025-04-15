@@ -590,9 +590,8 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
               <span className={styles.termsText}>
                 He leído y acepto los{" "}
                 <a
-                  href="/terminos"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/home/terminos"
+                  
                   className={styles.termsLink}
                 >
                   Términos y condiciones
