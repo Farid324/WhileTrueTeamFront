@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Navbar from '../components/navbar/Navbar';
 import FiltersBar from '../components/filters/FiltersBar';
 import Footer from '../components/footer/Footer';
-import LoginModal from '../components/auth/LoginModal';
+import LoginModal from '../components/auth/authInicioSesion/LoginModal';
 import styles from './Home.module.css';
 import RegisterModal from '../components/auth/authregistro/RegisterModal';
 
