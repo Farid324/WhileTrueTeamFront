@@ -261,6 +261,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                 clip-rule="evenodd"
               />
             </svg>
+            
             <div className={styles.halfInput2}>
               <label htmlFor="phone">Teléfono</label>
               <input
@@ -268,6 +269,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
                 id="phone"
                 name="phone"
                 placeholder="Ingrese número de teléfono"
+                pattern="[0-9]{8}"
                 className={styles.input}
                 required
               />
@@ -277,10 +279,14 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
           <div className={styles.terms}>
             <input type="checkbox" id="terms" name="terms" required />
             <label htmlFor="terms">
+<<<<<<< HEAD
               He leído y acepto los{" "}
               <a href="/terms" className={styles.termsLink}>
                 Términos y condiciones
               </a>
+=======
+              He leído y acepto los Términos y condiciones
+>>>>>>> 31aad5d5d52392af56b3440007c0d3f1a3a737eb
             </label>
           </div>
 
@@ -292,6 +298,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             Registrarse
           </button>
         </form>
+<<<<<<< HEAD
         <div className={styles.loginContainer}>
           <label className={styles.loginLabel}>
             ¿Ya tienes cuenta?{" "}
@@ -300,6 +307,9 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             </a>
           </label>
         </div>
+=======
+
+>>>>>>> 31aad5d5d52392af56b3440007c0d3f1a3a737eb
         <button className={styles.close} onClick={onClose}>
           ✕
         </button>
