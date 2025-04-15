@@ -17,7 +17,10 @@
   padding: 2rem;
   border-radius: 12px;
   width: 30rem;
-  height: auto;
+  /* height: auto; */
+  height: fit-content;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   position: relative;
   font-family: var(--fuente-principal);
@@ -48,6 +51,22 @@
   height: 30px;
 }
 
+.cIcon {
+  color: var(--azul-oscuro);
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  width: 30px;
+  height: 30px;
+}
+
+.tIcon {
+  color: var(--azul-oscuro);
+  margin-top: 0.7rem;
+  margin-left: 0.5rem;
+  width: 25px;
+  height: 25px;
+}
+
 .dateGroup {
   display: flex;
   gap: 0.5rem;
@@ -75,16 +94,29 @@
 /* Checkbox de términos */
 .terms {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-  font-size: 0.85rem;
-  color: #5e503f;
 }
 
-.terms input {
+.termsText {
+  font-size: 0.91rem;
+  color: #000000;
+}
+
+.termsLink {
+  color: #FCA311;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.termsLink:hover {
+  text-decoration-thickness: 2px;
+  opacity: 0.9;
+}
+
+/* .terms input {
   margin: 0;
 }
+ */
+
 
 /* Botón de cerrar */
 .close {
@@ -111,7 +143,7 @@
   color: var(--azul-oscuro);
   margin-top: 0.5rem;
   margin-left: 0.5rem;
-  font-size: 0.60rem;
+  font-size: 0.6rem;
   display: block;
 }
 
@@ -125,7 +157,7 @@
   color: var(--azul-oscuro);
 }
 
-.input2{
+.input2 {
   width: 100%;
   border: none;
   border-radius: 8px;
@@ -134,7 +166,7 @@
 }
 
 .input::placeholder {
-  color: rgba(17, 41, 91, 0.5); 
+  color: rgba(17, 41, 91, 0.5);
 }
 
 .halfInput {
@@ -145,15 +177,11 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* sombra suave */
 }
 
-
 .iconollave {
   color: rgb(0, 0, 0);
   width: 30px;
   height: 30px;
   margin: 0.5rem 0 0 0.5rem;
-}
-
-.passwordIcon {
 }
 
 .ojito {
@@ -164,45 +192,27 @@
 }
 
 .passwordRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; /* ❗ evita que se apilen */
+  gap: 1rem;
   margin-bottom: 1rem;
-  display: flex;
-} 
-
-.halfInputC1 {
-  height: 3rem;
-  width: 12rem;
-  margin-right: 1rem;
-  border: 2px solid #11295b;
-  border-radius: 5px;
-  display: flex;
+  align-items: flex-start; /* permite que los campos crezcan en altura diferente */
 }
 
+.halfInputC1,
 .halfInputC2 {
-  height: 3rem;
-  width: 12rem;
-  margin-left: 1rem;
+  display: flex;
+  align-items: center;
   border: 2px solid #11295b;
   border-radius: 5px;
-  display: flex;
+  padding: 0.5rem;
+  flex: 1;
+  gap: 0.5rem;
+  min-width: 12rem;
 }
 
-.cIcon {
-  color: var(--azul-oscuro);
-  margin-top: 0.5rem;
-  margin-left: 0.5rem;
-  width: 30px;
-  height: 30px;
-}
-
-.tIcon {
-  color: var(--azul-oscuro);
-  margin-top: 0.7rem;
-  margin-left: 0.5rem;
-  width: 25px;
-  height: 25px;
-}
-
-.select{
+.select {
   color: var(--azul-oscuro);
   border: 2px solid #11295b;
   border-radius: 5px;
@@ -216,14 +226,32 @@
   }
 
   .passwordRow {
-    flex-direction: column;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: 1rem;
   }
 
-  .halfInputC1,
+  .halfInputC1 {
+    width: 12rem;
+    margin-right: 1rem;
+    border: 2px solid #11295b;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column; /* permite que crezca verticalmente */
+    padding: 0.5rem;
+  }
+
   .halfInputC2 {
-    width: 100%;
-    margin: 0;
+    width: 12rem;
+    margin-left: 1rem;
+    border: 2px solid #11295b;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
   }
 
   .birthInputs {
@@ -251,3 +279,17 @@
   }
 }
 
+/*validaciones*/
+
+.errorInput {
+  border: 2px solid #e30000 !important;
+  color: #e30000 !important;
+}
+
+.errorInput::placeholder {
+  color: #e30000 !important;
+}
+
+.errorIcon {
+  color: #e30000 !important;
+}
