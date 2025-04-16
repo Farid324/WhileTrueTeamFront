@@ -10,18 +10,38 @@ const PasswordRecoveryModal = ({
   onPasswordRecoverySubmit: () => void;
 }) => {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
+  const validateEmail = (input: string) => {
+    const emailPattern = /^[a-zA-Z0-9@._-]{1,70}$/; // Verifica caracteres permitidos y longitud
+    const formatPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Verifica formato correcto
+
+    if (input.length > 70) {
+      setErrorMessage("El correo no debe superar los 70 caracteres.");
+      setIsValidEmail(false);
+    } else if (!emailPattern.test(input)) {
+      setErrorMessage("El correo contiene caracteres no permitidos.");
+      setIsValidEmail(false);
+    } else if (!formatPattern.test(input)) {
+      setErrorMessage("El correo debe tener el formato usuario@dominio.com.");
+      setIsValidEmail(false);
+    } else {
+      setErrorMessage('');
+      setIsValidEmail(true);
+    }
+
+    setEmail(input);
+  };
 
   const handlePasswordRecovery = async () => {
-    setError('');
-
-    if (!email) {
-      setError('El correo es obligatorio');
+    if (!isValidEmail || !email) {
+      setErrorMessage('Por favor, ingrese un correo válido.');
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/recover-password', {
+      const response = await fetch('http://localhost:3000/api/recover-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -35,12 +55,11 @@ const PasswordRecoveryModal = ({
 
       console.log(data.message);
 
-      // 🔥 Cambio de modal
       onPasswordRecoverySubmit(); 
 
     } catch (error: any) {
       console.error('Error:', error);
-      setError(error.message || 'Error al recuperar la contraseña');
+      setErrorMessage(error.message || 'Error al recuperar la contraseña');
     }
   };
 
@@ -59,31 +78,48 @@ const PasswordRecoveryModal = ({
           Ingresa el correo con el que te registraste en REDIBO.
         </p>
 
-        <input
-          className="w-full border border-black p-4 rounded-lg text-[0.95rem] font-bold text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-2 focus:ring-[#FCA311] font-sans"
-          type="email"
-          placeholder="usuario@dominio.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          maxLength={254}
-        />
+        <div className="relative">
+          {/* Input de correo */}
+          <input
+            className="w-full pl-10 pr-4 border border-black p-4 rounded-lg text-[0.95rem] font-bold text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-2 focus:ring-[#FCA311] font-sans"
+            type="email"
+            placeholder="usuario@dominio.com"
+            value={email}
+            onChange={(e) => validateEmail(e.target.value)}
+            required
+            maxLength={70}
+          />
 
-        {error && (
+          {/* Icono de correo */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[#11295B]"
+          >
+            <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+            <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+          </svg>
+        </div>
+
+        {errorMessage && (
           <div className="text-[#F85959] text-sm mt-2 font-semibold">
-            {error}
+            {errorMessage}
           </div>
         )}
 
         <button
-          className="w-full mt-6 bg-[rgba(252,163,17,0.5)] hover:bg-[#eb5905] text-white font-semibold py-3 px-4 rounded-full shadow-md transition-colors"
+          className={`w-full mt-6 font-semibold py-3 px-4 rounded-full shadow-md transition-colors 
+            ${!isValidEmail || !email ? 'bg-[rgba(252,163,17,0.5)] shadow-[0_0px_4px_rgba(0,0,0,0.25)] cursor-pointer text-white border-none mt-4 p-4 rounded-[40px] disabled:opacity-50 disabled:cursor-not-allowed' 
+            : 'bg-[#FCA311] hover:bg-[#eb5905]'}`}
           onClick={handlePasswordRecovery}
+          disabled={!isValidEmail || !email}
         >
           Siguiente
         </button>
 
         <button
-          className="w-full mt-4 text-black/30 underline hover:text-[#11295B] font-medium transition-colors"
+          className="text-[#11295B] underline cursor-pointer w-full transition-colors duration-200 my-4 border-none bg-none"
           onClick={onClose}
         >
           Atrás
