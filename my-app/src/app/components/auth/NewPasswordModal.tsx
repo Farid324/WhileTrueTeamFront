@@ -31,7 +31,6 @@ const NewPasswordModal = ({
       return;
     }
 
-    // 🔥 Llamamos al submit real (puede hacer fetch al back)
     onPasswordRecoverySubmit(newPassword);
   };
 

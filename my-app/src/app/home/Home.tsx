@@ -27,7 +27,11 @@ export default function Home() {
   };
 
   const handleClose = () => {
-    setModalState(null);
+    setModalState('login'); // Si se presiona "Atrás" en cualquier modal, se regresa al Login
+  };
+
+  const handleBackToPasswordRecovery = () => {
+    setModalState('passwordRecovery'); // Regresa al PasswordRecoveryModal desde el CodeVerificationModal
   };
 
   return (
@@ -62,13 +66,13 @@ export default function Home() {
       )}
       {modalState === 'codeVerification' && (
         <CodeVerificationModal
-          onClose={handleClose}
+          onClose={handleBackToPasswordRecovery} // Aquí gestionas el "Atrás" para volver al PasswordRecoveryModal
           onCodeVerificationSubmit={handleCodeVerificationSubmit}
         />
       )}
       {modalState === 'newPassword' && (
         <NewPasswordModal
-          onClose={handleClose}
+          onClose={handleClose} // Redirige al Login al cancelar o finalizar
           onPasswordRecoverySubmit={() => {
             console.log('Contraseña nueva confirmada.');
           }}
