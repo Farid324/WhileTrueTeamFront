@@ -1,7 +1,10 @@
 import styles from "./RegisterModal.module.css";
 import { useState } from "react";
 
-export default function RegisterModal({ onClose }: { onClose: () => void }) {
+export default function RegisterModal({ onClose, onLoginClick }: { 
+  onClose: () => void; 
+  onLoginClick: () => void; 
+}) {
   const [error, setError] = useState("");
 
   const [nameError, setNameError] = useState(false);
@@ -177,7 +180,7 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
         telefono: phone ? parseInt(phone) : null,
       };
 
-      const res = await fetch("http://localhost:3001/api/register", {
+      const res = await fetch("http://localhost:3000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
@@ -630,9 +633,14 @@ export default function RegisterModal({ onClose }: { onClose: () => void }) {
             }}
           >
             ¿Ya tienes una cuenta?{" "}
-            <a
-              href="/login"
-              style={{ color: "#FCA311", textDecoration: "none" }}
+            <a onClick={() => {
+               onClose(); // Cierra el modal de registro
+               setTimeout(() => {
+               onLoginClick(); // Abre el de login
+              }, 100); // Breve delay
+            }}
+
+              style={{ color: "#FCA311", textDecoration: "none", cursor: "pointer" }}
             >
               Iniciar Sesión
             </a>

@@ -4,7 +4,10 @@
 import { useState } from 'react';
 import { login } from '@/libs/authServices'; // Importa tu servicio
 ///////////////////////////
-export default function LoginModal({ onClose }: { onClose: () => void }) {
+export default function LoginModal({ onClose, onRegisterClick }: { 
+  onClose: () => void; 
+  onRegisterClick: () => void; 
+}) {
   
   ////////////Back//////////////
   const [email, setEmail] = useState('');
@@ -305,7 +308,13 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           ¿No tienes una cuenta?{' '}
           <button
             className="underline cursor-pointer transition-colors duration-200"
-            onClick={onClose}
+            onClick={() => {
+              onClose(); // Cierra el modal de registro
+              setTimeout(() => {
+              onRegisterClick(); // Abre el de login
+             }, 100); // Breve delay
+           }}
+
             style={{ fontFamily: 'var(--fuente-principal)', color: 'var(--azul-oscuro)' }}
             onMouseOver={(e) => (e.currentTarget.style.color = 'var(--naranja)')}
             onMouseOut={(e) => (e.currentTarget.style.color = 'var(--azul-oscuro)')}

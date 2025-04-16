@@ -35,11 +35,11 @@ export default function HomePage() {
       </footer>
 
       {activeModal === 'login' && (
-        <LoginModal onClose={() => setActiveModal(null)} />
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
       )}
 
       {activeModal === 'register' && (
-        <RegisterModal onClose={() => setActiveModal(null)} />
+        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
       )}
     </div>
   );
