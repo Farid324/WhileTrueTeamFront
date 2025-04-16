@@ -384,12 +384,12 @@ export default function Terminos() {
         <Footer/>
       </footer>
       {activeModal === 'login' && (
-              <LoginModal onClose={() => setActiveModal(null)} />
-            )}
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
+      )}
       
-            {activeModal === 'register' && (
-              <RegisterModal onClose={() => setActiveModal(null)} />
-            )}
+      {activeModal === 'register' && (
+        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
+      )}
     </div>
   );
 }
