@@ -13,6 +13,9 @@ export default function RegisterModal({ onClose, onLoginClick }: {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
   const [birthError, setBirthError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [termsError, setTermsError] = useState(false);
@@ -321,7 +324,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                   Contraseña
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   placeholder={
@@ -345,11 +348,14 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                 )}
               </div>
               <svg
+                onClick={() => setShowPassword((prev) => !prev)}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
+                style={{ cursor: "pointer" }}
                 className={`${styles.ojito} ${
                   passwordError ? styles.errorIcon : ""
+                  
                 }`}
               >
                 <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -389,7 +395,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                   Confirmar Contraseña
                 </label>
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   id="confirmPassword"
                   name="confirmPassword"
                   placeholder={
@@ -416,6 +422,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 className={`${styles.ojito} ${
