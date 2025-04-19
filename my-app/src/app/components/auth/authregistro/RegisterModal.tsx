@@ -294,7 +294,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
             </div>
           </div>
 
-          {/* campo password y confirmar password */}
+          {/* campo password */}
           <div className={styles.passwordRow}>
             <div
               className={`${styles.halfInputC1} ${
@@ -367,6 +367,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
               </svg>
             </div>
 
+            {/* campo confirmar contraseña */}
             <div
               className={`${styles.halfInputC2} ${
                 confirmPasswordError ? styles.errorInput : ""
@@ -425,6 +426,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
                 viewBox="0 0 24 24"
                 fill="currentColor"
+                style={{ cursor: "pointer" }}
                 className={`${styles.ojito} ${
                   confirmPasswordError ? styles.errorIcon : ""
                 }`}
