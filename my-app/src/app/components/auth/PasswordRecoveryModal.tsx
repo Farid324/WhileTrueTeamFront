@@ -7,31 +7,23 @@ const PasswordRecoveryModal = ({
   onPasswordRecoverySubmit,
 }: {
   onClose: () => void;
-  onPasswordRecoverySubmit: () => void;
+  onPasswordRecoverySubmit: (email: string) => void;
 }) => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(false);
 
   const validateEmail = (input: string) => {
-    const emailPattern = /^[a-zA-Z0-9@._-]{1,70}$/; // Verifica caracteres permitidos y longitud
-    const formatPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Verifica formato correcto
+    const formatPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    setEmail(input);
 
-    if (input.length > 70) {
-      setErrorMessage("El correo no debe superar los 70 caracteres.");
-      setIsValidEmail(false);
-    } else if (!emailPattern.test(input)) {
-      setErrorMessage("El correo contiene caracteres no permitidos.");
-      setIsValidEmail(false);
-    } else if (!formatPattern.test(input)) {
-      setErrorMessage("El correo debe tener el formato usuario@dominio.com.");
+    if (!formatPattern.test(input)) {
+      setErrorMessage('Correo inválido. Usa el formato usuario@dominio.com.');
       setIsValidEmail(false);
     } else {
       setErrorMessage('');
       setIsValidEmail(true);
     }
-
-    setEmail(input);
   };
 
   const handlePasswordRecovery = async () => {
@@ -41,7 +33,7 @@ const PasswordRecoveryModal = ({
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/recover-password', {
+      const response = await fetch('http://localhost:3001/api/recover-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -49,13 +41,9 @@ const PasswordRecoveryModal = ({
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Error desconocido');
-      }
+      if (!response.ok) throw new Error(data.message || 'Error desconocido');
 
-      console.log(data.message);
-
-      onPasswordRecoverySubmit(); 
+      onPasswordRecoverySubmit(email); // Pasa al siguiente paso
 
     } catch (error: any) {
       console.error('Error:', error);
@@ -66,7 +54,6 @@ const PasswordRecoveryModal = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 font-sans">
       <div className="bg-white p-10 rounded-[35px] w-[33rem] shadow-[0_4px_12px_rgba(0,0,0,0.72)]">
-        
         <h2 className="text-center text-[#11295B] text-[1.44rem] font-medium leading-normal mb-4 drop-shadow-md">
           Recupera tu contraseña de <br />
           <span className="text-[#FCA311] font-black text-[2.074rem] drop-shadow-sm">
@@ -79,7 +66,6 @@ const PasswordRecoveryModal = ({
         </p>
 
         <div className="relative">
-          {/* Input de correo */}
           <input
             className="w-full pl-10 pr-4 border border-black p-4 rounded-lg text-[0.95rem] font-bold text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-2 focus:ring-[#FCA311] font-sans"
             type="email"
@@ -89,8 +75,6 @@ const PasswordRecoveryModal = ({
             required
             maxLength={70}
           />
-
-          {/* Icono de correo */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -109,17 +93,19 @@ const PasswordRecoveryModal = ({
         )}
 
         <button
-          className={`w-full mt-6 font-semibold py-3 px-4 rounded-full shadow-md transition-colors 
-            ${!isValidEmail || !email ? 'bg-[rgba(252,163,17,0.5)] shadow-[0_0px_4px_rgba(0,0,0,0.25)] cursor-pointer text-white border-none mt-4 p-4 rounded-[40px] disabled:opacity-50 disabled:cursor-not-allowed' 
-            : 'bg-[#FCA311] hover:bg-[#eb5905]'}`}
+          className={`w-full mt-6 font-semibold py-3 px-4 rounded-full transition-colors ${
+            !isValidEmail
+              ? 'bg-[rgba(252,163,17,0.5)] text-white cursor-not-allowed'
+              : 'bg-[#FCA311] hover:bg-[#eb5905]'
+          }`}
           onClick={handlePasswordRecovery}
-          disabled={!isValidEmail || !email}
+          disabled={!isValidEmail}
         >
           Siguiente
         </button>
 
         <button
-          className="text-[#11295B] underline cursor-pointer w-full transition-colors duration-200 my-4 border-none bg-none"
+          className="text-[#11295B] underline cursor-pointer w-full mt-4"
           onClick={onClose}
         >
           Atrás
@@ -130,4 +116,5 @@ const PasswordRecoveryModal = ({
 };
 
 export default PasswordRecoveryModal;
+
 
