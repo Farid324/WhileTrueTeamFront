@@ -12,6 +12,18 @@ const NewPasswordModal = ({
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const validatePassword = (password: string) => {
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,25}$/;  
+
+    if (!passwordPattern.test(password)) {
+      setError('La contraseña debe tener entre 8 y 25 caracteres, al menos una letra mayúscula y un número.');
+      return false;
+    }
+    setError('');  // Si pasa la validación, se limpia el error
+    return true;
+  };
 
   const handleConfirm = () => {
     setError('');
@@ -26,11 +38,23 @@ const NewPasswordModal = ({
       return;
     }
 
+    if (!validatePassword(newPassword)) {
+      return;
+    }
+
+    setSuccessMessage('Contraseña actualizada con éxito!');
+    setTimeout(() => {
+      setSuccessMessage(''); // Ocultar el pop-up después de 2 segundos
+    }, 2000);
+
+
     onPasswordRecoverySubmit(newPassword);
   };
 
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
+    const password = e.target.value;
+    setNewPassword(password);
+    validatePassword(password);;
   };
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
@@ -59,7 +83,7 @@ const NewPasswordModal = ({
             type={showPassword ? 'text' : 'password'}
             placeholder="Nueva contraseña"
             value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            onChange={handleNewPasswordChange}
           />
 
           <svg 
@@ -78,6 +102,7 @@ const NewPasswordModal = ({
             type="button"
             className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[#11295B]"
             onClick={() => setShowPassword(!showPassword)}  // Cambia el estado de visibilidad
+            disabled={!setNewPassword}
           >
               <img
                 src="https://www.svgrepo.com/download/526542/eye.svg"
@@ -88,7 +113,6 @@ const NewPasswordModal = ({
         </div>
         
 
-//-----------------------------------------------------------------
         {/* Confirmar contraseña */}
         <div className="relative border-2 border-solid border-[#11295B] flex flex-col mb-2 rounded-lg">
           <input
@@ -96,7 +120,7 @@ const NewPasswordModal = ({
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder="Confirmar contraseña"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={handleConfirmPasswordChange}
           />
 
           <svg 
@@ -115,6 +139,7 @@ const NewPasswordModal = ({
             type="button"
             className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[#11295B]"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}  // Cambia el estado de visibilidad
+            disabled={!confirmPassword}
           >
             <img
               src="https://www.svgrepo.com/download/526542/eye.svg"
@@ -147,6 +172,11 @@ const NewPasswordModal = ({
           Cancelar
         </button>
       </div>
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white p-3 rounded-lg shadow-lg">
+          {successMessage}
+        </div>
+      )}
     </div>
   );
 };

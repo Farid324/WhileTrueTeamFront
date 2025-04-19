@@ -81,7 +81,7 @@ const PasswordRecoveryModal = ({
         <div className="relative">
           {/* Input de correo */}
           <input
-            className="w-full pl-10 pr-4 border border-black p-4 rounded-lg text-[0.95rem] font-bold text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-2 focus:ring-[#FCA311] font-sans"
+            className="w-full pl-12 pr-4 border border-black p-4 rounded-lg text-[0.95rem] font-bold text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-2 focus:ring-[#FCA311] font-sans"
             type="email"
             placeholder="usuario@dominio.com"
             value={email}
