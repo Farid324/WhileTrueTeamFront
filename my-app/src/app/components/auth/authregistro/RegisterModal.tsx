@@ -180,7 +180,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
         telefono: phone ? parseInt(phone) : null,
       };
 
-      const res = await fetch("http://localhost:3000/api/register", {
+      const res = await fetch("http://localhost:3001/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
@@ -201,12 +201,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
       setError("No se pudo conectar al servidor.");
     }
 
-    /* if (!name) {
-      setNameError(true);
-      return;
-    } else {
-      setNameError(false);
-    } */
   };
 
   return (
@@ -233,6 +227,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
               ></path>
             </svg>
 
+            {/* campo nombre */}
             <div className={styles.halfInput2}>
               <label
                 htmlFor="name"
@@ -253,12 +248,11 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                 className={`${styles.input} ${
                   nameError ? styles.errorInput : ""
                 }`}
-                /*className={styles.input}*/
-                /*required*/
               />
             </div>
           </div>
 
+          {/* campo email */}
           <div
             className={`${styles.halfInput} ${
               emailError ? styles.errorInput : ""
@@ -283,14 +277,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
               >
                 Correo electrónico
               </label>
-              {/* <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Correo electrónico"
-                className={styles.input}
-                required
-              /> */}
               <input
                 type="email"
                 id="email"
@@ -304,6 +290,8 @@ export default function RegisterModal({ onClose, onLoginClick }: {
               />
             </div>
           </div>
+
+          {/* campo password y confirmar password */}
           <div className={styles.passwordRow}>
             <div
               className={`${styles.halfInputC1} ${
@@ -332,14 +320,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                 >
                   Contraseña
                 </label>
-                {/* <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Contraseña"
-                  className={styles.input2}
-                  required
-                /> */}
                 <input
                   type="password"
                   id="password"
@@ -408,14 +388,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                 >
                   Confirmar Contraseña
                 </label>
-                {/* <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="Confirme su contraseña"
-                  className={styles.input2}
-                  required
-                /> */}
                 <input
                   type="password"
                   id="confirmPassword"
@@ -480,13 +452,13 @@ export default function RegisterModal({ onClose, onLoginClick }: {
               />
             </svg>
 
+            {/* campo fecha de nacimiento */}
             <div className={styles.birthRow}>
               <label style={{ color: getLabelColor(birthError) }}>
                 Fecha de Nacimiento
               </label>
 
               <div className={styles.birthInputs}>
-                {/* <select name="birthDay" required className={styles.select}> */}
                 <select
                   name="birthDay"
                   className={`${styles.select} ${
@@ -500,7 +472,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                     </option>
                   ))}
                 </select>
-                {/* <select name="birthMonth" required className={styles.select}> */}
                 <select
                   name="birthMonth"
                   className={`${styles.select} ${
@@ -514,7 +485,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
                     </option>
                   ))}
                 </select>
-                {/* <select name="birthYear" required className={styles.select}> */}
                 <select
                   name="birthYear"
                   className={`${styles.select} ${
@@ -535,6 +505,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
             </div>
           </div>
 
+          {/* campo telefono */}
           <div
             className={`${styles.halfInput} ${
               phoneError ? styles.errorInput : ""
@@ -562,15 +533,6 @@ export default function RegisterModal({ onClose, onLoginClick }: {
               >
                 Teléfono
               </label>
-              {/* <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="Ingrese número de teléfono"
-                pattern="[0-9]{8}"
-                className={styles.input}
-                required
-              /> */}
               <input
                 type="tel"
                 id="phone"
@@ -587,6 +549,7 @@ export default function RegisterModal({ onClose, onLoginClick }: {
             </div>
           </div>
 
+          {/* campo terminos y condiciones */}
           <div className={styles.terms}>
             <input type="checkbox" id="terms" name="terms" />
             <label htmlFor="terms">
@@ -620,10 +583,12 @@ export default function RegisterModal({ onClose, onLoginClick }: {
             <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>
           )}
 
+          {/* boton registrarse */}
           <button type="submit" className={styles.button}>
             Registrarse
           </button>
 
+          {/* campo inicio de sesion */}
           <p
             style={{
               textAlign: "center",
@@ -634,10 +599,10 @@ export default function RegisterModal({ onClose, onLoginClick }: {
           >
             ¿Ya tienes una cuenta?{" "}
             <a onClick={() => {
-               onClose(); // Cierra el modal de registro
+               onClose();
                setTimeout(() => {
-               onLoginClick(); // Abre el de login
-              }, 100); // Breve delay
+               onLoginClick();
+              }, 100); 
             }}
 
               style={{ color: "#FCA311", textDecoration: "none", cursor: "pointer" }}
