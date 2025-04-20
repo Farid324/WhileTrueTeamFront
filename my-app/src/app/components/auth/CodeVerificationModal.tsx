@@ -7,25 +7,53 @@ const CodeVerificationModal = ({
   onCodeVerificationSubmit,
 }: {
   onClose: () => void;
-  onCodeVerificationSubmit: () => void;
+  onCodeVerificationSubmit: (code: string) => void;
 }) => {
   const [code, setCode] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '').slice(0, 6);
     setCode(value);
+    setErrorMessage('');
   };
 
   const handleFocus = () => {
     inputRef.current?.focus();
   };
 
+  const handleVerification = async () => {
+    if (code.length !== 6) {
+      setErrorMessage('El código debe tener 6 dígitos.');
+      return;
+    }
+
+    console.log('🚀 Enviando al backend:', { code });
+
+    try {
+      const response = await fetch('http://localhost:3001/api/verify-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message || 'Error al verificar el código');
+
+      onCodeVerificationSubmit(code); // ✅ Se pasa el código al componente padre
+
+    } catch (error: any) {
+      console.error('❌ Error en la verificación del código:', error);
+      setErrorMessage(error.message || 'Error al verificar el código');
+    }
+  };
+
   return (
     <div className="fixed w-full h-full flex justify-center items-center z-[9999] left-0 top-0 bg-black/50 font-sans">
-      <div className="w-[33rem] h-auto bg-white p-10 rounded-[35px] shadow-[0_0px_20px_rgba(0,0,0,0.72)]">
-        
-        {/* Título */}
+      <div className="w-[33rem] bg-white p-10 rounded-[35px] shadow-[0_0px_20px_rgba(0,0,0,0.72)]">
+
         <h1 className="text-center text-[#11295B] text-[1.44rem] font-medium leading-normal mb-4 drop-shadow-md">
           Recupera tu contraseña de <br />
           <span className="text-[#FCA311] font-black text-[2.074rem] drop-shadow-sm">
@@ -41,8 +69,10 @@ const CodeVerificationModal = ({
           Código de verificación
         </h5>
 
-        {/* Input oculto para el código */}
-        <div className="relative w-full max-w-[450px] cursor-text bg-white mx-0 my-4 pb-6 p-3 rounded-lg border-2 border-solid border-black" onClick={handleFocus}>
+        <div
+          className="relative w-full max-w-[450px] cursor-text bg-white mx-0 my-4 pb-6 p-3 rounded-lg border-2 border-solid border-black"
+          onClick={handleFocus}
+        >
           <input
             ref={inputRef}
             type="text"
@@ -57,26 +87,28 @@ const CodeVerificationModal = ({
                 <span className="text-[22px] font-bold h-6 text-black">
                   {code[i] || ' '}
                 </span>
-                <span className="text-[22px] text-[#aaa] leading-[0]">
-                  __
-                </span>
+                <span className="text-[22px] text-[#aaa] leading-[0]">__</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Botón siguiente */}
+        {errorMessage && (
+          <div className="text-red-600 text-center mb-4 font-semibold">
+            {errorMessage}
+          </div>
+        )}
+
         <button
-          className="w-full bg-[rgba(252,163,17,0.5)] hover:bg-[#FCA311] shadow-[0_0px_4px_rgba(0,0,0,0.25)] text-white cursor-pointer mt-4 p-4 rounded-[40px] border-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={onCodeVerificationSubmit}
-          disabled={code.length !== 6} // Solo habilita cuando tiene 6 dígitos
+          className="w-full bg-[rgba(252,163,17,0.5)] hover:bg-[#FCA311] text-white p-4 rounded-[40px] transition-colors disabled:opacity-50"
+          onClick={handleVerification}
+          disabled={code.length !== 6}
         >
-          Siguiente
+          Verificar código
         </button>
 
-        {/* Botón atrás */}
         <button
-          className="text-[#11295B] underline cursor-pointer w-full transition-colors duration-200 my-4 border-none bg-none"
+          className="text-[#11295B] underline cursor-pointer w-full mt-4"
           onClick={onClose}
         >
           Atrás

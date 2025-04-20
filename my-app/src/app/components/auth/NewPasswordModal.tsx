@@ -3,10 +3,12 @@
 import { useState } from 'react';
 
 const NewPasswordModal = ({
-  onPasswordRecoverySubmit,  // Asegúrate de pasar esta función al componente
+  code,
+  onPasswordResetSuccess,
 }: {
-  onPasswordRecoverySubmit: (newPassword: string) => void;
-}) => {
+  code: string;
+  onPasswordResetSuccess: () => void;}) => {
+  console.log('🧠 Código recibido en NewPasswordModal:', code);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,8 +27,13 @@ const NewPasswordModal = ({
     return true;
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setError('');
+
+    if (!code || code.length !== 6) {
+      setError('Código no válido. Intenta nuevamente.');
+      return;
+    }
 
     if (!newPassword || !confirmPassword) {
       setError('Por favor completa ambos campos.');
@@ -46,11 +53,33 @@ const NewPasswordModal = ({
     setTimeout(() => {
       setSuccessMessage(''); // Ocultar el pop-up después de 2 segundos
     }, 2000);
+    //onPasswordRecoverySubmit(newPassword);
 
 
-    onPasswordRecoverySubmit(newPassword);
-  };
+    try {
+      console.log('📤 Enviando al backend:', { code, newPassword });
+      console.log('📦 Código recibido en NewPasswordModal:', code);
 
+      const response = await fetch('http://localhost:3001/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, newPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al actualizar la contraseña');
+      }
+
+      alert('¡Contraseña actualizada correctamente!');
+      onPasswordResetSuccess();
+
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Error al cambiar la contraseña');
+    }
+  }
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value;
     setNewPassword(password);
@@ -59,6 +88,7 @@ const NewPasswordModal = ({
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
   };
+  
 
   return (
     <div className="fixed w-full h-full flex justify-center items-center z-[9999] left-0 top-0 bg-black/50 font-sans">
@@ -74,9 +104,7 @@ const NewPasswordModal = ({
           CÓDIGO DE VERIFICACIÓN CORRECTO. Por favor establece una nueva contraseña.
         </p>
 
-{/*//-------------------------------------------*/}
-
-        {/* Nueva contraseña */}
+        {/* -------- Nueva contraseña -------- */}
         <div className="relative border-2 border-solid border-[#11295B] flex flex-col mb-4 rounded-lg">
           <input
             className="w-full h-16 pl-12 pr-4 font-bold text-[#11295B] rounded-2xl outline-none placeholder:text-[#11295B]/50"
@@ -104,11 +132,11 @@ const NewPasswordModal = ({
             onClick={() => setShowPassword(!showPassword)}  // Cambia el estado de visibilidad
             disabled={!setNewPassword}
           >
-              <img
-                src="https://www.svgrepo.com/download/526542/eye.svg"
-                alt="Mostrar contraseña"
-                className="w-6 h-6"
-              />
+            <img
+              src="https://www.svgrepo.com/download/526542/eye.svg"
+              alt="Mostrar contraseña"
+              className="w-6 h-6"
+            />
           </button>
         </div>
         
@@ -138,7 +166,7 @@ const NewPasswordModal = ({
           <button
             type="button"
             className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[#11295B]"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}  // Cambia el estado de visibilidad
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             disabled={!confirmPassword}
           >
             <img
@@ -149,25 +177,23 @@ const NewPasswordModal = ({
           </button>
         </div>
 
-        {/* Error */}
+        {/* -------- Mensaje de error -------- */}
         {error && (
           <div className="text-[#F85959] text-sm font-semibold mb-4 text-center">
             {error}
           </div>
         )}
 
-        {/* Confirmar */}
         <button
-          className="w-full bg-[rgba(252,163,17,0.5)] hover:bg-[#FCA311] shadow-[0_0px_4px_rgba(0,0,0,0.25)] text-white cursor-pointer mt-4 p-4 rounded-[40px] border-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-[rgba(252,163,17,0.5)] hover:bg-[#FCA311] text-white mt-4 p-4 rounded-[40px] border-none transition-colors"
           onClick={handleConfirm}
         >
           Confirmar
         </button>
 
-        {/* Cancelar */}
         <button
           className="w-full text-[#11295B] underline cursor-pointer my-4 hover:text-[#11295B] transition-colors"
-          //onClick={onClose}
+          onClick={() => window.location.reload()}
         >
           Cancelar
         </button>
