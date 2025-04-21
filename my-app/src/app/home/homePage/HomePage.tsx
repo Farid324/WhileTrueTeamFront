@@ -5,24 +5,22 @@ import FiltersBar from '@/app/components/filters/FiltersBar';
 import Footer from '@/app/components/footer/Footer';
 import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
 import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
-import styles from '@/app/home/homePage/HomePage.module.css';
-
 
 export default function MainHome() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
 
   return (
-    <div className={styles.container}>
-      <header className={styles.headerTop}>
-        <NavbarInicioSesion/>
+    <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
+      <header className="px-8 py-4 bg-[var(--blanco)]">
+        <NavbarInicioSesion />
       </header>
 
-      <header className={styles.headerFilters}>
+      <header className="px-8 py-4 bg-[var(--gris-claro)] border-b border-[#ccc]">
         <FiltersBar />
       </header>
 
-      <main className={styles.body}>
-        <div className={styles.scrollContent}>
+      <main className="flex-grow p-8">
+        <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
           <p>Contenido principal del usuario (tarjetas, información, etc.).</p>
         </div>
       </main>
@@ -32,11 +30,11 @@ export default function MainHome() {
       </footer>
 
       {activeModal === 'login' && (
-        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')} />
       )}
 
       {activeModal === 'register' && (
-        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
+        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')} />
       )}
     </div>
   );
