@@ -3,8 +3,12 @@
 ////////////back///////////
 import { useState } from 'react';
 import { login } from '@/libs/authServices'; // Importa tu servicio
+import { useRouter } from 'next/navigation';
 ///////////////////////////
-export default function LoginModal({ onClose }: { onClose: () => void }) {
+export default function LoginModal({ onClose, onRegisterClick }: { 
+  onClose: () => void; 
+  onRegisterClick: () => void; 
+}) {
   
   ////////////Back//////////////
   const [email, setEmail] = useState('');
@@ -31,6 +35,8 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
 
   //Efecto de boton de activar o desactivar poder ver la contraseña
   const [showPassword, setShowPassword] = useState(false);
+  
+  const router = useRouter();
 
   const handleLogin = async () => {
     setError('');
@@ -56,6 +62,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       '@icloud.com', 
       '@proton.me'
     ];
+
     //validar el signo @
     if (!email.includes('@')) {
       setErrorAtSymbol('Incluye un signo @ en el correo electrónico.');
@@ -101,7 +108,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
       setError('');
       setHasLoginError(false);
       // Puedes hacer algo con el resultado aquí, como guardar el token o redirigir
-      
+      router.push('/home/homePage');
     }  catch (error) {
       console.error('Error al iniciar sesión:', error);
       /*setError(error?.response?.data?.message || 'Error al iniciar sesión.');
@@ -275,6 +282,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
 
           //Llamada al boton
           disabled={isButtonDisabled}
+          
           ////////////////back////////////////
           className={`w-full 
           ${isButtonDisabled 
@@ -305,7 +313,13 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           ¿No tienes una cuenta?{' '}
           <button
             className="underline cursor-pointer transition-colors duration-200"
-            onClick={onClose}
+            onClick={() => {
+              onClose(); // Cierra el modal de registro
+              setTimeout(() => {
+              onRegisterClick(); // Abre el de login
+             }, 100); // Breve delay
+           }}
+
             style={{ fontFamily: 'var(--fuente-principal)', color: 'var(--azul-oscuro)' }}
             onMouseOver={(e) => (e.currentTarget.style.color = 'var(--naranja)')}
             onMouseOut={(e) => (e.currentTarget.style.color = 'var(--azul-oscuro)')}
