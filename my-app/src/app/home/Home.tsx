@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation'; // ✅
 import Navbar from '../components/navbar/Navbar';
 import FiltersBar from '../components/filters/FiltersBar';
 import Footer from '../components/footer/Footer';
@@ -10,6 +11,13 @@ import RegisterModal from '../components/auth/authregistro/RegisterModal';
 
 export default function HomePage() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams?.get('googleComplete') === 'true') {
+      setActiveModal('register'); // Abrir modal de registro al volver de Google
+    }
+  }, [searchParams]);
 
   return (
     <div className={styles.container}>
