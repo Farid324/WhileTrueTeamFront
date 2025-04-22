@@ -6,7 +6,7 @@ export default function NavbarInicioSesion() {
   const [activeBtn, setActiveBtn] = useState(0);
 
   return (
-    <div className="px-6 md:px-20 lg:px-40 py-4 border-b border-[rgba(0,0,0,0.05)] font-[var(--fuente-principal)] bg-[var(--blanco)]">
+    <div className="px-6 md:px-20 lg:px-40 py-4  border-b border-[rgba(0,0,0,0.05)] font-[var(--fuente-principal)] bg-[var(--blanco)]">
       <nav className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0">
         
         <h1 className="text-3xl md:text-4xl text-[var(--naranja)] font-[var(--tamaño-black)] drop-shadow-[var(--sombra)]">
@@ -18,7 +18,7 @@ export default function NavbarInicioSesion() {
             <button
               key={i}
               onClick={() => setActiveBtn(i)}
-              className={`relative px-6 md:px-12 py-[0.2rem] border-[#00000033] text-[var(--azul-oscuro)] 
+              className={`relative px-6 md:px-12 py-[0.2rem] border border-[#00000033] text-[var(--azul-oscuro)] 
                 font-[var(--tamaño-regular)] bg-[var(--blanco)] shadow-[var(--sombra)] text-sm md:text-base
                 ${i === 0 ? 'rounded-l-full border-r-0' : ''}
                 ${i === 4 ? 'rounded-r-full border-l-0' : ''}
