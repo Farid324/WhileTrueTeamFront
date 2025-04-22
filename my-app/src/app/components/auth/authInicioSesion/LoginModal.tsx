@@ -3,6 +3,7 @@
 ////////////back///////////
 import { useState } from 'react';
 import { login } from '@/libs/authServices'; // Importa tu servicio
+import { useRouter } from 'next/navigation';
 ///////////////////////////
 export default function LoginModal({ onClose, onRegisterClick }: { 
   onClose: () => void; 
@@ -34,6 +35,8 @@ export default function LoginModal({ onClose, onRegisterClick }: {
 
   //Efecto de boton de activar o desactivar poder ver la contraseña
   const [showPassword, setShowPassword] = useState(false);
+  
+  const router = useRouter();
 
   const handleLogin = async () => {
     setError('');
@@ -59,6 +62,7 @@ export default function LoginModal({ onClose, onRegisterClick }: {
       '@icloud.com', 
       '@proton.me'
     ];
+
     //validar el signo @
     if (!email.includes('@')) {
       setErrorAtSymbol('Incluye un signo @ en el correo electrónico.');
@@ -104,7 +108,7 @@ export default function LoginModal({ onClose, onRegisterClick }: {
       setError('');
       setHasLoginError(false);
       // Puedes hacer algo con el resultado aquí, como guardar el token o redirigir
-      
+      router.push('/home/homePage');
     }  catch (error) {
       console.error('Error al iniciar sesión:', error);
       /*setError(error?.response?.data?.message || 'Error al iniciar sesión.');
@@ -278,6 +282,7 @@ export default function LoginModal({ onClose, onRegisterClick }: {
 
           //Llamada al boton
           disabled={isButtonDisabled}
+          
           ////////////////back////////////////
           className={`w-full 
           ${isButtonDisabled 

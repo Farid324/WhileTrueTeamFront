@@ -1,0 +1,212 @@
+/* Estilos base del modal (similares a LoginModal pero adaptados) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 30rem;
+  height: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  font-family: var(--fuente-principal);
+}
+
+/* Título */
+.modal h2 {
+  text-align: center;
+  color: var(--azul-oscuro);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: var(--tamaño-black);
+}
+
+.uIcon {
+  color: var(--azul-oscuro);
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  width: 30px;
+  height: 30px;
+}
+
+.eicon {
+  color: var(--azul-oscuro);
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  width: 30px;
+  height: 30px;
+}
+
+.dateGroup {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dateGroup input {
+  flex: 1;
+  text-align: center;
+}
+
+/* Botón principal */
+.button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: hsl(37, 98%, 53%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+/* Checkbox de términos */
+.terms {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+  color: #5e503f;
+}
+
+.terms input {
+  margin: 0;
+}
+
+/* Botón de cerrar */
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #5e503f;
+}
+
+/* Efectos interactivos */
+.button:hover {
+  background-color: #1a2a32;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #5e503f;
+}
+.form label {
+  color: var(--azul-oscuro);
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  font-size: 0.60rem;
+  display: block;
+}
+
+.input {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--azul-oscuro);
+}
+
+.input2{
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--azul-oscuro);
+}
+
+.input::placeholder {
+  color: rgba(17, 41, 91, 0.5); 
+}
+
+.halfInput {
+  margin-bottom: 1rem;
+  border: 2px solid #11295b;
+  border-radius: 5px;
+  display: flex;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* sombra suave */
+}
+
+
+.iconollave {
+  color: rgb(0, 0, 0);
+  width: 30px;
+  height: 30px;
+  margin: 0.5rem 0 0 0.5rem;
+}
+
+.passwordIcon {
+}
+
+.ojito {
+  color: rgba(17, 41, 91, 0.5);
+  margin-top: 0.5rem;
+  width: 25px;
+  height: 25px;
+}
+
+.passwordRow {
+  margin-bottom: 1rem;
+  display: flex;
+} 
+
+.halfInputC1 {
+  height: 3rem;
+  width: 12rem;
+  margin-right: 1rem;
+  border: 2px solid #11295b;
+  border-radius: 5px;
+  display: flex;
+}
+
+.halfInputC2 {
+  height: 3rem;
+  width: 12rem;
+  margin-left: 1rem;
+  border: 2px solid #11295b;
+  border-radius: 5px;
+  display: flex;
+}
+
+.cIcon {
+  color: var(--azul-oscuro);
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  width: 30px;
+  height: 30px;
+}
+
+.tIcon {
+  color: var(--azul-oscuro);
+  margin-top: 0.7rem;
+  margin-left: 0.5rem;
+  width: 25px;
+  height: 25px;
+}
+
+.select{
+  color: var(--azul-oscuro);
+  border: 2px solid #11295b;
+  border-radius: 5px;
+  
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+}
