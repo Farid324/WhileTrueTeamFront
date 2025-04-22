@@ -43,6 +43,8 @@ const PasswordRecoveryModal = ({
 
       if (!response.ok) throw new Error(data.message || 'Error desconocido');
 
+      // Verificar que el correo es correctamente pasado al siguiente controlador
+      console.log('📧 Correo validado y pasando al siguiente paso:', email);
       onPasswordRecoverySubmit(email); // Pasa al siguiente paso
 
     } catch (error: any) {

@@ -13,6 +13,9 @@ import styles from './Home.module.css';
 export default function Home() {
   // Controla qué modal se debe mostrar
   const [modalState, setModalState] = useState<'login' | 'passwordRecovery' | 'codeVerification' | 'newPassword' | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [showToast2, setShowToast2] = useState(false); // Para el mensaje de usuario bloqueado
+
 
   const handleLoginSubmit = () => {
     setModalState('passwordRecovery');
@@ -35,6 +38,7 @@ export default function Home() {
   };
 
   return (
+    
     <div className={styles.container}>
       <header className={styles.headerTop}>
         <Navbar onLoginClick={() => setModalState('login')} />
@@ -66,18 +70,41 @@ export default function Home() {
       )}
       {modalState === 'codeVerification' && (
         <CodeVerificationModal
-          onClose={handleBackToPasswordRecovery} // Aquí gestionas el "Atrás" para volver al PasswordRecoveryModal
-          onCodeVerificationSubmit={handleCodeVerificationSubmit}
-        />
+        onClose={handleBackToPasswordRecovery}
+        onCodeVerificationSubmit={handleCodeVerificationSubmit}
+        onBlocked={() => {
+          setModalState('login')
+          setShowToast2(true); // muestra el pop-up
+
+            // Ocultar el toast automáticamente después de 3 segundos
+            setTimeout(() => setShowToast2(false), 10000);
+        }} // ✅ Redirige al login si el backend dice "bloqueado"
+      />
       )}
       {modalState === 'newPassword' && (
         <NewPasswordModal
           onClose={handleClose} // Redirige al Login al cancelar o finalizar
-          onPasswordRecoverySubmit={() => {
-            console.log('Contraseña nueva confirmada.');
-          }}
+          code="exampleCode" // Replace "exampleCode" with the actual code value
+          onNewPasswordSubmit={() => {
+            setModalState('login') // Redirige al Login al finalizar
+            setShowToast(true); // muestra el pop-up
+
+            // Ocultar el toast automáticamente después de 3 segundos
+            setTimeout(() => setShowToast(false), 10000);
+          }} 
+          
         />
       )}
+      {showToast && (
+      <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+        ¡Contraseña actualizada correctamente!
+      </div>
+    )}
+    {showToast2 && (
+      <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+        Usuario bloqueado temporalmente. Intenta nuevamente más tarde.
+      </div>
+    )}
     </div>
   );
 }

@@ -5,9 +5,11 @@ import { useState, useRef } from 'react';
 const CodeVerificationModal = ({
   onClose,
   onCodeVerificationSubmit,
+  onBlocked,
 }: {
   onClose: () => void;
   onCodeVerificationSubmit: (code: string) => void;
+  onBlocked?: () => void;
 }) => {
   const [code, setCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -23,7 +25,7 @@ const CodeVerificationModal = ({
     inputRef.current?.focus();
   };
 
-  const handleVerification = async () => {
+  const handleConfirm = async () => {
     if (code.length !== 6) {
       setErrorMessage('El código debe tener 6 dígitos.');
       return;
@@ -37,16 +39,33 @@ const CodeVerificationModal = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
       });
+      
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || 'Error al verificar el código');
+    if (!response.ok) {
+      // The request failed
+      if (response.status === 400 && data.message.includes('Usuario bloqueado temporalmente')) {
+        // Handle the specific lockout error
+        setErrorMessage('Has sido bloqueado temporalmente. Intenta nuevamente más tarde.');
+        onBlocked?.();
+      } else {
+        // Handle other errors
+        //alert(`Error: ${data.message || 'Unknown error occurred.'}`);
+        setErrorMessage(data.message || 'Codigo incorrecto. Por favor intenta nuevamente.');
 
-      onCodeVerificationSubmit(code); // ✅ Se pasa el código al componente padre
+      }
+      return;
+    }
 
+    // Success path
+    console.log('Code verified successfully:', data);
+    onCodeVerificationSubmit(code); // Pass the code to the next step
+    //alert('Código verificado correctamente');
     } catch (error: any) {
-      console.error('❌ Error en la verificación del código:', error);
-      setErrorMessage(error.message || 'Error al verificar el código');
+      
+      console.error('Network or unexpected error:', error);
+      setErrorMessage('Error de comunicación con el servidor. Inténtalo de nuevo más tarde.');
     }
   };
 
@@ -101,7 +120,7 @@ const CodeVerificationModal = ({
 
         <button
           className="w-full bg-[rgba(252,163,17,0.5)] hover:bg-[#FCA311] text-white p-4 rounded-[40px] transition-colors disabled:opacity-50"
-          onClick={handleVerification}
+          onClick={handleConfirm}
           disabled={code.length !== 6}
         >
           Verificar código

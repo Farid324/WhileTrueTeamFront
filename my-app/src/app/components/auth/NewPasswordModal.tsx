@@ -4,10 +4,15 @@ import { useState } from 'react';
 
 const NewPasswordModal = ({
   code,
-  onPasswordResetSuccess,
+  //onPasswordResetSuccess,
+  onClose, // Agregamos una función para cerrar el modal
+  onNewPasswordSubmit
 }: {
   code: string;
-  onPasswordResetSuccess: () => void;}) => {
+  //onPasswordResetSuccess: () => void;
+  onClose: () => void; // Nueva prop para manejar el cierre del modal
+  onNewPasswordSubmit: (newPassword: string) => void; // Nueva prop para manejar el envío de la nueva contraseña
+}) => {
   console.log('🧠 Código recibido en NewPasswordModal:', code);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,23 +22,24 @@ const NewPasswordModal = ({
   const [successMessage, setSuccessMessage] = useState('');
 
   const validatePassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,25}$/;  
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,25}$/;
 
     if (!passwordPattern.test(password)) {
       setError('La contraseña debe tener entre 8 y 25 caracteres, al menos una letra mayúscula y un número.');
       return false;
     }
-    setError('');  // Si pasa la validación, se limpia el error
+    setError(''); // Si pasa la validación, se limpia el error
     return true;
   };
 
   const handleConfirm = async () => {
     setError('');
 
-    if (!code || code.length !== 6) {
+    
+    /*if (!code || code.length !== 6) {
       setError('Código no válido. Intenta nuevamente.');
       return;
-    }
+    }*/
 
     if (!newPassword || !confirmPassword) {
       setError('Por favor completa ambos campos.');
@@ -53,17 +59,15 @@ const NewPasswordModal = ({
     setTimeout(() => {
       setSuccessMessage(''); // Ocultar el pop-up después de 2 segundos
     }, 2000);
-    //onPasswordRecoverySubmit(newPassword);
-
 
     try {
-      console.log('📤 Enviando al backend:', { code, newPassword });
-      console.log('📦 Código recibido en NewPasswordModal:', code);
+      console.log('📤 Enviando al backend:', {newPassword });
+      //console.log('📦 Código recibido en NewPasswordModal:', code);
 
       const response = await fetch('http://localhost:3001/api/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, newPassword }),
+        body: JSON.stringify({  newPassword }),
       });
 
       const data = await response.json();
@@ -72,32 +76,40 @@ const NewPasswordModal = ({
         throw new Error(data.message || 'Error al actualizar la contraseña');
       }
 
-      alert('¡Contraseña actualizada correctamente!');
-      onPasswordResetSuccess();
-
+      //alert('¡Contraseña actualizada correctamente!');
+      onNewPasswordSubmit(newPassword); // Llama a la función para manejar el envío de la nueva contraseña
+      //onPasswordResetSuccess();
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Error al cambiar la contraseña');
     }
-  }
+  };
+
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value;
     setNewPassword(password);
-    validatePassword(password);;
+    validatePassword(password);
   };
+
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
   };
-  
+
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).classList.contains('modal-overlay')) {
+      onClose(); // Llama a la función para cerrar el modal
+    }
+  };
 
   return (
-    <div className="fixed w-full h-full flex justify-center items-center z-[9999] left-0 top-0 bg-black/50 font-sans">
+    <div
+      className="fixed w-full h-full flex justify-center items-center z-[9999] left-0 top-0 bg-black/50 font-sans modal-overlay"
+      onClick={handleOutsideClick} // Detecta clics fuera del modal
+    >
       <div className="w-[33rem] h-auto bg-white p-10 rounded-[35px] shadow-[0_0px_20px_rgba(0,0,0,0.72)]">
         <h1 className="text-center text-[#11295B] text-[1.44rem] font-medium leading-normal mb-4 drop-shadow-md">
           Recupera tu contraseña de <br />
-          <span className="text-[#FCA311] font-black text-[2.074rem] drop-shadow-sm">
-            REDIBO
-          </span>
+          <span className="text-[#FCA311] font-black text-[2.074rem] drop-shadow-sm">REDIBO</span>
         </h1>
 
         <p className="text-[0.9rem] text-black mb-6 text-center">
@@ -121,9 +133,9 @@ const NewPasswordModal = ({
             className ="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[#11295B]"
           >
             <path 
-              fill-rule="evenodd" 
+              fillRule="evenodd" 
               d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" 
-              clip-rule="evenodd" 
+              clipRule="evenodd" 
             />
           </svg>
           <button
@@ -139,7 +151,6 @@ const NewPasswordModal = ({
             />
           </button>
         </div>
-        
 
         {/* Confirmar contraseña */}
         <div className="relative border-2 border-solid border-[#11295B] flex flex-col mb-2 rounded-lg">
@@ -158,9 +169,9 @@ const NewPasswordModal = ({
             className ="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[#11295B]"
           >
             <path 
-              fill-rule="evenodd" 
+              fillRule="evenodd" 
               d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" 
-              clip-rule="evenodd" />
+              clipRule="evenodd" />
           </svg>
 
           <button
@@ -193,7 +204,7 @@ const NewPasswordModal = ({
 
         <button
           className="w-full text-[#11295B] underline cursor-pointer my-4 hover:text-[#11295B] transition-colors"
-          onClick={() => window.location.reload()}
+          onClick={onClose} // Llama a la función para cerrar el modal
         >
           Cancelar
         </button>
