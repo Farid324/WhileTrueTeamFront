@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { login } from '@/libs/authServices'; // Importa tu servicio
 import { useRouter } from 'next/navigation';
 ///////////////////////////
-export default function LoginModal({ onClose, onRegisterClick }: { 
+export default function LoginModal({ onClose, onRegisterClick, onPasswordRecoveryClick}: { 
   onClose: () => void; 
   onRegisterClick: () => void; 
+  onPasswordRecoveryClick: () => void;
 }) {
   
   ////////////Back//////////////
@@ -301,7 +302,13 @@ export default function LoginModal({ onClose, onRegisterClick }: {
         
         <button
           className="text-[var(--azul-oscuro)] underline cursor-pointer w-full transition-colors duration-200 my-4 border-none"
-          onClick={onClose}
+          onClick={() => {
+            onClose(); // Cierra el modal de login
+            setTimeout(() => {
+              onPasswordRecoveryClick(); // Activa el modal de recuperación
+            }, 100); // Pequeño delay
+          }}
+
           style={{ background: 'none', fontFamily: 'var(--fuente-principal)' }}
           onMouseOver={(e) => (e.currentTarget.style.color = 'var(--naranja)')}
           onMouseOut={(e) => (e.currentTarget.style.color = 'var(--azul-oscuro)')}
