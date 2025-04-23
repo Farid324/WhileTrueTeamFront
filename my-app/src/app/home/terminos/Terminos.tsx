@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '@/app/components/navbar/Navbar';
 import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
 import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
-import Footer from '@/app/components/footer/Footer';
 
 
 export default function Terminos() {
@@ -21,10 +20,12 @@ export default function Terminos() {
         });
       },
       {
-        rootMargin: '0px 0px -60% 0px',
-        threshold: 0.2
+        threshold: 0.3,
+        rootMargin: '0px 0px -30% 0px',
+                        
       }
     );
+    
   
     sections.forEach(section => observer.observe(section));
   
@@ -36,56 +37,19 @@ export default function Terminos() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
-        <header>
-        <Navbar onLoginClick={() => setActiveModal('login')}
+      <header>
+          <Navbar onLoginClick={() => setActiveModal('login')}
           onRegisterClick={() => setActiveModal('register')}/>
-        </header>
-      {/*<header className="bg-[var(--blanco)] px-[10rem] py-4 border-b-[2px] border-black/5 fixed top-0 left-0 right-0 z-[1000]">
-        <div className="flex justify-between items-center">
-          <div
-            className="text-[2.1rem] text-[var(--naranja)] font-[var(--tamaño-black)]"
-            style={{
-              fontFamily: 'var(--fuente-principal)',
-              textShadow: '1px 2px 2px rgba(0,0,0,0.3)'
-            }}
-          >
-            REDIBO
-          </div>
+      </header>
 
 
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <button
-                key={i}
-                className={`text-[var(--azul-oscuro)] font-[var(--tamaño-regular)] py-[0.2rem] px-[2.8rem] border-2 border-[#00000033] bg-[var(--blanco)] cursor-pointer relative
-                  ${i === 0 ? 'rounded-l-full border-r-0 after:absolute after:top-[25%] after:right-0 after:h-[50%] after:w-px after:bg-[#00000033]' : ''}
-                  ${i > 0 && i < 4 ? 'border-x-0 relative before:absolute before:top-[25%] before:left-0 before:h-[50%] before:w-px before:bg-[#00000033] after:absolute after:top-[25%] after:right-0 after:h-[50%] after:w-px after:bg-[#00000033]' : ''}
-                  ${i === 4 ? 'rounded-r-full border-l-0 relative before:absolute before:top-[25%] before:left-0 before:h-[50%] before:w-px before:bg-[#00000033]' : ''}
-                `}
-              >
-                Botón{i + 1}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-2">
-            <button className="bg-[var(--naranja-46)] text-[var(--azul-oscuro)] font-[var(--tamaño-regular)] rounded-l-[20px] py-2 px-8 border-none cursor-pointer">
-              Registrarse
-            </button>
-            <button className="bg-[#FCA311] text-[var(--blanco)] font-[var(--tamaña-bold)] rounded-r-[20px] py-2 px-4 border-none cursor-pointer">
-              Iniciar Sesión
-            </button>
-          </div>
-        </div>
-      </header>*/}
-
-      
-      <main className="flex-1  pt-[4.5rem] px-4 md:px-12">
+      <main className="flex-1 bg-[var(--blanco)] pt-[4.5rem] px-4 md:px-12">
         <div className="flex flex-col md:flex-row items-start gap-8 max-w-[1200px] mx-auto">
           <aside className="flex-none w-full md:w-[260px] bg-[var(--hueso)] p-[2.2rem] md:ml-[-70px] sticky top-[100px] h-fit rounded-[8px] shadow-[var(--sombra)]">
             <nav>
               <ul className="list-none p-0 m-0">
                 {[
+                  ['descripcion', 'Descripción de la Plataforma'],
                   ['introduccion', 'Introducción'],
                   ['registro', 'Registro y Cuenta'],
                   ['host', 'Obligaciones del Host'],
@@ -125,12 +89,12 @@ export default function Terminos() {
             <section id="descripcion" className="mb-8 scroll-mt-[104.4px]">
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Descripción de la Plataforma</h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4 font-[var(--tamaño-regular)]">
-                REDIBO es un servicio en línea diseñado para conectar propietarios de vehículos (&quot;Host&quot;) con personas interesadas en alquilar
-                autos (&quot;Renters&quot;). Nuestra misión es proporcionar una experiencia segura, cómoda y eficiente para el alquiler de vehículos, 
-                asegurando que todas las transacciones sean claras y equitativas para ambas partes. A través de nuestra tecnología 
-                innovadora, facilitamos el proceso de reserva, pago y comunicación, asegurando que cada alquiler sea una experiencia 
-                satisfactoria y confiable.
+                Nuestra visión es revolucionar el mercado del alquiler de autos en Bolivia, ofreciendo una alternativa digital que elimine las barreras tradicionales. REDIBO permite a cualquier propietario publicar su vehículo con facilidad y comenzar a generar ingresos adicionales de forma segura.
               </p>
+              <p className="text-[var(--negro)] leading-relaxed mb-4 font-[var(--tamaño-regular)]">
+                Asimismo, los arrendatarios pueden acceder a una variedad de opciones según su necesidad, desde vehículos compactos para recorridos urbanos hasta camionetas o SUVs para viajes largos. Todo esto se realiza con información clara, precios competitivos y soporte dedicado.
+              </p>
+
             </section>
 
             <section id="introduccion" className="mb-8 scroll-mt-[104.4px]">
@@ -152,7 +116,7 @@ export default function Terminos() {
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Registro y Cuenta</h2>
               <p className="font-semibold text-[var(--negro)] mb-2">Requisitos para Hosts:</p>
               <ul className="list-disc pl-6 text-[var(--negro)] space-y-2 mb-4">
-                <li>Ser mayor de 21 años</li>
+                <li>Ser mayor de 18 años</li>
                 <li>Poseer un vehículo con documentación en regla</li>
                 <li>Contar con SOAT vigente</li>
                 <li>Presentar cédula de identidad o pasaporte válido</li>
@@ -161,7 +125,7 @@ export default function Terminos() {
 
               <p className="font-semibold text-[var(--negro)] mb-2">Requisitos para Renters:</p>
               <ul className="list-disc pl-6 text-[var(--negro)] space-y-2 mb-4">
-                <li>Ser mayor de 21 años</li>
+                <li>Ser mayor de 18 años</li>
                 <li>Licencia de conducir válida con al menos 2 años de antigüedad</li>
                 <li>Documento de identidad oficial (cédula o pasaporte)</li>
                 <li>Método de pago válido registrado en la plataforma</li>
@@ -342,15 +306,38 @@ export default function Terminos() {
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Ley Aplicable y Resolución de Conflictos</h2>
 
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                Estos Términos y Condiciones se rigen por la normativa vigente en Bolivia, en especial el Código Civil
-                y la Ley General de Transporte. Ante cualquier disputa, REDIBO fomentará la resolución mediante
-                mediación. Si no se llega a un acuerdo, el caso podrá ser presentado ante los tribunales ordinarios
-                bolivianos con jurisdicción en la ciudad de La Paz.
+                Estos Términos y Condiciones se rigen por la normativa vigente en Bolivia, en especial el Código Civil,
+                la Ley General de Transporte y demás disposiciones conexas que regulan el arrendamiento de bienes y servicios
+                en el país. REDIBO opera conforme al marco legal establecido, promoviendo prácticas comerciales justas y transparentes.
+              </p>
+
+              <p className="text-[var(--negro)] leading-relaxed mb-4">
+                En caso de presentarse conflictos entre los usuarios (ya sea entre Host y Renter o entre estos y la plataforma),
+                REDIBO fomentará en primera instancia la resolución amistosa de las controversias mediante comunicación directa.
+                Si esto no fuera suficiente, se brindará apoyo para iniciar procesos de mediación voluntaria, 
+                siempre que ambas partes lo acepten.
+              </p>
+
+              <p className="text-[var(--negro)] leading-relaxed mb-4">
+                Si la mediación no resulta efectiva o no es aceptada por alguna de las partes, el conflicto podrá resolverse mediante 
+                arbitraje institucional de acuerdo con los reglamentos del Centro de Conciliación y Arbitraje 
+                reconocido por el Ministerio de Justicia de Bolivia. Esta alternativa ofrece mayor celeridad y confidencialidad en los procedimientos.
+              </p>
+
+              <p className="text-[var(--negro)] leading-relaxed mb-4">
+                Finalmente, si no se opta por ninguna de las vías alternativas o si el conflicto requiere intervención judicial,
+                el caso deberá ser presentado ante los tribunales ordinarios competentes del Estado Plurinacional de Bolivia,
+                con jurisdicción en la ciudad de La Paz, salvo acuerdo distinto entre las partes.
+              </p>
+
+              <p className="text-[var(--negro)] leading-relaxed">
+                REDIBO no será responsable por las acciones u omisiones de los usuarios fuera del alcance de la plataforma,
+                pero colaborará con las autoridades en caso de que se requiera su intervención.
               </p>
             </section>
 
 
-            <section id="contacto" className="mb-8 scroll-mt-[104.4px]">
+            <section id="contacto" className="mb-8 scroll-mt-[104.4px] min-h-[300px]">
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Contacto</h2>
 
               <p className="text-[var(--negro)] leading-relaxed mb-4">
@@ -378,18 +365,31 @@ export default function Terminos() {
             </section>
           </div>
         </div>
+        <div aria-hidden="true" className="mt-[300px] invisible" />
       </main>
       
-      <footer>
-        <Footer/>
+      <footer className="bg-[var(--hueso)] text-[var(--negro)] font-[var(--fuente-principal)] border-t-[1px] border-[rgba(0,0,0,0.2)] p-8 text-right rounded-t-[20px]">
+          <span
+          onClick={(e) => {
+            e.preventDefault();
+            const target = document.getElementById('descripcion');
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              setActiveSection('descripcion');
+            }
+          }}
+          className="underline cursor-pointer text-[var(--negro)]"
+        >
+          Términos y condiciones
+        </span>
       </footer>
-        {activeModal === 'login' && (
-              <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
-            )}
+      {activeModal === 'login' && (
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
+      )}
       
-            {activeModal === 'register' && (
-              <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
-            )}
+      {activeModal === 'register' && (
+        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
+      )}
     </div>
   );
 }

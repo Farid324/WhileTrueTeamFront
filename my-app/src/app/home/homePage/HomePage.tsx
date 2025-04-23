@@ -11,16 +11,17 @@ export default function MainHome() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
-      <header className="px-8 py-4 bg-[var(--blanco)]">
+      <header className="border-t border-b border-[rgba(215, 30, 30, 0.1)] shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
+
         <NavbarInicioSesion />
       </header>
 
-      <header className="px-8 py-4 bg-[var(--gris-claro)] border-b border-[#ccc]">
+      <header className="/* headerFilters */">
         <FiltersBar />
       </header>
 
       <main className="flex-grow p-8">
-        <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+        <div className="/* scrollContent */">
           <p>Contenido principal del usuario (tarjetas, información, etc.).</p>
         </div>
       </main>
