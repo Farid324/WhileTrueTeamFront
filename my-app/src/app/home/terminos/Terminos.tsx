@@ -1,10 +1,13 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import Navbar from '@/app/components/navbar/Navbar';
+import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
+import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
 
 
 export default function Terminos() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
 
   useEffect(() => {
     const sections = document.querySelectorAll('section[id]');
@@ -33,44 +36,10 @@ export default function Terminos() {
   
 
   return (
-    <div className="flex flex-col min-h-screen font-family: var(--fuente-principal)">
-      <header className="bg-[var(--blanco)] px-[10rem] py-4 border-b-[2px] border-black/5 fixed top-0 left-0 right-0 z-[1000]">
-        <div className="flex justify-between items-center">
-          <div
-            className="text-[2.1rem] text-[var(--naranja)] font-[var(--tamaño-black)]"
-            style={{
-              fontFamily: 'var(--fuente-principal)',
-              textShadow: '1px 2px 2px rgba(0,0,0,0.3)'
-            }}
-          >
-            REDIBO
-          </div>
-
-
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <button
-                key={i}
-                className={`text-[var(--azul-oscuro)] font-[var(--tamaño-regular)] py-[0.2rem] px-[2.8rem] border-2 border-[#00000033] bg-[var(--blanco)] cursor-pointer relative
-                  ${i === 0 ? 'rounded-l-full border-r-0 after:absolute after:top-[25%] after:right-0 after:h-[50%] after:w-px after:bg-[#00000033]' : ''}
-                  ${i > 0 && i < 4 ? 'border-x-0 relative before:absolute before:top-[25%] before:left-0 before:h-[50%] before:w-px before:bg-[#00000033] after:absolute after:top-[25%] after:right-0 after:h-[50%] after:w-px after:bg-[#00000033]' : ''}
-                  ${i === 4 ? 'rounded-r-full border-l-0 relative before:absolute before:top-[25%] before:left-0 before:h-[50%] before:w-px before:bg-[#00000033]' : ''}
-                `}
-              >
-                Botón{i + 1}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-2">
-            <button className="bg-[var(--naranja-46)] text-[var(--azul-oscuro)] font-[var(--tamaño-regular)] rounded-l-[20px] py-2 px-8 border-none cursor-pointer">
-              Registrarse
-            </button>
-            <button className="bg-[#FCA311] text-[var(--blanco)] font-[var(--tamaña-bold)] rounded-r-[20px] py-2 px-4 border-none cursor-pointer">
-              Iniciar Sesión
-            </button>
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
+      <header>
+          <Navbar onLoginClick={() => setActiveModal('login')}
+          onRegisterClick={() => setActiveModal('register')}/>
       </header>
 
 
@@ -399,7 +368,7 @@ export default function Terminos() {
         <div aria-hidden="true" className="mt-[300px] invisible" />
       </main>
       
-      <footer className="p-4 bg-[var(--hueso)] text-right font-[var(--fuente-principal)]">
+      <footer className="bg-[var(--hueso)] text-[var(--negro)] font-[var(--fuente-principal)] border-t-[1px] border-[rgba(0,0,0,0.2)] p-8 text-right rounded-t-[20px]">
           <span
           onClick={(e) => {
             e.preventDefault();
@@ -414,6 +383,13 @@ export default function Terminos() {
           Términos y condiciones
         </span>
       </footer>
+      {activeModal === 'login' && (
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
+      )}
+      
+      {activeModal === 'register' && (
+        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
+      )}
     </div>
   );
 }
