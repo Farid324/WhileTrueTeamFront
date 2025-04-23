@@ -1,22 +1,25 @@
 'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation'; // ✅
 import Navbar from '../components/navbar/Navbar';
 import FiltersBar from '../components/filters/FiltersBar';
 import Footer from '../components/footer/Footer';
-import LoginModal from '../components/auth/LoginModal';
 import PasswordRecoveryModal from '../components/auth/PasswordRecoveryModal';
 import CodeVerificationModal from '../components/auth/CodeVerificationModal';
 import NewPasswordModal from '../components/auth/NewPasswordModal';
+import LoginModal from '../components/auth/authInicioSesion/LoginModal';
 import styles from './Home.module.css';
+import RegisterModal from '../components/auth/authregistro/RegisterModal';
 
-export default function Home() {
-  // Controla qué modal se debe mostrar
-  const [modalState, setModalState] = useState<'login' | 'passwordRecovery' | 'codeVerification' | 'newPassword' | null>(null);
+export default function HomePage() {
+  const searchParams = useSearchParams();
+
+  const [activeModal, setActiveModal] = useState<'login' | 'register'| null>(null);
+  const [modalState, setModalState] = useState<'passwordRecovery' | 'codeVerification' | 'newPassword' | null>(null);
+  
   const [showToast, setShowToast] = useState(false);
   const [showToast2, setShowToast2] = useState(false); // Para el mensaje de usuario bloqueado
-
-
+  
   const handleLoginSubmit = () => {
     setModalState('passwordRecovery');
   };
@@ -30,18 +33,28 @@ export default function Home() {
   };
 
   const handleClose = () => {
-    setModalState('login'); // Si se presiona "Atrás" en cualquier modal, se regresa al Login
+    setModalState(null); // Cierra cualquier modal de recuperación
+    setActiveModal('login'); // Abre el login modal
   };
 
   const handleBackToPasswordRecovery = () => {
     setModalState('passwordRecovery'); // Regresa al PasswordRecoveryModal desde el CodeVerificationModal
   };
 
+  useEffect(() => {
+    if (searchParams?.get('googleComplete') === 'true') {
+      setActiveModal('register'); // Abrir modal de registro al volver de Google
+    }
+  }, [searchParams]);
+
   return (
     
     <div className={styles.container}>
       <header className={styles.headerTop}>
-        <Navbar onLoginClick={() => setModalState('login')} />
+        <Navbar 
+          onLoginClick={() => setActiveModal('login')}
+          onRegisterClick={() => setActiveModal('register')}
+        />
       </header>
 
       <header className={styles.headerFilters}>
@@ -59,9 +72,9 @@ export default function Home() {
       </footer>
 
       {/* Mostrar los modales según el estado */}
-      {modalState === 'login' && (
+      {/*{modalState === 'login' && (
         <LoginModal onClose={handleClose} onLoginSubmit={handleLoginSubmit} />
-      )}
+      )}*/}
       {modalState === 'passwordRecovery' && (
         <PasswordRecoveryModal
           onClose={handleClose}
@@ -73,7 +86,8 @@ export default function Home() {
         onClose={handleBackToPasswordRecovery}
         onCodeVerificationSubmit={handleCodeVerificationSubmit}
         onBlocked={() => {
-          setModalState('login')
+          setModalState(null);
+          setActiveModal('login'); // Redirige al Login al finalizar
           setShowToast2(true); // muestra el pop-up
 
             // Ocultar el toast automáticamente después de 3 segundos
@@ -86,7 +100,8 @@ export default function Home() {
           onClose={handleClose} // Redirige al Login al cancelar o finalizar
           code="exampleCode" // Replace "exampleCode" with the actual code value
           onNewPasswordSubmit={() => {
-            setModalState('login') // Redirige al Login al finalizar
+            setModalState(null);
+            setActiveModal('login'); // Redirige al Login al finalizar
             setShowToast(true); // muestra el pop-up
 
             // Ocultar el toast automáticamente después de 3 segundos
@@ -96,15 +111,24 @@ export default function Home() {
         />
       )}
       {showToast && (
-      <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
-        ¡Contraseña actualizada correctamente!
-      </div>
-    )}
-    {showToast2 && (
-      <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
-        Usuario bloqueado temporalmente. Intenta nuevamente más tarde.
-      </div>
-    )}
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+          ¡Contraseña actualizada correctamente!
+        </div>
+      )}
+      {showToast2 && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+          Usuario bloqueado temporalmente. Intenta nuevamente más tarde.
+        </div>
+      )}
+
+      {activeModal === 'login' && (<LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')}
+      onPasswordRecoveryClick={handleLoginSubmit} // 👈 Aquí usas la función
+      />
+      )}
+
+      {activeModal === 'register' && (
+        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
+      )}
     </div>
   );
 }
