@@ -4,9 +4,9 @@ import { useSearchParams } from 'next/navigation'; // ✅
 import Navbar from '../components/navbar/Navbar';
 import FiltersBar from '../components/filters/FiltersBar';
 import Footer from '../components/footer/Footer';
-import PasswordRecoveryModal from '../components/auth/PasswordRecoveryModal';
-import CodeVerificationModal from '../components/auth/CodeVerificationModal';
-import NewPasswordModal from '../components/auth/NewPasswordModal';
+import PasswordRecoveryModal from '../components/auth/authRecuperarContrasena/PasswordRecoveryModal';
+import CodeVerificationModal from '../components/auth/authRecuperarContrasena/CodeVerificationModal';
+import NewPasswordModal from '../components/auth/authRecuperarContrasena/NewPasswordModal';
 import LoginModal from '../components/auth/authInicioSesion/LoginModal';
 import styles from './Home.module.css';
 import RegisterModal from '../components/auth/authregistro/RegisterModal';

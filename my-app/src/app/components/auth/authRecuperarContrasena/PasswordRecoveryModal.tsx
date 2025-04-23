@@ -47,10 +47,15 @@ const PasswordRecoveryModal = ({
       console.log('📧 Correo validado y pasando al siguiente paso:', email);
       onPasswordRecoverySubmit(email); // Pasa al siguiente paso
 
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error:', error);
-      setErrorMessage(error.message || 'Error al recuperar la contraseña');
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Error al recuperar la contraseña');
+      }
     }
+    
   };
 
   return (

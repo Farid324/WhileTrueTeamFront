@@ -62,10 +62,13 @@ const CodeVerificationModal = ({
     console.log('Code verified successfully:', data);
     onCodeVerificationSubmit(code); // Pass the code to the next step
     //alert('Código verificado correctamente');
-    } catch (error: any) {
-      
+    } catch (error) {
       console.error('Network or unexpected error:', error);
-      setErrorMessage('Error de comunicación con el servidor. Inténtalo de nuevo más tarde.');
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Error de comunicación con el servidor. Inténtalo de nuevo más tarde.');
+      }
     }
   };
 

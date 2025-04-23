@@ -79,10 +79,15 @@ const NewPasswordModal = ({
       //alert('¡Contraseña actualizada correctamente!');
       onNewPasswordSubmit(newPassword); // Llama a la función para manejar el envío de la nueva contraseña
       //onPasswordResetSuccess();
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || 'Error al cambiar la contraseña');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Error al cambiar la contraseña');
+      }
     }
+    
   };
 
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +149,7 @@ const NewPasswordModal = ({
             onClick={() => setShowPassword(!showPassword)}  // Cambia el estado de visibilidad
             disabled={!setNewPassword}
           >
-            <img
+            <img 
               src="https://www.svgrepo.com/download/526542/eye.svg"
               alt="Mostrar contraseña"
               className="w-6 h-6"
