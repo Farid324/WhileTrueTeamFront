@@ -3,6 +3,7 @@ import { useState } from "react";
 import CompleteProfileModal from "./CompleteProfileModal"; // ajusta si cambia el path
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation"; // o useLocation si usas react-router
+import { backendip } from "@/libs/authServices";
 
 export default function RegisterModal({
   onClose,
@@ -14,7 +15,7 @@ export default function RegisterModal({
   const handleGoogleRegister = () => {
     try {
       localStorage.setItem("openCompleteProfileModal", "true");
-      window.location.href = "http://localhost:3001/api/auth/google";
+      window.location.href = backendip + "/api/auth/google";
     } catch (error) {
       console.error("Error en registro con Google", error);
     }
@@ -311,7 +312,7 @@ export default function RegisterModal({
         telefono: phone ? parseInt(cleanPhone) : null,
       };
 
-      const res = await fetch("http://localhost:3001/api/register", {
+      const res = await fetch(backendip + "/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
