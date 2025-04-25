@@ -384,7 +384,7 @@ export default function Terminos() {
         </span>
       </footer>
       {activeModal === 'login' && (
-        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} />
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() =>setActiveModal('register')} onPasswordRecoveryClick={() => console.log('Recuperar contraseña')}/>
       )}
       
       {activeModal === 'register' && (

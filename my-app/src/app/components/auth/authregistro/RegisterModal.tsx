@@ -805,7 +805,7 @@ export default function RegisterModal({
                         ? "Número inválido"
                         : "Ingrese número de teléfono"
                     }
-                    className={`${styles.input} ${
+                    className={`${styles.input3} ${
                       phoneError ? styles.errorInput : ""
                     }`}
                   />

@@ -106,6 +106,12 @@ export default function LoginModal({ onClose, onRegisterClick, onPasswordRecover
     try {
       const result = await login(email, password);
       console.log('Login exitoso:', result);
+
+      //Guarda el token y el nombre del usuario
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('nombre_completo', result.user.nombre_completo);
+
+
       setError('');
       setHasLoginError(false);
       // Puedes hacer algo con el resultado aquí, como guardar el token o redirigir

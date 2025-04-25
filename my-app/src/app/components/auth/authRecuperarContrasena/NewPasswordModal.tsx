@@ -21,14 +21,48 @@ const NewPasswordModal = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  const validatePassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,25}$/;
-
-    if (!passwordPattern.test(password)) {
-      setError('La contraseña debe tener entre 8 y 25 caracteres, al menos una letra mayúscula y un número.');
+  const validatePassword = (password: string): boolean => {
+    if (password.trim() === "") {
+      setError("La contraseña no puede estar vacía");
       return false;
     }
-    setError(''); // Si pasa la validación, se limpia el error
+
+    if (!/[A-Z]/.test(password)) {
+      setError("Debe contener al menos una letra mayúscula");
+      return false;
+    }
+
+    if (!/[a-z]/.test(password)) {
+      setError("Debe contener al menos una letra minúscula");
+      return false;
+    }
+
+    if (!/[0-9]/.test(password)) {
+      setError("Debe contener al menos un número");
+      return false;
+    }
+
+    if (!/[!@#$%^&*]/.test(password)) {
+      setError("Debe tener al menos un carácter especial (!@#$...)");
+      return false;
+    }
+
+    if (password.includes(" ")) {
+      setError("No puede contener espacios");
+      return false;
+    }
+
+    if (password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres");
+      return false;
+    }
+
+    if (password.length > 25) {
+      setError("No puede tener más de 25 caracteres");
+      return false;
+    }
+
+    setError(""); // Limpia el error si todo es válido
     return true;
   };
 
