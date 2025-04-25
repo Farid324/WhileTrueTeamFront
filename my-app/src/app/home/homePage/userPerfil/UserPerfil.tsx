@@ -10,8 +10,10 @@
   import PerfilIcon from "@/app/components/Icons/Perfil"; // <-- Nuevo icono importado
   import Padlock from "@/app/components/Icons/Candado";
   /* import { IdIcon } from "@/app/components/Icons/Doc_Identidad"; */
+  import { useUser } from '@/hooks/useUser';
 
   export default function UserPerfilPage() {
+    const user = useUser();
     return (
       <>
         <NavbarPerfilUsuario />
@@ -38,9 +40,11 @@
                 id="Nombre"
                 label="Nombre Completo"
                 type="Text"
-                placeholder="Example"
+                
                 icono={<UserIcon />}
+                defaultValue={user?.nombre_completo || ''}
                 className="focus:ring-[#11295B] border-[#11295B]"
+                
               />
 
               {/* Input Email */}
@@ -48,8 +52,9 @@
                 id="Email"
                 label="Email"
                 type="Text"
-                placeholder="example@gmail.com"
+                
                 icono={<MailIcon />}
+                defaultValue={user?.email || ''}
                 className="focus:ring-[#11295B] border-[#11295B]"
               />
 
@@ -58,7 +63,7 @@
                 id="Contraseña"
                 label="Contraseña"
                 type="password"
-                placeholder="*************"
+                defaultValue="********"
                 icono={<Padlock />}
                 className="focus:ring-[#11295B] border-[#11295B]"
               />
@@ -71,8 +76,9 @@
                     id="Fecha"
                     label="Fecha de Nacimiento"
                     type="date"
-                    placeholder="DD/MM/YY"
+                    
                     icono={<CalendarIcon />}
+                    defaultValue={user?.fecha_nacimiento?.split('T')[0] || ''}
                     className="focus:ring-[#11295B] border-[#11295B]"
                   />
                 </div>
@@ -83,8 +89,9 @@
                     id="Telefono"
                     label="Teléfono"
                     type="number"
-                    placeholder="3842944"
+                    
                     icono={<PhoneIcon />}
+                    defaultValue={user?.telefono?.toString() || ''}
                     className="focus:ring-[#11295B] border-[#11295B]"
                   />
                 </div>

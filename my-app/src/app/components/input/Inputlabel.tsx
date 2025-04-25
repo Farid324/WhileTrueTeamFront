@@ -4,20 +4,22 @@ interface InputlabelProps {
   id: string;
   label: string;
   type: string;
-  placeholder: string;
+
   icono?: React.ReactNode;
   className?: string;
   readOnly?: boolean; // <-- Nuevo para permitir solo lectura
+  defaultValue?: string;
 }
 
 const Inputlabel: React.FC<InputlabelProps> = ({
   id,
   label,
   type,
-  placeholder,
+  
   icono,
   className,
   readOnly = false, // <-- Por defecto editable
+  defaultValue,
 }) => {
   return (
     <div>
@@ -29,7 +31,8 @@ const Inputlabel: React.FC<InputlabelProps> = ({
           id={id}
           name={id}
           type={type}
-          placeholder={placeholder}
+         
+          defaultValue={defaultValue}
           readOnly={readOnly} // <-- Aplicamos aquí
           className={`w-full border border-[#11295B] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#11295B] ${className} shadow-[0_4px_10px_rgba(0,0,0,0.4)] pl-10 ${
             readOnly ? "bg-gray-100 cursor-not-allowed" : ""

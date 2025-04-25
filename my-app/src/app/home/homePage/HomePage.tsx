@@ -1,5 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+//Proteger el frontend (redireccionar si no hay token):
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/hooks/useUser';
+
 import NavbarInicioSesion from '@/app/components/navbar/NavbarInicioSesion';
 import FiltersBar from '@/app/components/filters/FiltersBar';
 import Footer from '@/app/components/footer/Footer';
@@ -8,6 +13,16 @@ import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
 
 export default function MainHome() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
+  
+  const router = useRouter();
+  const user = useUser(); // 🚀
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/');
+    }
+  }, [user, router]); // 🚀 Agrega user como dependencia
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
@@ -31,7 +46,7 @@ export default function MainHome() {
       </footer>
 
       {activeModal === 'login' && (
-        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')} />
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')} onPasswordRecoveryClick={() => console.log('Recuperar contraseña')}/>
       )}
 
       {activeModal === 'register' && (
