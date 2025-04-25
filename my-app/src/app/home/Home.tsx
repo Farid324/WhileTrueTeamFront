@@ -121,7 +121,8 @@ export default function HomePage() {
         </div>
       )}
 
-      {activeModal === 'login' && (<LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')}
+      {activeModal === 'login' && (
+        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')}
       onPasswordRecoveryClick={handleLoginSubmit} // 👈 Aquí usas la función
       />
       )}
