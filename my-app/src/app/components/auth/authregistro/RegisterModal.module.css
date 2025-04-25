@@ -212,6 +212,9 @@
 
 .input {
   width: 100%;
+  padding: 0.5rem 0.75rem;
+  line-height: 1.5;
+  box-sizing: border-box;
   margin-bottom: 0.5rem;
   margin-left: 0.5rem;
   border: none;
@@ -222,6 +225,21 @@
 
 .input2 {
   width: 100%;
+  padding: 0.5rem 0.75rem;
+  line-height: 1.5;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--azul-oscuro);
+}
+
+.input3 {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  line-height: 1.5;
+  box-sizing: border-box;
+  margin-left: 0.5rem;
   border: none;
   border-radius: 8px;
   font-size: 0.75rem;
