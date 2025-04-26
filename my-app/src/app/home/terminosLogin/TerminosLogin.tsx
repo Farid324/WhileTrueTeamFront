@@ -83,30 +83,36 @@ export default function TerminosLogin() {
                
           
             <section id="descripcion" className="mb-8 scroll-mt-[104.4px]">
-              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Descripción de la Plataforma</h2>
+              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">
+                Descripción de la Plataforma
+              </h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4 font-[var(--tamaño-regular)]">
-                Nuestra visión es revolucionar el mercado del alquiler de autos en Bolivia, ofreciendo una alternativa digital que elimine las barreras tradicionales. REDIBO permite a cualquier propietario publicar su vehículo con facilidad y comenzar a generar ingresos adicionales de forma segura.
+                REDIBO es una plataforma innovadora diseñada para transformar el mercado del alquiler de vehículos en Bolivia, conectando directamente a propietarios de autos (Hosts) con arrendatarios (Renters) interesados en alquilar vehículos de forma segura, eficiente y transparente. Nuestra plataforma elimina intermediarios tradicionales, brindando autonomía y mayores ingresos a los Hosts, mientras ofrece a los Renters una amplia variedad de opciones para satisfacer diferentes necesidades de transporte.
               </p>
               <p className="text-[var(--negro)] leading-relaxed mb-4 font-[var(--tamaño-regular)]">
-                Asimismo, los arrendatarios pueden acceder a una variedad de opciones según su necesidad, desde vehículos compactos para recorridos urbanos hasta camionetas o SUVs para viajes largos. Todo esto se realiza con información clara, precios competitivos y soporte dedicado.
+                A través de REDIBO, los usuarios pueden listar vehículos particulares, desde autos económicos hasta camionetas de alta gama, proporcionando detalles claros y fotografías actualizadas. Los Renters, por su parte, pueden buscar vehículos según ubicación, rango de precios, características específicas y fechas deseadas. La experiencia de usuario se optimiza mediante un sistema de filtros inteligentes, recomendaciones personalizadas y reseñas de otros usuarios que garantizan la confianza en cada operación.
               </p>
-
+              <p className="text-[var(--negro)] leading-relaxed mb-4 font-[var(--tamaño-regular)]">
+                Además, REDIBO incorpora funcionalidades de pago seguro, depósito de garantías, gestión de reservas, soporte al cliente en tiempo real, verificación de identidades y contratos electrónicos para proteger los intereses de ambas partes. Nos enorgullece ser pioneros en democratizar el acceso al alquiler de vehículos, impulsando la economía colaborativa en Bolivia y promoviendo valores de responsabilidad, compromiso y confianza mutua entre todos los miembros de nuestra comunidad.
+              </p>
             </section>
+
 
             <section id="introduccion" className="mb-8 scroll-mt-[104.4px]">
-              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Introducción</h2>
+              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">
+                Introducción
+              </h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                Estos Términos y Condiciones establecen las reglas y regulaciones para el uso de REDIBO.
-                Al acceder o utilizar nuestros servicios, los usuarios acuerdan cumplir con todas las disposiciones aquí descritas.
-                El incumplimiento de estos términos puede resultar en la suspensión o terminación de la cuenta del usuario,
-                además de otras acciones legales según corresponda.
+                Bienvenidos a REDIBO, una plataforma que redefine el concepto de movilidad compartida en Bolivia. Estos Términos y Condiciones establecen los lineamientos legales y normativos que rigen el acceso y uso de nuestros servicios. Todos los usuarios deben leer detenidamente este documento antes de registrarse o utilizar nuestra plataforma, ya que al hacerlo aceptan quedar legalmente vinculados por estas disposiciones.
               </p>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                REDIBO es la Plataforma de una empresa registrada en Bolivia que opera como una plataforma intermediaria que facilita
-                la conexión entre Hosts y Arrendatarios. No somos responsables por la calidad, seguridad o legalidad de los vehículos
-                listados, ni garantizamos la exactitud de la información proporcionada por los usuarios.
+                REDIBO actúa como un facilitador tecnológico que conecta, a través de su plataforma digital, a Hosts que desean poner a disposición sus vehículos, con Renters que requieren alquilarlos. Si bien nos esforzamos en promover prácticas seguras y responsables, REDIBO no es propietaria ni operadora de los vehículos listados, ni participa en las transacciones de forma directa, más allá de brindar el espacio virtual para su concreción.
+              </p>
+              <p className="text-[var(--negro)] leading-relaxed mb-4">
+                El incumplimiento de cualquiera de las disposiciones contenidas en estos Términos y Condiciones podrá derivar en la suspensión o cancelación de la cuenta del usuario, sin perjuicio de las acciones legales adicionales que REDIBO pudiera iniciar. Estos términos están sujetos a actualización periódica, y será responsabilidad de los usuarios revisar las modificaciones antes de utilizar nuevamente nuestros servicios.
               </p>
             </section>
+
 
             <section id="registro" className="mb-8 scroll-mt-[104.4px]">
               <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Registro y Cuenta</h2>
@@ -250,52 +256,51 @@ export default function TerminosLogin() {
 
             
             <section id="cancelaciones" className="mb-8 scroll-mt-[104.4px]">
-              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Cancelaciones y Reembolsos</h2>
-
+              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">
+                Cancelaciones y Reembolsos
+              </h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                En REDIBO entendemos que pueden surgir imprevistos. Por ello, ofrecemos políticas claras de cancelación.
-                Los Renters pueden cancelar sus reservas hasta 48 horas antes del inicio del alquiler con un reembolso
-                completo, excluyendo la comisión de servicio. Cancelaciones dentro de las 48 horas previas recibirán
-                un 50% de reembolso, y si la cancelación ocurre en las últimas 12 horas, no se otorgará reembolso salvo
-                casos justificados como emergencias verificadas.
+                Entendemos que pueden surgir imprevistos tanto para Hosts como para Renters. Por ello, REDIBO establece políticas claras de cancelación que buscan proteger los intereses de ambas partes. Los Renters podrán cancelar una reserva con reembolso completo (menos comisiones) si la cancelación se realiza al menos 48 horas antes del inicio del alquiler.
               </p>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                Los Hosts también deben actuar con responsabilidad. Si cancelan sin motivo justificado, pueden recibir
-                sanciones como menor visibilidad en la plataforma o suspensión. Los reembolsos se procesan en un plazo
-                de 3 a 7 días hábiles, dependiendo del método de pago utilizado.
+                Cancelaciones realizadas entre 24 y 48 horas antes del inicio del alquiler darán derecho a un reembolso del 50% del monto pagado, mientras que cancelaciones con menos de 24 horas no tendrán derecho a reembolso, salvo situaciones excepcionales debidamente justificadas (accidentes, emergencias médicas, etc.). Las solicitudes de excepción deberán presentarse con documentación comprobatoria.
+              </p>
+              <p className="text-[var(--negro)] leading-relaxed mb-4">
+                Los Hosts que cancelen reservas confirmadas sin justificación válida podrán ser sancionados con cargos por cancelación, pérdida de visibilidad en la plataforma y suspensión temporal o permanente de su cuenta, dependiendo de la gravedad de la falta y su reincidencia.
               </p>
             </section>
+
 
 
             <section id="seguro" className="mb-8 scroll-mt-[104.4px]">
-              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Seguro y Responsabilidad</h2>
-
+              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">
+                Seguro y Responsabilidad
+              </h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                Todos los vehículos publicados en REDIBO deben contar con SOAT vigente. Además, recomendamos a los Hosts
-                contar con seguro complementario contra daños y robos. El Renter es responsable por el uso correcto del
-                vehículo y debe respetar todas las normativas de tránsito vigentes en Bolivia.
+                Todos los vehículos ofrecidos a través de REDIBO deben contar obligatoriamente con seguro SOAT vigente. REDIBO recomienda adicionalmente la contratación de seguros complementarios que cubran daños materiales, robo, responsabilidad civil frente a terceros y accidentes personales.
               </p>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                En caso de accidente, el Renter debe reportar inmediatamente a Tránsito, al Host y a REDIBO. La
-                responsabilidad financiera ante daños será evaluada según el informe oficial y el tipo de seguro
-                contratado por el Host. REDIBO actúa como intermediario, pero no cubre daños ni actúa como aseguradora.
+                En caso de accidente, el Renter debe contactar de inmediato a la autoridad competente, al Host y a REDIBO. Se deberán seguir todos los protocolos establecidos en el seguro contratado y en las políticas de la plataforma. La responsabilidad financiera ante daños se determinará en función de los informes periciales, la póliza de seguro y la verificación de cumplimiento de las condiciones de uso pactadas.
+              </p>
+              <p className="text-[var(--negro)] leading-relaxed mb-4">
+                REDIBO actúa como intermediario y no como aseguradora. No cubrimos daños directos, robos ni pérdidas económicas derivadas del uso del vehículo, salvo que expresamente se haya contratado una cobertura específica a través de nuestros servicios complementarios.
               </p>
             </section>
+
 
             
             <section id="conducta" className="mb-8 scroll-mt-[104.4px]">
-              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">Conducta Prohibida</h2>
-
+              <h2 className="text-[1.8rem] font-[var(--tamaña-bold)] text-left text-[var(--negro)] mb-4 mt-8">
+                Conducta Prohibida
+              </h2>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                Para asegurar una experiencia segura, REDIBO prohíbe estrictamente las siguientes conductas:
-                uso de información falsa, uso de vehículos para fines ilícitos, daño intencional al vehículo,
-                conducta ofensiva hacia otros usuarios, y evasión de pagos o políticas.
+                REDIBO fomenta un ambiente de respeto, seguridad y colaboración entre todos sus usuarios. Por tanto, queda estrictamente prohibido: falsificar información, suplantar identidades, utilizar vehículos para actividades ilegales, trasladar mercancías peligrosas, permitir que terceros no autorizados conduzcan el vehículo, o realizar prácticas que deterioren intencionalmente los bienes ofrecidos en la plataforma.
               </p>
               <p className="text-[var(--negro)] leading-relaxed mb-4">
-                Cualquier usuario que infrinja estas normas puede ser suspendido temporal o permanentemente,
-                y en casos graves será reportado a las autoridades competentes del Estado Plurinacional de Bolivia.
+                También se prohíbe acosar, discriminar o realizar comentarios ofensivos contra otros usuarios. REDIBO mantiene una política de tolerancia cero frente a cualquier tipo de abuso o maltrato y se reserva el derecho de suspender o eliminar cuentas sin previo aviso ante el incumplimiento de estas normas.
               </p>
             </section>
+
 
 
             <section id="leyes" className="mb-8 scroll-mt-[104.4px]">
