@@ -43,7 +43,7 @@ export default function Terminos() {
       </header>
 
 
-      <main className="flex-1 bg-[var(--blanco)] pt-[4.5rem] px-4 md:px-12">
+      <main className="flex-1 bg-[var(--blanco)] pt-[1.7rem] px-4 md:px-12">
         <div className="flex flex-col md:flex-row items-start gap-8 max-w-[1200px] mx-auto">
           <aside className="flex-none w-full md:w-[260px] bg-[var(--hueso)] p-[2.2rem] md:ml-[-70px] sticky top-[100px] h-fit rounded-[8px] shadow-[var(--sombra)]">
             <nav>
