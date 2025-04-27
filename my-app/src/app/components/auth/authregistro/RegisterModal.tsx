@@ -140,167 +140,25 @@ export default function RegisterModal({
     let hasErrors = false;
 
     //validaciones de nombre de usuario
-    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ'’\- ]+$/;
-
-    if (name.length < 3) {
-      setNameError(true);
-      setNameMessage("El nombre debe tener al menos 3 caracteres");
-      hasErrors = true;
-    } else if (name.length > 50) {
-      setNameError(true);
-      setNameMessage("El nombre no puede superar los 50 caracteres");
-      hasErrors = true;
-    } else if (!nameRegex.test(name)) {
-      setNameError(true);
-      setNameMessage(
-        "El nombre solo puede contener letras, tildes, espacios, guiones y apóstrofes"
-      );
-      hasErrors = true;
-    } else {
-      setNameError(false);
-      setNameMessage("");
-    }
+    
 
     //validaciones de email
 
-    const emailDomain = email.slice(email.indexOf("@"));
-
-    if (!email.includes("@") || !email.includes(".") || email.length < 5) {
-      setEmailError(true);
-      setEmailMessage("Correo inválido, verifique si contiene '@' y '.'");
-      hasErrors = true;
-    } else if (email.length > 70) {
-      setEmailError(true);
-      setEmailMessage("El correo no debe superar los 70 caracteres.");
-      hasErrors = true;
-    } else if (!validDomains.includes(emailDomain)) {
-      setEmailError(true);
-      setEmailMessage("El dominio no es válido");
-      hasErrors = true;
-    } else {
-      setEmailError(false);
-      setEmailMessage("");
-    }
+    
 
     //validaciones de passwrod
 
-    if (password.trim() === "") {
-      setPasswordMessage("La contraseña no puede estar vacía");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (!/[A-Z]/.test(password)) {
-      setPasswordMessage("Debe contener al menos una letra mayúscula");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (!/[a-z]/.test(password)) {
-      setPasswordMessage("Debe contener al menos una letra minúscula");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (!/[0-9]/.test(password)) {
-      setPasswordMessage("Debe contener al menos un número");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (!/[!@#$%^&*]/.test(password)) {
-      setPasswordMessage("Debe tener al menos un carácter especial (!@#$...)");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (password.includes(" ")) {
-      setPasswordMessage("No puede contener espacios");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (password.length < 8) {
-      setPasswordMessage("La contraseña debe tener al menos 8 caracteres");
-      setPasswordError(true);
-      hasErrors = true;
-    } else if (password.length > 25) {
-      setPasswordMessage("No puede tener más de 25 caracteres");
-      setPasswordError(true);
-      hasErrors = true;
-    } else {
-      setPasswordError(false);
-      setPasswordMessage("");
-    }
+    
 
     // validacion de Confirmar contraseña
-    if (confirmPassword.trim() === "") {
-      setConfirmPasswordError(true);
-      setConfirmPasswordMessage("Debes confirmar la contraseña");
-      hasErrors = true;
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordError(true);
-      setConfirmPasswordMessage("Las contraseñas deben coincidir");
-      hasErrors = true;
-    } else {
-      setConfirmPasswordError(false);
-      setConfirmPasswordMessage("");
-    }
+    
 
     /*validacion de fecha*/
 
-    const today = new Date();
-    const selectedDate = new Date(
-      Number(birthYear),
-      Number(birthMonth) - 1,
-      Number(birthDay)
-    );
-
-    const ageDiffMs = today.getTime() - selectedDate.getTime();
-    const ageDate = new Date(ageDiffMs);
-    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-
-    const invalidBirth =
-      !birthDay || !birthMonth || !birthYear || selectedDate > today;
-
-    if (invalidBirth) {
-      setBirthError(true);
-      setBirthMessage("Debes completar la fecha de nacimiento");
-      hasErrors = true;
-    } else if (age < 18) {
-      setBirthError(true);
-      setBirthMessage("Debes tener al menos 18 años para registrarte");
-      hasErrors = true;
-    } else {
-      setBirthError(false);
-      setBirthMessage("");
-    }
+    
 
     //validacion de telefono
-    const cleanPhone = phone.replace(/\D/g, "");
-
-    if (!phone) {
-      setPhoneError(false);
-      setPhoneMessage("");
-    } else if (!/^[67]/.test(cleanPhone)) {
-      setPhoneError(true);
-      setPhoneMessage("El número debe comenzar con 6 o 7");
-      hasErrors = true;
-    } else if (!/^\d{8}$/.test(cleanPhone)) {
-      setPhoneError(true);
-      setPhoneMessage("El número debe tener exactamente 8 dígitos");
-      hasErrors = true;
-    } else {
-      // Si pasa validaciones de formato, ahora verificamos si ya está en uso en BD
-      try {
-        const phoneCheckResponse = await fetch("http://localhost:3001/api/check-phone", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ telefono: parseInt(cleanPhone) }),
-        });
     
-        const phoneCheckData = await phoneCheckResponse.json();
-    
-        if (phoneCheckData.exists) {
-          setPhoneError(true);
-          setPhoneMessage("El número ya está registrado en el sistema.");
-          hasErrors = true; // 🔥 Muy importante: detener el submit
-        } else {
-          setPhoneError(false);
-          setPhoneMessage("");
-        }
-      } catch (error) {
-        console.error("Error verificando teléfono:", error);
-      }
-    }
 
     //validacion de terminos y condiciones
     const terms = (form.elements.namedItem("terms") as HTMLInputElement)
@@ -358,7 +216,7 @@ export default function RegisterModal({
       setError("No se pudo conectar al servidor.");
     }
 
-    setShowCompleteProfileModal(true);
+    /* setShowCompleteProfileModal(true); */
   };
 
   return (
