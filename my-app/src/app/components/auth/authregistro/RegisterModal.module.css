@@ -275,7 +275,7 @@
 .passwordRow {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap; /* ❗ evita que se apilen */
+  flex-wrap: nowrap; /* evita que se apilen */
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: flex-start; /* permite que los campos crezcan en altura diferente */
