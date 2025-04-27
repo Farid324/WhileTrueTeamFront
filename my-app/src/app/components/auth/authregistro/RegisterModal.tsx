@@ -626,7 +626,7 @@ export default function RegisterModal({
                         color: getLabelColor(passwordError),
                       }}
                     >
-                      Confirmar Contraseña
+                    Confirmar Contraseña
                     </label>
                     <input
                       type={showConfirmPassword ? "text" : "password"}
@@ -661,7 +661,7 @@ export default function RegisterModal({
                       </p>
                     )}
                   </div>
-                  /*ojito con funcion  */
+                  
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     onClick={() => setShowConfirmPassword((prev) => !prev)}
