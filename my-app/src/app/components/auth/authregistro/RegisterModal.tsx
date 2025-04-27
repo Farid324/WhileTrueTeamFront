@@ -2,7 +2,8 @@ import styles from "./RegisterModal.module.css";
 import { useState } from "react";
 import CompleteProfileModal from "./CompleteProfileModal"; // ajusta si cambia el path
 import { useEffect } from "react";
-/* import { useSearchParams } from "next/navigation"; // o useLocation si usas react-router */
+/* import { useSearchParams } from "next/navigation"; */ // o useLocation si usas react-router
+/* import { backendip } from "@/libs/authServices"; */
 
 export default function RegisterModal({
   onClose,
@@ -278,8 +279,27 @@ export default function RegisterModal({
       setPhoneMessage("El número debe tener exactamente 8 dígitos");
       hasErrors = true;
     } else {
-      setPhoneError(false);
-      setPhoneMessage("");
+      // Si pasa validaciones de formato, ahora verificamos si ya está en uso en BD
+      try {
+        const phoneCheckResponse = await fetch("http://localhost:3001/api/check-phone", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ telefono: parseInt(cleanPhone) }),
+        });
+    
+        const phoneCheckData = await phoneCheckResponse.json();
+    
+        if (phoneCheckData.exists) {
+          setPhoneError(true);
+          setPhoneMessage("El número ya está registrado en el sistema.");
+          hasErrors = true; // 🔥 Muy importante: detener el submit
+        } else {
+          setPhoneError(false);
+          setPhoneMessage("");
+        }
+      } catch (error) {
+        console.error("Error verificando teléfono:", error);
+      }
     }
 
     //validacion de terminos y condiciones
