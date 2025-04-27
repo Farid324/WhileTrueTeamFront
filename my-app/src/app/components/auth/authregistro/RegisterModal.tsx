@@ -2,7 +2,7 @@ import styles from "./RegisterModal.module.css";
 import { useState } from "react";
 import CompleteProfileModal from "./CompleteProfileModal"; // ajusta si cambia el path
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // o useLocation si usas react-router
+/* import { useSearchParams } from "next/navigation"; // o useLocation si usas react-router */
 
 export default function RegisterModal({
   onClose,
@@ -55,14 +55,14 @@ export default function RegisterModal({
   const [phoneMessage, setPhoneMessage] = useState("");
   const [termsError, setTermsError] = useState(false);
 
-  const searchParams =
+/*   const searchParams =
     typeof window !== "undefined"
       ? new URLSearchParams(window.location.search)
-      : null;
+      : null; */
 
   const [showCompleteProfile, setShowCompleteProfile] = useState(false);
-  const [showCompleteProfileModal, setShowCompleteProfileModal] =
-    useState(false);
+  /* const [showCompleteProfileModal, setShowCompleteProfileModal] =
+    useState(false); */
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
