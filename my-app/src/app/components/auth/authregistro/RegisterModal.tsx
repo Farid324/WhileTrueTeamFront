@@ -140,7 +140,26 @@ export default function RegisterModal({
     let hasErrors = false;
 
     //validaciones de nombre de usuario
-    
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ'’\- ]+$/;
+
+    if (name.length < 3) {
+      setNameError(true);
+      setNameMessage("El nombre debe tener al menos 3 caracteres");
+      hasErrors = true;
+    } else if (name.length > 50) {
+      setNameError(true);
+      setNameMessage("El nombre no puede superar los 50 caracteres");
+      hasErrors = true;
+    } else if (!nameRegex.test(name)) {
+      setNameError(true);
+      setNameMessage(
+        "El nombre solo puede contener letras, tildes, espacios, guiones y apóstrofes"
+      );
+      hasErrors = true;
+    } else {
+      setNameError(false);
+      setNameMessage("");
+    }
 
     //validaciones de email
 
