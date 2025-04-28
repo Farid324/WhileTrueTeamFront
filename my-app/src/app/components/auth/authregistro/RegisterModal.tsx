@@ -267,9 +267,43 @@ export default function RegisterModal({
       setBirthMessage("");
     }
     
-
     //validacion de telefono
+    const cleanPhone = phone.replace(/\D/g, "");
+
+    if (!phone) {
+      setPhoneError(false);
+      setPhoneMessage("");
+    } else if (!/^[67]/.test(cleanPhone)) {
+      setPhoneError(true);
+      setPhoneMessage("El número debe comenzar con 6 o 7");
+      hasErrors = true;
+    } else if (!/^\d{8}$/.test(cleanPhone)) {
+      setPhoneError(true);
+      setPhoneMessage("El número debe tener exactamente 8 dígitos");
+      hasErrors = true;
+    } else {
+      // Si pasa validaciones de formato, ahora verificamos si ya está en uso en BD
+      try {
+        const phoneCheckResponse = await fetch("http://localhost:3001/api/check-phone", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ telefono: parseInt(cleanPhone) }),
+        });
     
+        const phoneCheckData = await phoneCheckResponse.json();
+    
+        if (phoneCheckData.exists) {
+          setPhoneError(true);
+          setPhoneMessage("El número ya está registrado en el sistema.");
+          hasErrors = true; //  Muy importante: detener el submit
+        } else {
+          setPhoneError(false);
+          setPhoneMessage("");
+        }
+      } catch (error) {
+        console.error("Error verificando teléfono:", error);
+      }
+    }
 
     //validacion de terminos y condiciones
     const terms = (form.elements.namedItem("terms") as HTMLInputElement)
