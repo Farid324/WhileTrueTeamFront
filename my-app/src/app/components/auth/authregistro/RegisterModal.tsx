@@ -240,7 +240,32 @@ export default function RegisterModal({
     }
     
     /*validacion de fecha*/
+    const today = new Date();
+    const selectedDate = new Date(
+      Number(birthYear),
+      Number(birthMonth) - 1,
+      Number(birthDay)
+    );
 
+    const ageDiffMs = today.getTime() - selectedDate.getTime();
+    const ageDate = new Date(ageDiffMs);
+    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+    const invalidBirth =
+      !birthDay || !birthMonth || !birthYear || selectedDate > today;
+
+    if (invalidBirth) {
+      setBirthError(true);
+      setBirthMessage("Debes completar la fecha de nacimiento");
+      hasErrors = true;
+    } else if (age < 18) {
+      setBirthError(true);
+      setBirthMessage("Debes tener al menos 18 años para registrarte");
+      hasErrors = true;
+    } else {
+      setBirthError(false);
+      setBirthMessage("");
+    }
     
 
     //validacion de telefono
