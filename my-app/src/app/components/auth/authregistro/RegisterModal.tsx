@@ -226,7 +226,19 @@ export default function RegisterModal({
 
     // validacion de Confirmar contraseña
     
-
+    if (confirmPassword.trim() === "") {
+      setConfirmPasswordError(true);
+      setConfirmPasswordMessage("Debes confirmar la contraseña");
+      hasErrors = true;
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordError(true);
+      setConfirmPasswordMessage("Las contraseñas deben coincidir");
+      hasErrors = true;
+    } else {
+      setConfirmPasswordError(false);
+      setConfirmPasswordMessage("");
+    }
+    
     /*validacion de fecha*/
 
     
