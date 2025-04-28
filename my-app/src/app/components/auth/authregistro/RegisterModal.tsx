@@ -20,7 +20,7 @@ export default function RegisterModal({
       console.error("Error en registro con Google", error);
     }
   };
-
+  /* Parte de las const*/
   const [nameValue, setNameValue] = useState(
     localStorage.getItem("register_name") || ""
   );
@@ -341,7 +341,7 @@ export default function RegisterModal({
                 </div>
               </div>
 
-              {/* campo email */}
+              {/*campo email correo electronico*/}
               <div
                 className={`${styles.halfInput} ${
                   emailError ? styles.errorInput : ""
@@ -504,7 +504,7 @@ export default function RegisterModal({
                         color: getLabelColor(passwordError),
                       }}
                     >
-                      Confirmar Contraseña
+                    Confirmar Contraseña
                     </label>
                     <input
                       type={showConfirmPassword ? "text" : "password"}
@@ -539,7 +539,7 @@ export default function RegisterModal({
                       </p>
                     )}
                   </div>
-
+                  
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     onClick={() => setShowConfirmPassword((prev) => !prev)}

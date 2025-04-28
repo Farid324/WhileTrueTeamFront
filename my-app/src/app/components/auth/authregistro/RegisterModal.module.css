@@ -228,6 +228,8 @@
   padding: 0.5rem 0.75rem;
   line-height: 1.5;
   box-sizing: border-box;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
   border: none;
   border-radius: 8px;
   font-size: 0.75rem;
@@ -275,7 +277,7 @@
 .passwordRow {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap; /* ❗ evita que se apilen */
+  flex-wrap: nowrap; /* evita que se apilen */
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: flex-start; /* permite que los campos crezcan en altura diferente */
