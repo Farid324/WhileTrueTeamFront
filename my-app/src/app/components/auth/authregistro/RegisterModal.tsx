@@ -163,7 +163,26 @@ export default function RegisterModal({
 
     //validaciones de email
 
-    
+    const emailDomain = email.slice(email.indexOf("@"));
+
+    if (!email.includes("@") || !email.includes(".") || email.length < 5) {
+      setEmailError(true);
+      setEmailMessage("Correo inválido, verifique si contiene '@' y '.'");
+      hasErrors = true;
+    } else if (email.length > 70) {
+      setEmailError(true);
+      setEmailMessage("El correo no debe superar los 70 caracteres.");
+      hasErrors = true;
+    } else if (!validDomains.includes(emailDomain)) {
+      setEmailError(true);
+      setEmailMessage("El dominio no es válido");
+      hasErrors = true;
+    } else {
+      setEmailError(false);
+      setEmailMessage("");
+    }
+
+
 
     //validaciones de passwrod
 
