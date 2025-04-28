@@ -186,7 +186,43 @@ export default function RegisterModal({
 
     //validaciones de passwrod
 
-    
+    if (password.trim() === "") {
+      setPasswordMessage("La contraseña no puede estar vacía");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (!/[A-Z]/.test(password)) {
+      setPasswordMessage("Debe contener al menos una letra mayúscula");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (!/[a-z]/.test(password)) {
+      setPasswordMessage("Debe contener al menos una letra minúscula");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (!/[0-9]/.test(password)) {
+      setPasswordMessage("Debe contener al menos un número");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (!/[!@#$%^&*]/.test(password)) {
+      setPasswordMessage("Debe tener al menos un carácter especial (!@#$...)");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (password.includes(" ")) {
+      setPasswordMessage("No puede contener espacios");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (password.length < 8) {
+      setPasswordMessage("La contraseña debe tener al menos 8 caracteres");
+      setPasswordError(true);
+      hasErrors = true;
+    } else if (password.length > 25) {
+      setPasswordMessage("No puede tener más de 25 caracteres");
+      setPasswordError(true);
+      hasErrors = true;
+    } else {
+      setPasswordError(false);
+      setPasswordMessage("");
+    }
+
 
     // validacion de Confirmar contraseña
     
