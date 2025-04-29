@@ -307,7 +307,7 @@
 
 .ojito {
   color: rgba(17, 41, 91, 0.5);
-  margin-top: 0.5rem;
+  margin-top: -0.5rem;
   width: 25px;
   height: 25px;
 }
@@ -331,6 +331,20 @@
   flex: 1;
   gap: 0.5rem;
   min-width: 12rem;
+}
+
+.checkIconValid {
+  color: green;
+  margin-left: 4px;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.checkIconInvalid {
+  color: #e30000; /* rojo */
+  margin-left: 4px;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
 }
 
 .select {

@@ -55,6 +55,11 @@ export default function RegisterModal({
   const [confirmPasswordValue, setConfirmPasswordValue] = useState(
     localStorage.getItem("register_confirmPassword") || ""
   );
+
+
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+
   const [phoneValue, setPhoneValue] = useState(
     localStorage.getItem("register_phone") || ""
   );
@@ -623,11 +628,19 @@ export default function RegisterModal({
                       name="password"
                       value={passwordValue}
                       onChange={(e) => {
-                        setPasswordValue(e.target.value);
-                        localStorage.setItem(
-                          "register_password",
-                          e.target.value
-                        );
+                        const value = e.target.value;
+                        setPasswordValue(value);
+                        localStorage.setItem("register_password", value);
+                      
+                        // Validar todo junto
+                        const isValid =
+                          value.length >= 8 &&
+                          value.length <= 25 &&
+                          /[A-Z]/.test(value) &&
+                          /\d/.test(value) &&
+                          /[!@#$%^&*]/.test(value);
+                      
+                        setIsPasswordValid(isValid);
                       }}
                       placeholder={
                         passwordError ? "contraseña inválida" : "Contraseña"
@@ -636,6 +649,17 @@ export default function RegisterModal({
                         passwordError ? styles.errorInput : ""
                       }`}
                     />
+
+                   {passwordValue.length > 0 && (
+                    <span
+                       className={
+                        isPasswordValid ? styles.checkIconValid : styles.checkIconInvalid
+                       }
+                    >
+                     {isPasswordValid ? "Si cumple" : "No cumple"}
+                    </span>
+                    )}
+
                     {passwordError && (
                       <p
                         style={{
