@@ -2,7 +2,7 @@
   import Inputlabel from "@/app/components/input/Inputlabel";
   import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
   import Button from "@/app/components/botons/botons";
-  import UserIcon from "@/app/components/Icons/User";
+  import NombreEditable from "@/app/components/input/NombreEditable";
   import MailIcon from "@/app/components/Icons/Email";
   import CalendarIcon from "@/app/components/Icons/Calendar";
   import PhoneIcon from "@/app/components/Icons/Phone";
@@ -37,17 +37,7 @@
             <form method="PUT" className="space-y-6 w-full md:w-2/3">
               
               {/* Input Nombre */}
-              <Inputlabel
-                id="Nombre"
-                label="Nombre Completo"
-                type="Text"
-                
-                icono={<UserIcon />}
-                defaultValue={user?.nombre_completo || ''}
-                className="focus:ring-[#11295B] border-[#11295B]"
-                readOnly={true}
-                
-              />
+              {user && <NombreEditable initialValue={user.nombre_completo} />}
 
               {/* Input Email */}
               <Inputlabel

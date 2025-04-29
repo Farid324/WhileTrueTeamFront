@@ -2,7 +2,7 @@
 export const updateUserField = async (campo: string, valor: string) => {
     const token = localStorage.getItem("token");
   
-    const res = await fetch("http://34.69.214.55:3001/api/user/update", {
+    const res = await fetch("http://localhost:3001/api/user/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
