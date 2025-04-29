@@ -14,13 +14,23 @@ export default function RegisterModal({
 }) {
   const handleGoogleRegister = () => {
     try {
+      setLoading(true);
       localStorage.setItem("openCompleteProfileModal", "true");
-      window.location.href = "http://localhost:3001/api/auth/google";
+      
+      // Pequeño delay para que el spinner alcance a mostrarse
+      setTimeout(() => {
+        window.location.href = "http://localhost:3001/api/auth/google";
+      }, 300); // 300ms = 0.3 segundos
     } catch (error) {
       console.error("Error en registro con Google", error);
+      setLoading(false);
     }
   };
+  
   /* Parte de las const*/
+
+  const [loading, setLoading] = useState(false);
+
   const [nameValue, setNameValue] = useState(
     localStorage.getItem("register_name") || ""
   );
@@ -386,9 +396,12 @@ export default function RegisterModal({
 
             {/* campo registro con google */}
             <div className={styles.googleBtn}>
-              <button type="button" onClick={handleGoogleRegister}aria-label="Registrarse con Google">
+              <button type="button" onClick={handleGoogleRegister}aria-label="Registrarse con Google" disabled={loading} >
                 <span className={styles.googleIcon}>
-                  {/* Logo de Google */}
+                  {loading ? (
+                     <div className={styles.spinner} /> 
+                   ) : (
+                  
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="-3 0 262 262"
@@ -413,8 +426,9 @@ export default function RegisterModal({
                       fill="#EB4335"
                     />
                   </svg>
+                  )}
                 </span>
-                <span className={styles.googleText}>Regístrate con Google</span>
+                <span className={styles.googleText}>{loading ? "Cargando..." : "Regístrate con Google"}</span>
               </button>
             </div>
 
