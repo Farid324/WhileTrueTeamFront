@@ -16,7 +16,7 @@ export default function RegisterModal({
     try {
       setLoading(true);
       localStorage.setItem("openCompleteProfileModal", "true");
-      
+      localStorage.setItem("welcomeMessage", "¡Bienvenido a Redibo!");
       // Pequeño delay para que el spinner alcance a mostrarse
       setTimeout(() => {
         window.location.href = "http://localhost:3001/api/auth/google";
@@ -28,6 +28,9 @@ export default function RegisterModal({
   };
   
   /* Parte de las const*/
+  const [welcome, setWelcome] = useState("");
+
+  const [showWelcome, setShowWelcome] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -92,6 +95,17 @@ export default function RegisterModal({
 
   useEffect(() => {
 
+    const message = localStorage.getItem("welcomeMessage");
+    if (message) {
+      setWelcome(message);
+    setShowWelcome(true);
+    localStorage.removeItem("welcomeMessage");
+
+    // Desaparecer después de 3 segundos
+      setTimeout(() => {
+        setShowWelcome(false);
+      }, 3000);
+    }
     const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get("error") === "cuentaExistente") {
     alert("Este correo ya fue registrado de forma manual. Inicia sesión con tu contraseña.");
@@ -392,6 +406,12 @@ export default function RegisterModal({
       {!showCompleteProfile && (
         <>
           <div className={styles.modal}>
+          {showWelcome && (
+            <div className={`${styles.welcomeMessage} ${!showWelcome ? styles.fadeOut : ""}`}>
+              {welcome}
+         </div>
+          )}
+
             <h2 className={styles.title}>Registrarse</h2>
 
             {/* campo registro con google */}

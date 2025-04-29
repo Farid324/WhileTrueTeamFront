@@ -90,6 +90,23 @@
   100% { transform: rotate(360deg); }
 }
 
+.welcomeMessage {
+  background-color: #e6f4ea; /* verde clarito */
+  color: #0f9d58; /* verde fuerte */
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+
+/* Este será el efecto de desvanecimiento */
+.fadeOut {
+  opacity: 0;
+}
 
 .separator {
   display: flex;
