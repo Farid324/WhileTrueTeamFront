@@ -1,7 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-
-//Proteger el frontend (redireccionar si no hay token):
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/useUser';
 
@@ -10,25 +8,27 @@ import FiltersBar from '@/app/components/filters/FiltersBar';
 import Footer from '@/app/components/footer/FooterLogin';
 import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
 import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
+import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleDataModal'; // Nuevo modal importado
 
 export default function MainHome() {
-  const [activeModal, setActiveModal] = useState<'login' | 'register' | null>(null);
-  
+  const [activeModal, setActiveModal] = useState<
+    'login' | 'register' | 'vehicleData' | null
+  >(null);
+
   const router = useRouter();
-  const user = useUser(); // 🚀
+  const user = useUser();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/');
     }
-  }, [user, router]); // 🚀 Agrega user como dependencia
+  }, [user, router]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
       <header className="border-t border-b border-[rgba(215, 30, 30, 0.1)] shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
-
-        <NavbarInicioSesion />
+        <NavbarInicioSesion onBecomeHost={() => setActiveModal('vehicleData')} />
       </header>
 
       <header className="/* headerFilters */">
@@ -46,12 +46,31 @@ export default function MainHome() {
       </footer>
 
       {activeModal === 'login' && (
-        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')} onPasswordRecoveryClick={() => console.log('Recuperar contraseña')}/>
+        <LoginModal
+          onClose={() => setActiveModal(null)}
+          onRegisterClick={() => setActiveModal('register')}
+          onPasswordRecoveryClick={() => console.log('Recuperar contraseña')}
+        />
       )}
 
       {activeModal === 'register' && (
-        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')} />
+        <RegisterModal
+          onClose={() => setActiveModal(null)}
+          onLoginClick={() => setActiveModal('login')}
+        />
+      )}
+
+      {activeModal === 'vehicleData' && (
+        <VehicleDataModal
+          onNext={(data) => {
+            console.log('Datos del vehículo:', data);
+            // Aquí puedes pasar al siguiente modal o guardar en contexto global
+            setActiveModal(null); // Cambiar a 'paymentModal' más adelante
+          }}
+          onClose={() => setActiveModal(null)}
+        />
       )}
     </div>
   );
 }
+
