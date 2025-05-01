@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Upload } from "lucide-react";
 
 interface Props {
   onNext: (data: {
@@ -24,11 +24,13 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
   const [previewImg, setPreviewImg] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
+  // Validaciones mejoradas combinando ambos enfoques
   const validarPlaca = (valor: string) =>
-    /^[A-Z]{3}[0-9]{3}$|^[0-9]{3,4}[A-Z]{3}$/.test(valor);
+    /^[A-Z]{3}[0-9]{3}$|^[A-Z]{3}[0-9]{4}$|^[0-9]{3,4}[A-Z]{3}$/.test(valor);
 
-  const validarSOAT = (valor: string) => /^[A-Z0-9]{6,10}$/.test(valor);
+  const validarSOAT = (valor: string) => /^[A-Z0-9]{8,12}$/.test(valor);
 
   const camposValidos = () =>
     validarPlaca(placa) &&
@@ -38,17 +40,19 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     imagenes.every((file) => ["image/jpeg", "image/png"].includes(file.type));
 
   const validarYActualizarPlaca = (valor: string) => {
-    setPlaca(valor);
-    if (!validarPlaca(valor)) {
-      setErrors((prev) => ({ ...prev, placa: "Formato de placa inválido" }));
+    const upperValue = valor.toUpperCase();
+    setPlaca(upperValue);
+    if (upperValue.length > 0 && !validarPlaca(upperValue)) {
+      setErrors((prev) => ({ ...prev, placa: "Formato de placa inválido (ej: ABC123)" }));
     } else {
       setErrors((prev) => ({ ...prev, placa: undefined }));
     }
   };
 
   const validarYActualizarSOAT = (valor: string) => {
-    setSoat(valor);
-    if (!validarSOAT(valor)) {
+    const upperValue = valor.toUpperCase();
+    setSoat(upperValue);
+    if (upperValue.length > 0 && !validarSOAT(upperValue)) {
       setErrors((prev) => ({ ...prev, soat: "Formato de seguro inválido" }));
     } else {
       setErrors((prev) => ({ ...prev, soat: undefined }));
@@ -56,10 +60,19 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
   };
 
   const handleImagenesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    if (!e.target.files || e.target.files.length === 0) return;
+    
+    const files = Array.from(e.target.files);
     const validFiles = files.filter((file) => {
       return ["image/jpeg", "image/png"].includes(file.type) && file.size <= 5 * 1024 * 1024;
     });
+
+    if (validFiles.length !== files.length) {
+      setErrors((prev) => ({
+        ...prev,
+        imagenes: "Solo se permiten imágenes JPG/PNG de hasta 5MB"
+      }));
+    }
 
     const totalImagenes = [...imagenes, ...validFiles];
 
@@ -80,6 +93,11 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
       }));
     } else {
       setErrors((prev) => ({ ...prev, imagenes: undefined }));
+    }
+    
+    // Reset input value to allow uploading the same file again if needed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -133,18 +151,25 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     }
   };
 
+  // Limpieza de URLs de objetos al desmontar el componente
   useEffect(() => {
     return () => {
-      imagenes.forEach((img) => URL.revokeObjectURL(URL.createObjectURL(img)));
+      imagenes.forEach((img) => {
+        const url = URL.createObjectURL(img);
+        URL.revokeObjectURL(url);
+      });
     };
-  }, [imagenes]);
+  }, []);
 
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center modal-overlay bg-black/40"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white text-[#11295B] p-10 rounded-3xl shadow-2xl max-w-xl w-full relative">
+      <div
+        ref={modalRef}
+        className="bg-white text-[#11295B] p-10 rounded-3xl shadow-2xl max-w-xl w-full relative"
+      >
         <button
           onClick={onClose}
           className="absolute right-6 top-6 text-2xl text-[#11295B]"
@@ -161,9 +186,9 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
         <div className="mb-4">
           <input
             type="text"
-            placeholder="Placa"
+            placeholder="Placa del vehículo"
             value={placa}
-            onChange={(e) => validarYActualizarPlaca(e.target.value.toUpperCase())}
+            onChange={(e) => validarYActualizarPlaca(e.target.value)}
             className={`w-full border-2 rounded-lg px-4 py-3 outline-none text-lg placeholder:text-[#11295B]/50 font-semibold
               ${errors.placa ? "border-red-500 text-red-500 placeholder-red-400" : "border-[#11295B]"}`}
           />
@@ -174,9 +199,9 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
         <div className="mb-4">
           <input
             type="text"
-            placeholder="Numero de seguro"
+            placeholder="Número de seguro"
             value={soat}
-            onChange={(e) => validarYActualizarSOAT(e.target.value.toUpperCase())}
+            onChange={(e) => validarYActualizarSOAT(e.target.value)}
             className={`w-full border-2 rounded-lg px-4 py-3 outline-none text-lg placeholder:text-[#11295B]/50 font-semibold
               ${errors.soat ? "border-red-500 text-red-500 placeholder-red-400" : "border-[#11295B]"}`}
           />
@@ -187,12 +212,16 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
         <div className={`mb-4 bg-gray-100 rounded-xl p-4 ${errors.imagenes ? "border-2 border-red-500" : ""}`}>
           <label className="block font-semibold mb-1 text-[#11295B]">Imágenes del auto</label>
           <p className="text-sm text-gray-600 mb-2">Asegúrate de tomar las fotos en un lugar bien iluminado</p>
+          
           <div
-            className="border border-dashed rounded p-4 text-center cursor-pointer bg-gray-200 hover:bg-gray-300"
+            className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer bg-gray-200 hover:bg-gray-300 transition-colors"
             onClick={() => fileInputRef.current?.click()}
           >
-            Subir imagen / Arrastra aquí
+            <Upload className="mx-auto mb-2 w-6 h-6" />
+            <p className="font-medium">Subir imágenes del vehículo</p>
+            <p className="text-xs text-gray-500">Haz clic o arrastra aquí tus imágenes</p>
           </div>
+          
           <input
             ref={fileInputRef}
             type="file"
@@ -201,35 +230,42 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
             onChange={handleImagenesChange}
             className="hidden"
           />
+          
           {errors.imagenes ? (
             <p className="text-sm text-red-500 mt-2">{errors.imagenes}</p>
           ) : (
             <p className="text-xs text-gray-500 mt-2">*Mínimo 3 fotos del vehículo: frontal, lateral y trasera</p>
           )}
 
-          <div className="flex flex-wrap mt-3 gap-3">
-            {imagenes.map((img, idx) => {
-              const src = URL.createObjectURL(img);
-              return (
-                <div key={`${idx}-${img.name}`} className="relative w-20 h-20">
-                  <img
-                    src={src}
-                    alt={`imagen-${idx}`}
-                    onClick={() => setPreviewImg(src)}
-                    className="object-cover w-full h-full rounded border border-gray-300 cursor-pointer"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(idx)}
-                    title="Eliminar imagen"
-                    className="absolute -top-2 -right-2 bg-[#11295B] text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
-                  >
-                    <X size={12} />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {/* Vista previa de imágenes */}
+          {imagenes.length > 0 && (
+            <div className="flex flex-wrap mt-3 gap-3">
+              {imagenes.map((img, idx) => {
+                const src = URL.createObjectURL(img);
+                return (
+                  <div key={`${idx}-${img.name}`} className="relative w-20 h-20">
+                    <img
+                      src={src}
+                      alt={`imagen-${idx}`}
+                      onClick={() => setPreviewImg(src)}
+                      className="object-cover w-full h-full rounded border border-gray-300 cursor-pointer"
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveImage(idx);
+                      }}
+                      title="Eliminar imagen"
+                      className="absolute -top-2 -right-2 bg-[#11295B] text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Botón siguiente */}
@@ -259,7 +295,10 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
               className="w-full h-auto rounded-xl shadow-xl"
             />
             <button
-              onClick={() => setPreviewImg(null)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setPreviewImg(null);
+              }}
               title="Cerrar imagen"
               className="absolute top-2 right-2 text-white text-xl bg-[#11295B]/70 hover:bg-[#11295B] rounded-full w-8 h-8 flex items-center justify-center transition-colors"
             >
@@ -273,8 +312,3 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
 };
 
 export default VehicleDataModal;
-
-
-
-
-

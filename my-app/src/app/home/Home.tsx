@@ -1,134 +1,141 @@
 'use client';
+
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation'; // ✅
-import Navbar from '../components/navbar/Navbar';
-import FiltersBar from '../components/filters/FiltersBar';
-import Footer from '../components/footer/Footer';
-import PasswordRecoveryModal from '../components/auth/authRecuperarContrasena/PasswordRecoveryModal';
-import CodeVerificationModal from '../components/auth/authRecuperarContrasena/CodeVerificationModal';
-import NewPasswordModal from '../components/auth/authRecuperarContrasena/NewPasswordModal';
-import LoginModal from '../components/auth/authInicioSesion/LoginModal';
-import styles from './Home.module.css';
-import RegisterModal from '../components/auth/authregistro/RegisterModal';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/hooks/useUser';
 
-export default function HomePage() {
-  const searchParams = useSearchParams();
+import NavbarInicioSesion from '@/app/components/navbar/NavbarInicioSesion';
+import FiltersBar from '@/app/components/filters/FiltersBar';
+import Footer from '@/app/components/footer/FooterLogin';
+import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
+import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
+import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleDataModal';
+import PaymentModal from '@/app/components/auth/authRegistroHost/PaymentModal';
+import CompleteProfileModal from '@/app/components/auth/authRegistroHost/CompleteProfileModal';
 
-  const [activeModal, setActiveModal] = useState<'login' | 'register'| null>(null);
-  const [modalState, setModalState] = useState<'passwordRecovery' | 'codeVerification' | 'newPassword' | null>(null);
+export default function MainHome() {
+  // Estado de los modales
+  const [activeModal, setActiveModal] = useState<
+    'login' | 'register' | 'vehicleData' | 'paymentData' | 'completeProfile' | null
+  >(null);
   
+  // Estados para mantener los datos entre modales
+  const [vehicleData, setVehicleData] = useState<{
+    placa: string;
+    soat: string;
+    imagenes: File[];
+  } | null>(null);
+  
+  const [paymentData, setPaymentData] = useState<{
+    cardNumber: string;
+    expiration: string;
+    cvv: string;
+    cardHolder: string;
+  } | null>(null);
+  
+  // Estado para notificaciones toast
   const [showToast, setShowToast] = useState(false);
-  const [showToast2, setShowToast2] = useState(false); // Para el mensaje de usuario bloqueado
+  const [toastMessage, setToastMessage] = useState("");
   
-  const handleLoginSubmit = () => {
-    setModalState('passwordRecovery');
-  };
-
-  const handlePasswordRecoverySubmit = () => {
-    setModalState('codeVerification');
-  };
-
-  const handleCodeVerificationSubmit = () => {
-    setModalState('newPassword');
-  };
-
-  const handleClose = () => {
-    setModalState(null); // Cierra cualquier modal de recuperación
-    setActiveModal('login'); // Abre el login modal
-  };
-
-  const handleBackToPasswordRecovery = () => {
-    setModalState('passwordRecovery'); // Regresa al PasswordRecoveryModal desde el CodeVerificationModal
-  };
-
+  const router = useRouter();
+  const user = useUser();
+  
   useEffect(() => {
-    if (searchParams?.get('googleComplete') === 'true') {
-      setActiveModal('register'); // Abrir modal de registro al volver de Google
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/');
     }
-  }, [searchParams]);
+  }, [user, router]);
+  
+  // Manejador para mostrar mensajes toast
+  const displayToast = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+  
+  // Manejadores para cada paso del flujo de registro de host
+  const handleVehicleDataSubmit = (data: { placa: string; soat: string; imagenes: File[] }) => {
+    setVehicleData(data);
+    setActiveModal('paymentData');
+  };
+  
+  const handlePaymentDataSubmit = (data: { cardNumber: string; expiration: string; cvv: string; cardHolder: string }) => {
+    setPaymentData(data);
+    setActiveModal('completeProfile');
+  };
+  
+  const handleRegistrationComplete = () => {
+    setActiveModal(null);
+    displayToast('¡Tu registro como host fue completado exitosamente!');
+    // Aquí podrías realizar alguna acción adicional después del registro exitoso
+  };
 
   return (
-    
-    <div className={styles.container}>
-      <header className={styles.headerTop}>
-        <Navbar 
-          onLoginClick={() => setActiveModal('login')}
-          onRegisterClick={() => setActiveModal('register')}
-        />
+    <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
+      <header className="border-t border-b border-[rgba(215, 30, 30, 0.1)] shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
+        <NavbarInicioSesion onBecomeHost={() => setActiveModal('vehicleData')} />
       </header>
-
-      <header className={styles.headerFilters}>
+      
+      <header className="/* headerFilters */">
         <FiltersBar />
       </header>
-
-      <main className={styles.body}>
-        <div className={styles.scrollContent}>
+      
+      <main className="flex-grow p-8">
+        <div className="/* scrollContent */">
           <p>Contenido principal del usuario (tarjetas, información, etc.).</p>
         </div>
       </main>
-
+      
       <footer>
         <Footer />
       </footer>
-
-      {/* Mostrar los modales según el estado */}
-      {/*{modalState === 'login' && (
-        <LoginModal onClose={handleClose} onLoginSubmit={handleLoginSubmit} />
-      )}*/}
-      {modalState === 'passwordRecovery' && (
-        <PasswordRecoveryModal
-          onClose={handleClose}
-          onPasswordRecoverySubmit={handlePasswordRecoverySubmit}
+      
+      {/* Modales */}
+      {activeModal === 'login' && (
+        <LoginModal
+          onClose={() => setActiveModal(null)}
+          onRegisterClick={() => setActiveModal('register')}
+          onPasswordRecoveryClick={() => console.log('Recuperar contraseña')}
         />
       )}
-      {modalState === 'codeVerification' && (
-        <CodeVerificationModal
-        onClose={handleBackToPasswordRecovery}
-        onCodeVerificationSubmit={handleCodeVerificationSubmit}
-        onBlocked={() => {
-          setModalState(null);
-          setActiveModal('login'); // Redirige al Login al finalizar
-          setShowToast2(true); // muestra el pop-up
-
-            // Ocultar el toast automáticamente después de 3 segundos
-            setTimeout(() => setShowToast2(false), 10000);
-        }} // ✅ Redirige al login si el backend dice "bloqueado"
-      />
-      )}
-      {modalState === 'newPassword' && (
-        <NewPasswordModal
-          onClose={handleClose} // Redirige al Login al cancelar o finalizar
-          code="exampleCode" // Replace "exampleCode" with the actual code value
-          onNewPasswordSubmit={() => {
-            setModalState(null);
-            setActiveModal('login'); // Redirige al Login al finalizar
-            setShowToast(true); // muestra el pop-up
-
-            // Ocultar el toast automáticamente después de 3 segundos
-            setTimeout(() => setShowToast(false), 10000);
-          }} 
-          
+      
+      {activeModal === 'register' && (
+        <RegisterModal
+          onClose={() => setActiveModal(null)}
+          onLoginClick={() => setActiveModal('login')}
         />
       )}
+      
+      {activeModal === 'vehicleData' && (
+        <VehicleDataModal
+          onNext={handleVehicleDataSubmit}
+          onClose={() => setActiveModal(null)}
+        />
+      )}
+      
+      {activeModal === 'paymentData' && vehicleData && (
+        <PaymentModal
+          onNext={handlePaymentDataSubmit}
+          onClose={() => setActiveModal(null)}
+          onBack={() => setActiveModal('vehicleData')}
+        />
+      )}
+      
+      {activeModal === 'completeProfile' && vehicleData && paymentData && (
+        <CompleteProfileModal
+          vehicleData={vehicleData}
+          paymentData={paymentData}
+          onComplete={handleRegistrationComplete}
+          onClose={() => setActiveModal('vehicleData')}
+        />
+      )}
+      
+      {/* Toast de notificación */}
       {showToast && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
-          ¡Contraseña actualizada correctamente!
+          {toastMessage}
         </div>
-      )}
-      {showToast2 && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
-          Usuario bloqueado temporalmente. Intenta nuevamente más tarde.
-        </div>
-      )}
-
-      {activeModal === 'login' && (
-        <LoginModal onClose={() => setActiveModal(null)} onRegisterClick={() => setActiveModal('register')}
-      onPasswordRecoveryClick={handleLoginSubmit} // 👈 Aquí usas la función
-      />
-      )}
-
-      {activeModal === 'register' && (
-        <RegisterModal onClose={() => setActiveModal(null)} onLoginClick={() => setActiveModal('login')}/>
       )}
     </div>
   );
