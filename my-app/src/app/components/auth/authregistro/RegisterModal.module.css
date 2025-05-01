@@ -333,19 +333,6 @@
   min-width: 12rem;
 }
 
-.checkIconValid {
-  color: green;
-  margin-left: 4px;
-  font-size: 0.8rem;
-  transition: all 0.3s ease;
-}
-
-.checkIconInvalid {
-  color: #e30000; /* rojo */
-  margin-left: 4px;
-  font-size: 0.8rem;
-  transition: all 0.3s ease;
-}
 
 .select {
   color: var(--azul-oscuro);
