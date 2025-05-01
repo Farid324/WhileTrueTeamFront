@@ -3,6 +3,7 @@
   import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
   import Button from "@/app/components/botons/botons";
   import NombreEditable from "@/app/components/input/NombreEditable";
+  import TelefonoEditable from "@/app/components/input/TelefonoEditable";
   import MailIcon from "@/app/components/Icons/Email";
   import CalendarIcon from "@/app/components/Icons/Calendar";
   import PhoneIcon from "@/app/components/Icons/Phone";
@@ -39,7 +40,8 @@
               {/* Input Nombre */}
               {user && <NombreEditable initialValue={user.nombre_completo} />}
 
-              {/* Input Email */}
+                
+              {/* Input Email */} 
               <Inputlabel
                 id="Email"
                 label="Email"
@@ -49,18 +51,9 @@
                 defaultValue={user?.email || ''}
                 className="focus:ring-[#11295B] border-[#11295B]"
                 readOnly={true}
-              />
+              />      
 
-              {/* Input Contraseña */}
-              <Inputlabel
-                id="Contraseña"
-                label="Contraseña"
-                type="password"
-                defaultValue="********"
-                icono={<Padlock />}
-                className="focus:ring-[#11295B] border-[#11295B]"
-                readOnly={true}
-              />
+              
 
               {/* Inputs de Fecha y Teléfono (en fila) */}
               <div className="flex flex-row gap-x-4">
@@ -78,19 +71,9 @@
                   />
                 </div>
 
-                {/* Teléfono (más corto) */}
-                <div className="w-1/2">
-                  <Inputlabel
-                    id="Telefono"
-                    label="Teléfono"
-                    type="number"
-                    
-                    icono={<PhoneIcon />}
-                    defaultValue={user?.telefono?.toString() || ''}
-                    className="focus:ring-[#11295B] border-[#11295B]"
-                    readOnly={true}
-                  />
-                </div>
+                {/* Input Teléfono */}
+                {user && <TelefonoEditable initialValue={user.telefono?.toString() || ''} />}
+
               </div>
 
               {/* Botón cancelar */}
