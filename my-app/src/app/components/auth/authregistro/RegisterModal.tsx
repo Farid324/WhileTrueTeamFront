@@ -13,15 +13,6 @@ export default function RegisterModal({
   onLoginClick: () => void;
 }) {
   const handleGoogleRegister = () => {
-    const termsCheckbox = document.getElementById("terms") as HTMLInputElement;
-  
-    if (!termsCheckbox?.checked) {
-      setTermsError(true); // Esto muestra el mensajito rojo que ya tienes
-      console.log("Debes aceptar los términos para registrarte con Google.");
-      return; // No sigue al registro
-    } else {
-      setTermsError(false);
-    }
     try {
       setLoading(true);
       localStorage.setItem("openCompleteProfileModal", "true");
