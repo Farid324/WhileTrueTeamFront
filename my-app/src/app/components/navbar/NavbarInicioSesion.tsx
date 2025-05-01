@@ -4,7 +4,13 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/useUser';
 import Link from 'next/link';
 
-export default function NavbarInicioSesion({ onBecomeHost }: { onBecomeHost: () => void }) {
+export default function NavbarInicioSesion({
+  onBecomeHost,
+  onBecomeDriver
+}: {
+  onBecomeHost: () => void;
+  onBecomeDriver: () => void;
+}) {
   const [activeBtn, setActiveBtn] = useState(0);
   const user = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,7 +76,7 @@ export default function NavbarInicioSesion({ onBecomeHost }: { onBecomeHost: () 
           </div>
 
           {isMenuOpen && (
-            <ProfileMenu onLogout={handleLogout} router={router} onBecomeHost={onBecomeHost} />
+            <ProfileMenu onLogout={handleLogout} router={router} onBecomeHost={onBecomeHost} onBecomeDriver={onBecomeDriver} />
           )}
         </div>
       </nav>
@@ -81,11 +87,14 @@ export default function NavbarInicioSesion({ onBecomeHost }: { onBecomeHost: () 
 function ProfileMenu({
   onLogout,
   router,
-  onBecomeHost
+  onBecomeHost,
+  onBecomeDriver
 }: {
   onLogout: () => void;
   router: ReturnType<typeof useRouter>;
   onBecomeHost: () => void;
+
+  onBecomeDriver: () => void,
 }) {
   return (
     <div className="absolute right-0 top-full mt-2 w-40 bg-[var(--blanco)] border rounded-lg shadow-lg z-[9999] font-[var(--tamaña-bold)]">
@@ -101,6 +110,13 @@ function ProfileMenu({
         onClick={onBecomeHost}
       >
         <h2 className="hover:text-[var(--blanco)]">Quiero ser Host</h2>
+      </button>
+
+      <button 
+        className="block w-full text-left px-4 py-2 text-[var(--naranja)] hover:bg-[var(--naranja-46)]"
+        onClick={() => router.push('/home/Driver')}
+      >
+        <h2 className="hover:text-[var(--blanco)]">Quiero ser Conductor</h2>
       </button>
 
       <button 
