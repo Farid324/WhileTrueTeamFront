@@ -285,6 +285,10 @@ export default function RegisterModal({
       setBirthError(true);
       setBirthMessage("Debes tener al menos 18 años para registrarte");
       hasErrors = true;
+    } else if (age > 85) {
+      setBirthError(true);
+      setBirthMessage("La edad máxima permitida es de 85 años");
+      hasErrors = true;  
     } else {
       setBirthError(false);
       setBirthMessage("");
