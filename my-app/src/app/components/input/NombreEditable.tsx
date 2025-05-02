@@ -15,30 +15,45 @@ export default function NombreEditable({ initialValue }: Props) {
   const [feedback, setFeedback] = useState('');
   const [errorMensaje, setErrorMensaje] = useState('');
 
-  // ✅ Manejar cambios en el input y validar en tiempo real
+  // ✅ Validación en tiempo real
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nuevoValor = e.target.value;
 
-    // Validar longitud
+    // No dejar escribir más de 50 caracteres
     if (nuevoValor.length > 50) {
       setErrorMensaje('El nombre no puede superar los 50 caracteres.');
-      return; // 🚫 No dejamos escribir más
+      return;
     }
 
-    setValorTemporal(nuevoValor); // ✅ Actualizamos el valor temporal
+    setValorTemporal(nuevoValor);
 
-    // Mostrar error si es menor a 3 caracteres
+    // Validación de mínimo 3 caracteres
     if (nuevoValor.length > 0 && nuevoValor.length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
-    } else {
-      setErrorMensaje(''); // ✔ Limpiamos error si todo está bien
+      return;
     }
+
+    // Validación solo letras y espacios (regex)
+    const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
+    if (!soloLetrasRegex.test(nuevoValor)) {
+      setErrorMensaje('El nombre solo puede contener letras y espacios.');
+      return;
+    }
+
+    // Si todo está bien
+    setErrorMensaje('');
   };
 
   const handleGuardar = async () => {
-    // Validación antes de enviar
+    // Validaciones antes de enviar
     if (valorTemporal.trim().length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
+      return;
+    }
+
+    const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
+    if (!soloLetrasRegex.test(valorTemporal.trim())) {
+      setErrorMensaje('El nombre solo puede contener letras y espacios.');
       return;
     }
 
@@ -47,14 +62,14 @@ export default function NombreEditable({ initialValue }: Props) {
       setValor(valorTemporal.trim());
       setEditando(false);
       setFeedback('Nombre actualizado exitosamente.');
-      setTimeout(() => setFeedback(''), 3000); // feedback por 3 segundos
+      setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
       setErrorMensaje('Hubo un error al guardar.');
     }
   };
 
   const handleCancelar = () => {
-    setValorTemporal(valor); // restaurar original
+    setValorTemporal(valor); // Restaurar el valor original
     setEditando(false);
     setErrorMensaje('');
     setFeedback('');
@@ -99,7 +114,7 @@ export default function NombreEditable({ initialValue }: Props) {
       {errorMensaje && (
         <p className="text-red-500 text-sm mt-1">{errorMensaje}</p>
       )}
-      {feedback && (
+      {feedback && !errorMensaje && (
         <p className="text-green-600 text-sm mt-1">{feedback}</p>
       )}
 
