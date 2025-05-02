@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X, Check } from "lucide-react";
 
 interface Props {
@@ -28,6 +28,7 @@ const CompleteProfileModal: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleComplete = async () => {
     setIsLoading(true);
@@ -52,25 +53,46 @@ const CompleteProfileModal: React.FC<Props> = ({
     }
   };
 
+  // Función mejorada para cerrar al hacer clic en el overlay
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLElement).classList.contains("modal-overlay")) {
+    if (e.target === e.currentTarget && !isLoading) {
       onClose();
     }
   };
+
+  // Agregar manejo de la tecla Escape para cerrar el modal
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isLoading) {
+        onClose();
+      }
+    };
+    
+    window.addEventListener("keydown", handleEscapeKey);
+    
+    return () => {
+      window.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [onClose, isLoading]);
 
   // Mostrar solo los últimos 4 dígitos de la tarjeta
   const maskedCardNumber = paymentData.cardNumber.replace(/\s/g, "").replace(/\d(?=\d{4})/g, "•");
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center modal-overlay bg-black/40"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white text-[#11295B] p-10 rounded-3xl shadow-2xl max-w-xl w-full relative">
+      <div 
+        ref={modalRef}
+        className="bg-white text-[#11295B] p-10 rounded-3xl shadow-2xl max-w-xl w-full relative"
+      >
         <button
           onClick={onClose}
-          className="absolute right-6 top-6 text-2xl text-[#11295B]"
+          className="absolute right-6 top-6 text-2xl text-[#11295B] hover:text-red-500 transition-colors"
           disabled={isLoading}
+          aria-label="Cerrar"
+          type="button"
         >
           <X />
         </button>
@@ -134,14 +156,27 @@ const CompleteProfileModal: React.FC<Props> = ({
               </div>
             )}
 
-            <button
-              onClick={handleComplete}
-              disabled={isLoading}
-              className={`w-full text-white py-3 rounded-xl font-semibold text-lg transition-all duration-200 
-                ${isLoading ? "bg-[#FCA311]/60 cursor-wait" : "bg-[#FCA311] hover:bg-[#e29510]"}`}
-            >
-              {isLoading ? "Procesando..." : "Confirmar y finalizar"}
-            </button>
+            <div className="flex gap-4">
+              {/* Botón Cancelar */}
+              <button
+                onClick={onClose}
+                disabled={isLoading}
+                className="w-1/3 border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold text-lg transition-all hover:bg-gray-100"
+                type="button"
+              >
+                Cancelar
+              </button>
+              
+              <button
+                onClick={handleComplete}
+                disabled={isLoading}
+                className={`w-2/3 text-white py-3 rounded-xl font-semibold text-lg transition-all 
+                  ${isLoading ? "bg-[#FCA311]/60 cursor-wait" : "bg-[#FCA311] hover:bg-[#e29510]"}`}
+                type="button"
+              >
+                {isLoading ? "Procesando..." : "Confirmar y finalizar"}
+              </button>
+            </div>
           </>
         )}
       </div>
