@@ -1,4 +1,6 @@
 "use client";
+  import { useState, useEffect } from 'react';
+
   import Inputlabel from "@/app/components/input/Inputlabel";
   import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
   import Button from "@/app/components/botons/botons";
@@ -7,9 +9,9 @@
   import TelefonoEditable from "@/app/components/input/TelefonoEditable";
   import MailIcon from "@/app/components/Icons/Email";
   import CalendarIcon from "@/app/components/Icons/Calendar";
-  import PhoneIcon from "@/app/components/Icons/Phone";
+  //import PhoneIcon from "@/app/components/Icons/Phone";
   import PerfilIcon from "@/app/components/Icons/Perfil"; // <-- Nuevo icono importado
-  import Padlock from "@/app/components/Icons/Candado";
+  //import Padlock from "@/app/components/Icons/Candado";
   import { useRouter } from 'next/navigation';
   /* import { IdIcon } from "@/app/components/Icons/Doc_Identidad"; */
   import { useUser } from '@/hooks/useUser';
@@ -17,6 +19,20 @@
   export default function UserPerfilPage() {
     const user = useUser();
     const router = useRouter();
+
+    // ✅ NUEVO: guardamos la imagen seleccionada aquí 👇
+    /*const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(
+      user?.foto_perfil ? `http://localhost:3001${user.foto_perfil}` : null
+    );*/
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+    
+    useEffect(() => {
+      if (user?.foto_perfil) {
+        setImagePreviewUrl(`http://localhost:3001${user.foto_perfil}`);
+        console.log('✅ Foto cargada:', `http://localhost:3001${user.foto_perfil}`);
+      }
+    }, [user]);
+
     return (
       <>
         <NavbarPerfilUsuario />
@@ -31,11 +47,19 @@
             
             {/* Avatar (usando SolarUserBold, fondo plomo y borde) */}
             <div className="flex flex-col justify-center md:justify-start w-full md:w-1/3 items-center">
-              <div className="w-40 h-40 rounded-xl border-2 border-gray-400 bg-gray-100 flex items-center justify-center">
-                <PerfilIcon className="w-32 h-32 text-black" /> {/* Ícono más grande */}
+              <div className='border-2 rounded-3xl'>
+                {imagePreviewUrl ? (
+                  <img
+                    src={imagePreviewUrl}
+                    alt="Foto de perfil"
+                    className="w-34 h-34 object-cover rounded-3xl"
+                  />
+                  ) : (
+                  <PerfilIcon className="w-32 h-32 text-black" />
+                  )}
               </div>
-              
-              <FotoDePerfilEditable />
+              <FotoDePerfilEditable 
+              setImagePreviewUrl={setImagePreviewUrl}/>
 
             </div>
 
