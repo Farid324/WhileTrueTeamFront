@@ -82,26 +82,30 @@ export default function registroDriver() {
 
   return (
     <div className="bg-[var(--blanco)] min-h-screen flex flex-col">
-      <NavbarPerfilUsuario />
+      <div className="fixed top-0 w-full z-50 bg-white shadow-md">
+        <NavbarPerfilUsuario />
+      </div>
 
-      {/* Espacio reservado para la parte de tu compañera */}
-      <div className="h-[1000px] md:h-[600px] bg-white w-full flex items-center justify-center">
+      {/* Espacio para Meli*/}
+      <div className="h-[1000px] md:h-[680px] bg-white w-full flex items-center justify-center">
         <p className="text-gray-400">[ Meli]</p>
       </div>
 
-      {/* Tu sección de carga de imágenes de licencia */}
-      <div className="p-8 max-w-5xl mx-auto w-full">
+      {/* Sección de carga de imágenes de licencia */}
+      <div className="p-8 pl-20 pr-8 w-full max-w-[1300px]">
         <h2 className="text-2xl font-bold mb-6 text-[#11295B]">Fotos de Licencia de Conducir</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="flex flex-col gap-8 max-w-xl">
           {/* Imagen anverso */}
           <div className="bg-gray-100 p-4 rounded-xl">
             <label className="font-semibold text-[#11295B]">Imagen anverso de la licencia</label>
             <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
             <div
-              className="mt-2 border border-dashed border-gray-400 p-4 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300"
+              className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
               onClick={() => anversoRef.current?.click()}
             >
-              {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
+                <span className="text-[#11295B] font-semibold z-10 relative">
+                {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
+                </span>
             </div>
             <input
               ref={anversoRef}
@@ -119,10 +123,12 @@ export default function registroDriver() {
             <label className="font-semibold text-[#11295B]">Imagen reverso de la licencia</label>
             <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
             <div
-              className="mt-2 border border-dashed border-gray-400 p-4 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300"
+              className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
               onClick={() => reversoRef.current?.click()}
             >
-              {reverso ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
+                <span className="text-[#11295B] font-semibold z-10 relative">
+                {reverso ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
+                </span>
             </div>
             <input
               ref={reversoRef}
