@@ -22,11 +22,16 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     imagenes?: string;
   }>({});
   const [previewImg, setPreviewImg] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validarPlaca = (valor: string) =>
-    /^[A-Z]{3}[0-9]{3}$|^[0-9]{3,4}[A-Z]{3}$/.test(valor);
+  const validarPlaca = (valor: string) => {
+    const match = valor.match(/^(\d{3,4})([A-Z]{3})$/);
+    if (!match) return false;
+    const numero = parseInt(match[1], 10);
+    return numero >= 0 && numero <= 6399;
+  };
 
   const validarSOAT = (valor: string) => /^[A-Z0-9]{6,10}$/.test(valor);
 
@@ -39,27 +44,26 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
 
   const validarYActualizarPlaca = (valor: string) => {
     setPlaca(valor);
-    if (!validarPlaca(valor)) {
-      setErrors((prev) => ({ ...prev, placa: "Formato de placa inválido" }));
-    } else {
-      setErrors((prev) => ({ ...prev, placa: undefined }));
-    }
+    setErrors((prev) => ({
+      ...prev,
+      placa: validarPlaca(valor) ? undefined : "Formato de placa inválido",
+    }));
   };
 
   const validarYActualizarSOAT = (valor: string) => {
     setSoat(valor);
-    if (!validarSOAT(valor)) {
-      setErrors((prev) => ({ ...prev, soat: "Formato de seguro inválido" }));
-    } else {
-      setErrors((prev) => ({ ...prev, soat: undefined }));
-    }
+    setErrors((prev) => ({
+      ...prev,
+      soat: validarSOAT(valor) ? undefined : "Formato de seguro inválido",
+    }));
   };
 
-  const handleImagenesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const validFiles = files.filter((file) => {
-      return ["image/jpeg", "image/png"].includes(file.type) && file.size <= 5 * 1024 * 1024;
-    });
+  const agregarImagenes = (files: File[]) => {
+    const validFiles = files.filter(
+      (file) =>
+        ["image/jpeg", "image/png"].includes(file.type) &&
+        file.size <= 5 * 1024 * 1024
+    );
 
     const totalImagenes = [...imagenes, ...validFiles];
 
@@ -73,13 +77,35 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
 
     setImagenes(totalImagenes);
 
-    if (totalImagenes.length < 3) {
-      setErrors((prev) => ({
-        ...prev,
-        imagenes: "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)",
-      }));
-    } else {
-      setErrors((prev) => ({ ...prev, imagenes: undefined }));
+    setErrors((prev) => ({
+      ...prev,
+      imagenes:
+        totalImagenes.length < 3
+          ? "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)"
+          : undefined,
+    }));
+  };
+
+  const handleImagenesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      agregarImagenes(Array.from(e.target.files));
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files) {
+      agregarImagenes(Array.from(e.dataTransfer.files));
     }
   };
 
@@ -87,37 +113,32 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     const nuevasImagenes = imagenes.filter((_, i) => i !== index);
     setImagenes(nuevasImagenes);
 
-    if (nuevasImagenes.length < 3) {
-      setErrors((prev) => ({
-        ...prev,
-        imagenes: "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)",
-      }));
-    } else {
-      setErrors((prev) => ({ ...prev, imagenes: undefined }));
-    }
+    setErrors((prev) => ({
+      ...prev,
+      imagenes:
+        nuevasImagenes.length < 3
+          ? "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)"
+          : undefined,
+    }));
   };
 
   const handleSubmit = () => {
-    const nuevosErrores: {
-      placa?: string;
-      soat?: string;
-      imagenes?: string;
-    } = {};
+    const nuevosErrores: typeof errors = {};
 
-    if (!validarPlaca(placa)) {
-      nuevosErrores.placa = "Formato de placa inválido";
-    }
-
-    if (!validarSOAT(soat)) {
-      nuevosErrores.soat = "Formato de seguro inválido";
-    }
+    if (!validarPlaca(placa)) nuevosErrores.placa = "Formato de placa inválido";
+    if (!validarSOAT(soat)) nuevosErrores.soat = "Formato de seguro inválido";
 
     if (imagenes.length > 6) {
       nuevosErrores.imagenes = "Solo puedes subir hasta 6 imágenes del auto";
-    } else if (imagenes.some(img => !["image/jpeg", "image/png"].includes(img.type))) {
+    } else if (
+      imagenes.some(
+        (img) => !["image/jpeg", "image/png"].includes(img.type)
+      )
+    ) {
       nuevosErrores.imagenes = "Formato de imagen inválido";
     } else if (imagenes.length < 3) {
-      nuevosErrores.imagenes = "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)";
+      nuevosErrores.imagenes =
+        "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)";
     }
 
     setErrors(nuevosErrores);
@@ -127,23 +148,16 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     }
   };
 
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLElement).classList.contains("modal-overlay")) {
-      onClose();
-    }
-  };
-
   useEffect(() => {
     return () => {
-      imagenes.forEach((img) => URL.revokeObjectURL(URL.createObjectURL(img)));
+      imagenes.forEach((img) =>
+        URL.revokeObjectURL(URL.createObjectURL(img))
+      );
     };
   }, [imagenes]);
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center modal-overlay bg-black/40"
-      onClick={handleOverlayClick}
-    >
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
       <div className="bg-white text-[#11295B] p-10 rounded-3xl shadow-2xl max-w-xl w-full relative">
         <button
           onClick={onClose}
@@ -152,44 +166,93 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
           <X />
         </button>
 
-        <h2 className="text-lg font-semibold text-center text-[#11295B]">Bienvenido a</h2>
-        <h1 className="text-3xl font-bold text-center text-[#FCA311] drop-shadow-sm mb-2">REDIBO</h1>
-        <h3 className="text-xl text-center font-semibold text-[#11295B] mb-1">REGISTRARSE COMO HOST</h3>
-        <p className="text-center text-sm text-gray-600 mb-6">Ingresa datos de tu vehiculo</p>
+        <h2 className="text-lg font-semibold text-center text-[#11295B]">
+          Bienvenido a
+        </h2>
+        <h1 className="text-3xl font-bold text-center text-[#FCA311] drop-shadow-sm mb-2">
+          REDIBO
+        </h1>
+        <h3 className="text-xl text-center font-semibold text-[#11295B] mb-1">
+          REGISTRARSE COMO HOST
+        </h3>
+        <p className="text-center text-sm text-gray-600 mb-6">
+          Ingresa datos de tu vehículo
+        </p>
 
-        {/* Placa */}
+        {/* Campo Placa */}
         <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Placa"
-            value={placa}
-            onChange={(e) => validarYActualizarPlaca(e.target.value.toUpperCase())}
-            className={`w-full border-2 rounded-lg px-4 py-3 outline-none text-lg placeholder:text-[#11295B]/50 font-semibold
-              ${errors.placa ? "border-red-500 text-red-500 placeholder-red-400" : "border-[#11295B]"}`}
-          />
-          {errors.placa && <p className="text-sm text-red-500 mt-1">{errors.placa}</p>}
+          <div className="relative flex items-center">
+            <img
+              src="/placa.svg"
+              alt="icono placa"
+              className="absolute left-3 w-6 h-6"
+            />
+            <input
+              type="text"
+              placeholder="Placa"
+              value={placa}
+              onChange={(e) =>
+                validarYActualizarPlaca(e.target.value.toUpperCase())
+              }
+              className={`pl-12 w-full border-2 rounded-lg px-4 py-3 outline-none text-lg placeholder:text-[#11295B]/50 font-semibold ${
+                errors.placa
+                  ? "border-red-500 text-red-500 placeholder-red-400"
+                  : "border-[#11295B]"
+              }`}
+            />
+          </div>
+          {errors.placa && (
+            <p className="text-sm text-red-500 mt-1">{errors.placa}</p>
+          )}
         </div>
 
-        {/* SOAT */}
+        {/* Campo SOAT */}
         <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Numero de seguro"
-            value={soat}
-            onChange={(e) => validarYActualizarSOAT(e.target.value.toUpperCase())}
-            className={`w-full border-2 rounded-lg px-4 py-3 outline-none text-lg placeholder:text-[#11295B]/50 font-semibold
-              ${errors.soat ? "border-red-500 text-red-500 placeholder-red-400" : "border-[#11295B]"}`}
-          />
-          {errors.soat && <p className="text-sm text-red-500 mt-1">{errors.soat}</p>}
+          <div className="relative flex items-center">
+            <img
+              src="/seguro.svg"
+              alt="icono seguro"
+              className="absolute left-3 w-6 h-6"
+            />
+            <input
+              type="text"
+              placeholder="Número de seguro"
+              value={soat}
+              onChange={(e) =>
+                validarYActualizarSOAT(e.target.value.toUpperCase())
+              }
+              className={`pl-12 w-full border-2 rounded-lg px-4 py-3 outline-none text-lg placeholder:text-[#11295B]/50 font-semibold ${
+                errors.soat
+                  ? "border-red-500 text-red-500 placeholder-red-400"
+                  : "border-[#11295B]"
+              }`}
+            />
+          </div>
+          {errors.soat && (
+            <p className="text-sm text-red-500 mt-1">{errors.soat}</p>
+          )}
         </div>
 
-        {/* Imágenes */}
-        <div className={`mb-4 bg-gray-100 rounded-xl p-4 ${errors.imagenes ? "border-2 border-red-500" : ""}`}>
-          <label className="block font-semibold mb-1 text-[#11295B]">Imágenes del auto</label>
-          <p className="text-sm text-gray-600 mb-2">Asegúrate de tomar las fotos en un lugar bien iluminado</p>
+        {/* Campo Imágenes */}
+        <div
+          className={`mb-4 bg-gray-100 rounded-xl p-4 ${
+            errors.imagenes ? "border-2 border-red-500" : ""
+          }`}
+        >
+          <label className="block font-semibold mb-1 text-[#11295B]">
+            Imágenes del auto
+          </label>
+          <p className="text-sm text-gray-600 mb-2">
+            Asegúrate de tomar las fotos en un lugar bien iluminado
+          </p>
           <div
-            className="border border-dashed rounded p-4 text-center cursor-pointer bg-gray-200 hover:bg-gray-300"
+            className={`border border-dashed rounded p-4 text-center cursor-pointer transition-all duration-200 ${
+              isDragging ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
+            }`}
             onClick={() => fileInputRef.current?.click()}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
           >
             Subir imagen / Arrastra aquí
           </div>
@@ -204,7 +267,9 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
           {errors.imagenes ? (
             <p className="text-sm text-red-500 mt-2">{errors.imagenes}</p>
           ) : (
-            <p className="text-xs text-gray-500 mt-2">*Mínimo 3 fotos del vehículo: frontal, lateral y trasera</p>
+            <p className="text-xs text-gray-500 mt-2">
+              *Mínimo 3 fotos del vehículo: frontal, lateral y trasera
+            </p>
           )}
 
           <div className="flex flex-wrap mt-3 gap-3">
@@ -232,7 +297,7 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
           </div>
         </div>
 
-        {/* Botón siguiente */}
+        {/* Botón Siguiente */}
         <button
           onClick={handleSubmit}
           className={`w-full text-white py-3 rounded-xl font-semibold text-lg mt-2 transition-all duration-200 ${
@@ -246,7 +311,7 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
         </button>
       </div>
 
-      {/* Previsualización */}
+      {/* Modal de Previsualización */}
       {previewImg && (
         <div
           className="fixed inset-0 bg-black/60 z-[10000] flex items-center justify-center"
@@ -273,8 +338,4 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
 };
 
 export default VehicleDataModal;
-
-
-
-
 
