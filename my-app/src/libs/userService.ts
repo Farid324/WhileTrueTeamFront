@@ -38,3 +38,21 @@ export const updateUserField = async (campo: string, valor: string) => {
   
     return res.json(); // va a traer { message, foto_perfil }
   };
+
+  export const deleteProfilePhoto = async () => {
+    const token = localStorage.getItem('token');
+  
+    const res = await fetch('http://localhost:3001/api/delete-profile-photo', {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Error al eliminar la foto');
+    }
+  
+    return res.json(); // { message }
+  };

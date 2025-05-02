@@ -15,7 +15,7 @@
   import { useRouter } from 'next/navigation';
   /* import { IdIcon } from "@/app/components/Icons/Doc_Identidad"; */
   import { useUser } from '@/hooks/useUser';
-
+  
   export default function UserPerfilPage() {
     const user = useUser();
     const router = useRouter();
