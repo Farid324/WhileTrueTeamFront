@@ -100,7 +100,7 @@ export default function CompleteProfileModal({
       <div className={styles.modal}>
         <h2 className={styles.title}>REGISTRARSE</h2>
         <p
-          style={{ textAlign: "center", marginBottom: "1rem", fontWeight: 500 }}
+          style={{ textAlign: "center", marginBottom: "1rem", fontWeight: 500, color: "blue" }}
         >
           ¡Ya casi acabas!
         </p>
@@ -115,10 +115,21 @@ export default function CompleteProfileModal({
               name="name"
               value={name}
               placeholder="Ingrese su nombre completo"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+                const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/; // permite letras y espacios
+                if (regex.test(input) || input === "") {
+                  setName(input);
+                }
+              }}
+              pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+              title="Solo se permiten letras y espacios"
               className={styles.input}
+              required
             />
           </div>
+
+      
 
           {/* Fecha de nacimiento */}
           <div className={styles.halfInput}>
