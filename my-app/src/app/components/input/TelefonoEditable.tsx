@@ -46,7 +46,7 @@ export default function TelefonoEditable({ initialValue }: Props) {
           className={`w-full border-2 rounded-md px-10 py-2 focus:outline-none focus:ring-1 shadow-[0_4px_10px_rgba(0,0,0,0.4)] ${
             editando
               ? 'bg-white border-[var(--azul-oscuro)] ring-[var(--azul-oscuro)]'
-              : 'bg-gray-100 border-[var(--negro)]'
+              : 'bg-gray-100 border-2 border-[var(--azul-oscuro)]'
           }`}
         />
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#11295B]">

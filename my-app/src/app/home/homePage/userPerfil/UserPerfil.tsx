@@ -64,7 +64,7 @@
                   
                   icono={<MailIcon />}
                   defaultValue={user?.email || ''}
-                  className="focus:ring-[#11295B] border-[#11295B]"
+                  className="focus:ring-[var(--azul-oscuro)] border-[var(--azul-oscuro)] border-2 font-bold"
                   readOnly={true}
                 />      
 
@@ -81,7 +81,7 @@
                       
                       icono={<CalendarIcon />}
                       defaultValue={user?.fecha_nacimiento?.split('T')[0] || ''}
-                      className="focus:ring-[#11295B] border-[#11295B]"
+                      className="focus:ring-[var(--azul-oscuro)] border-[var(--azul-oscuro)] border-2 font-bold"
                       readOnly={true}
                     />
                   </div>

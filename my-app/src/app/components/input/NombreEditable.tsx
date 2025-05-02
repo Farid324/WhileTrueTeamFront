@@ -44,7 +44,7 @@ export default function NombreEditable({ initialValue }: Props) {
           readOnly={!editando}
           placeholder={editando ? "Ingresar nombre completo" : ""}
           className={`w-full border-2 rounded-md px-10 py-2 focus:outline-none focus:ring-1 shadow-[0_4px_10px_rgba(0,0,0,0.4)] ${
-            editando ? 'bg-white border-[var(--azul-oscuro)] ring-[var(--azul-oscuro)]' : 'bg-gray-100 border-2 border-[var(--negro)]'
+            editando ? 'bg-white border-[var(--azul-oscuro)] ring-[var(--azul-oscuro)]' : 'bg-gray-100 border-2 border-[var(--azul-oscuro)]'
           }`}
         />
   
