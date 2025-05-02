@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { MdiPencil } from '@/app/components/Icons/Pencil';
-import { updateUserField } from '@/libs/userService'; // lo crearás luego
+import { updateUserField } from '@/libs/userService';
 import UserIcon from '@/app/components/Icons/User';
 
 interface Props {
@@ -13,46 +13,77 @@ export default function NombreEditable({ initialValue }: Props) {
   const [editando, setEditando] = useState(false);
   const [valorTemporal, setValorTemporal] = useState(initialValue);
   const [feedback, setFeedback] = useState('');
+  const [errorMensaje, setErrorMensaje] = useState('');
+
+  // ✅ Manejar cambios en el input y validar en tiempo real
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nuevoValor = e.target.value;
+
+    // Validar longitud
+    if (nuevoValor.length > 50) {
+      setErrorMensaje('El nombre no puede superar los 50 caracteres.');
+      return; // 🚫 No dejamos escribir más
+    }
+
+    setValorTemporal(nuevoValor); // ✅ Actualizamos el valor temporal
+
+    // Mostrar error si es menor a 3 caracteres
+    if (nuevoValor.length > 0 && nuevoValor.length < 3) {
+      setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
+    } else {
+      setErrorMensaje(''); // ✔ Limpiamos error si todo está bien
+    }
+  };
 
   const handleGuardar = async () => {
+    // Validación antes de enviar
+    if (valorTemporal.trim().length < 3) {
+      setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
+      return;
+    }
+
     try {
-      await updateUserField('nombre_completo', valorTemporal);
-      setValor(valorTemporal);
+      await updateUserField('nombre_completo', valorTemporal.trim());
+      setValor(valorTemporal.trim());
       setEditando(false);
-      setFeedback('Cambios guardados exitosamente.');
+      setFeedback('Nombre actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000); // feedback por 3 segundos
     } catch (err) {
-      setFeedback('Hubo un error al guardar.');
+      setErrorMensaje('Hubo un error al guardar.');
     }
   };
 
   const handleCancelar = () => {
     setValorTemporal(valor); // restaurar original
     setEditando(false);
+    setErrorMensaje('');
+    setFeedback('');
   };
 
   return (
     <div className="relative mb-4 font-[var(--tamaña-bold)]">
       <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
-  
+
       {/* Contenedor solo del input + íconos */}
       <div className="relative">
         <input
           type="text"
           value={editando ? valorTemporal : valor}
-          onChange={(e) => setValorTemporal(e.target.value)}
+          onChange={handleInputChange}
           readOnly={!editando}
-          placeholder={editando ? "Ingresar nombre completo" : ""}
+          placeholder={editando ? 'Ingresar nombre completo' : ''}
           className={`w-full border-2 rounded-md px-10 py-2 focus:outline-none focus:ring-1 shadow-[0_4px_10px_rgba(0,0,0,0.4)] ${
-            editando ? 'bg-white border-[var(--azul-oscuro)] ring-[var(--azul-oscuro)]' : 'bg-gray-100 border-2 border-[var(--azul-oscuro)]'
+            editando
+              ? 'bg-white border-[var(--azul-oscuro)] ring-[var(--azul-oscuro)]'
+              : 'bg-gray-100 border-2 border-[var(--azul-oscuro)]'
           }`}
         />
-  
+
         {/* Ícono izquierdo */}
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#11295B]">
           <UserIcon />
         </div>
-  
+
         {/* Ícono derecho (Pencil) */}
         {!editando && (
           <div
@@ -63,7 +94,15 @@ export default function NombreEditable({ initialValue }: Props) {
           </div>
         )}
       </div>
-  
+
+      {/* Mensajes debajo del input */}
+      {errorMensaje && (
+        <p className="text-red-500 text-sm mt-1">{errorMensaje}</p>
+      )}
+      {feedback && (
+        <p className="text-green-600 text-sm mt-1">{feedback}</p>
+      )}
+
       {/* Botones debajo del input */}
       {editando && (
         <div className="flex gap-2 mt-2 justify-end">
@@ -80,11 +119,6 @@ export default function NombreEditable({ initialValue }: Props) {
             Cancelar
           </button>
         </div>
-      )}
-  
-      {/* Mensaje feedback */}
-      {feedback && (
-        <p className="text-center mt-2 text-green-600 font-semibold">{feedback}</p>
       )}
     </div>
   );
