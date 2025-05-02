@@ -16,20 +16,129 @@ export default function CompleteProfileModal({
   const [birthMonth, setBirthMonth] = useState("");
   const [birthYear, setBirthYear] = useState("");
   const [phoneValue, setPhoneValue] = useState("");
+  const [phoneError, setPhoneError] = useState(false);
+  const [phoneMessage, setPhoneMessage] = useState("");
+  const [error, setError] = useState("");
+  const userEmail = localStorage.getItem("google_email");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!name.trim()) {
+      setError("El nombre es obligatorio");
+      return;
+    }
+
+    if (!birthDay || !birthMonth || !birthYear) {
+      setError("Completa la fecha de nacimiento");
+      return;
+    }
 
     const birthDate = new Date(
       Number(birthYear),
       Number(birthMonth) - 1,
       Number(birthDay)
     );
-
-    onComplete({ name: name.trim(), birthDate: birthDate.toISOString() });
-    if (onSuccess) {
-      onSuccess();
+      //Validaciones Fecha de nacimiento
+    if (birthDate > new Date()) {
+      setError("La fecha de nacimiento no puede ser futura");
+      return;
     }
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    if (age < 18) {
+      setError("Debes tener al menos 18 años");
+      return;
+    } else if (age > 85) {
+      setError("La edad máxima permitida es de 85 años");
+      return;
+    }
+
+    const cleanPhone = phoneValue.replace(/\D/g, "");
+
+    if (!/^[67]/.test(cleanPhone)) {
+      setPhoneError(true);
+      setPhoneMessage("El número debe comenzar con 6 o 7");
+      return;
+    } else if (!/^\d{8}$/.test(cleanPhone)) {
+      setPhoneError(true);
+      setPhoneMessage("El número debe tener exactamente 8 dígitos");
+      return;
+    } else {
+      try {
+        const res = await fetch("http://localhost:3001/api/check-phone", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ telefono: parseInt(cleanPhone) }),
+        });
+
+        const data = await res.json();
+        if (data.exists) {
+          setPhoneError(true);
+          setPhoneMessage("Este número ya está registrado");
+          return;
+        } else {
+          setPhoneError(false);
+          setPhoneMessage("");
+        }
+      } catch (err) {
+        console.error("Error al verificar teléfono:", err);
+        setPhoneError(true);
+        setPhoneMessage("No se pudo validar el número");
+        return;
+      }
+    }
+
+    setError("");
+
+    try {
+      const res = await fetch("http://localhost:3001/api/update-profile", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: userEmail,
+          nombre_completo: name.trim(),
+          fecha_nacimiento: birthDate.toISOString(),
+          telefono: "+591" + cleanPhone,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+
+        if (data.message?.includes("registrado con email")) {
+          alert("Esta cuenta ya fue registrada con correo y contraseña. Por favor inicia sesión manualmente.");
+          return; //No continuar ni cerrar el modal
+        }
+
+        throw new Error(data.message || "No se pudo actualizar el perfil");
+      }
+
+      onComplete({ name: name.trim(), birthDate: birthDate.toISOString() });
+
+      if (onSuccess) {
+        onSuccess(); // ✅ activa el modal de éxito
+      }
+    } catch (err) {
+      console.error("Error al guardar datos de perfil", err);
+      setError("No se pudo guardar los datos. Intenta nuevamente.");
+    }
+    /*  onComplete({
+      name: name.trim(),
+      birthDate: birthDate.toISOString(),
+    });
+
+    if (onSuccess) onSuccess();
+    onClose(); */
   };
 
   return (
@@ -50,7 +159,15 @@ export default function CompleteProfileModal({
               name="name"
               value={name}
               placeholder="Ingrese su nombre completo"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+                const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
+                if (regex.test(input) || input === "") {
+                  setName(input);
+                }
+              }}
+              pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+              title="Solo se permiten letras y espacios"
               className={styles.input}
               required
             />
@@ -92,15 +209,39 @@ export default function CompleteProfileModal({
                 id="phone"
                 name="phone"
                 value={phoneValue}
-                onChange={(e) => setPhoneValue(e.target.value)}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+
+                  if (!/^\d*$/.test(newValue)) {
+                    setPhoneError(true);
+                    setPhoneMessage("Solo se permiten números");
+                    return;
+                  }
+
+                  setPhoneValue(newValue);
+                  localStorage.setItem("register_phone", newValue);
+                  setPhoneError(false);
+                  setPhoneMessage("");
+                }}
                 maxLength={8}
                 inputMode="numeric"
                 pattern="[0-9]*"
-                placeholder="Ingrese número de teléfono"
-                className={styles.input3}
+                placeholder={phoneError ? "Número inválido" : "Ingrese número de teléfono"}
+                className={`${styles.input3} ${phoneError ? styles.errorInput : ""}`}
               />
             </div>
+            {phoneError && phoneMessage && (
+              <p style={{ color: "#E30000", fontSize: "0.75rem", marginTop: "0.25rem" }}>
+                {phoneMessage}
+              </p>
+            )}
           </div>
+
+          {error && (
+            <p style={{ color: "red", fontSize: "0.75rem", marginTop: "0.5rem" }}>
+              {error}
+            </p>
+          )}
 
           <button type="submit" className={styles.button}>
             ¡Registrarme!
