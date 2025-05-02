@@ -42,12 +42,20 @@ export default function CompleteProfileModal({
       return;
     }
 
-    const age = new Date().getFullYear() - birthDate.getFullYear();
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
     if (age < 18) {
       setError("Debes tener al menos 18 años");
       return;
+    } else if (age > 85) {
+      setError("La edad máxima permitida es de 85 años");
+      return;
     }
-
     setError("");
 
     try {
