@@ -27,39 +27,64 @@ export default function NombreEditable({ initialValue }: Props) {
 
     setValorTemporal(nuevoValor);
 
-    // Validación de mínimo 3 caracteres
+    // Validación mínimo 3 caracteres
     if (nuevoValor.length > 0 && nuevoValor.length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
       return;
     }
 
-    // Validación solo letras y espacios (regex)
+    // Validación solo letras y espacios
     const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
     if (!soloLetrasRegex.test(nuevoValor)) {
       setErrorMensaje('El nombre solo puede contener letras y espacios.');
       return;
     }
 
-    // Si todo está bien
+    // Validar múltiples espacios consecutivos
+    if (/\s{2,}/.test(nuevoValor)) {
+      setErrorMensaje('El nombre no debe contener más de un espacio entre palabras.');
+      return;
+    }
+
+    // Validar si empieza o termina con espacio
+    if (/^\s|\s$/.test(nuevoValor)) {
+      setErrorMensaje('El nombre no debe comenzar ni terminar con espacios.');
+      return;
+    }
+
+    // Todo válido ✅
     setErrorMensaje('');
   };
 
   const handleGuardar = async () => {
-    // Validaciones antes de enviar
-    if (valorTemporal.trim().length < 3) {
+    const nombreAValidar = valorTemporal.trim();
+
+    // --- Replicar validaciones antes de enviar ---
+    if (nombreAValidar.length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
       return;
     }
 
     const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
-    if (!soloLetrasRegex.test(valorTemporal.trim())) {
+    if (!soloLetrasRegex.test(nombreAValidar)) {
       setErrorMensaje('El nombre solo puede contener letras y espacios.');
       return;
     }
 
+    if (/\s{2,}/.test(nombreAValidar)) {
+      setErrorMensaje('El nombre no debe contener más de un espacio entre palabras.');
+      return;
+    }
+
+    if (/^\s|\s$/.test(valorTemporal)) {
+      setErrorMensaje('El nombre no debe comenzar ni terminar con espacios.');
+      return;
+    }
+
+    // --- Si todo está bien ---
     try {
-      await updateUserField('nombre_completo', valorTemporal.trim());
-      setValor(valorTemporal.trim());
+      await updateUserField('nombre_completo', nombreAValidar);
+      setValor(nombreAValidar);
       setEditando(false);
       setFeedback('Nombre actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
@@ -69,7 +94,7 @@ export default function NombreEditable({ initialValue }: Props) {
   };
 
   const handleCancelar = () => {
-    setValorTemporal(valor); // Restaurar el valor original
+    setValorTemporal(valor); // Restaurar original
     setEditando(false);
     setErrorMensaje('');
     setFeedback('');
