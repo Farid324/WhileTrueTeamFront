@@ -1,4 +1,3 @@
-// components/input/TelefonoEditable.tsx
 'use client';
 import { useState } from 'react';
 import { MdiPencil } from '@/app/components/Icons/Pencil';
@@ -14,13 +13,35 @@ export default function TelefonoEditable({ initialValue }: Props) {
   const [editando, setEditando] = useState(false);
   const [valorTemporal, setValorTemporal] = useState(initialValue);
   const [feedback, setFeedback] = useState('');
+  const [errorMensaje, setErrorMensaje] = useState('');
+
+  const validarTelefono = (telefono: string) => {
+    const soloNumeros = /^[0-9]*$/;
+
+    if (!soloNumeros.test(telefono)) {
+      setErrorMensaje('Formato inválido, ingrese solo números.');
+      return false;
+    }
+
+    if (telefono.length !== 8) {
+      setErrorMensaje('El teléfono debe ser de 8 dígitos.');
+      return false;
+    }
+
+    setErrorMensaje('');
+    return true;
+  };
 
   const handleGuardar = async () => {
+    if (!validarTelefono(valorTemporal)) {
+      return;
+    }
+
     try {
       await updateUserField('telefono', valorTemporal);
       setValor(valorTemporal);
       setEditando(false);
-      setFeedback('Cambios guardados exitosamente.');
+      setFeedback('Teléfono actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
       setFeedback('Hubo un error al guardar.');
@@ -29,6 +50,7 @@ export default function TelefonoEditable({ initialValue }: Props) {
 
   const handleCancelar = () => {
     setValorTemporal(valor);
+    setErrorMensaje('');
     setEditando(false);
   };
 
@@ -40,7 +62,14 @@ export default function TelefonoEditable({ initialValue }: Props) {
         <input
           type="text"
           value={editando ? valorTemporal : valor}
-          onChange={(e) => setValorTemporal(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Solo permitimos máximo 8 caracteres ingresados en el input
+            if (value.length <= 8) {
+              setValorTemporal(value);
+              validarTelefono(value); // Valida mientras se escribe
+            }
+          }}
           readOnly={!editando}
           placeholder={editando ? "Ingresar número de teléfono" : ""}
           className={`w-full border-2 rounded-md px-10 py-2 focus:outline-none focus:ring-1 shadow-[0_4px_10px_rgba(0,0,0,0.4)] ${
@@ -62,6 +91,14 @@ export default function TelefonoEditable({ initialValue }: Props) {
         )}
       </div>
 
+      {/* Mensajes de error o éxito */}
+      {errorMensaje && (
+        <p className="text-red-500 text-sm mt-1">{errorMensaje}</p>
+      )}
+      {!errorMensaje && feedback && (
+        <p className="text-green-600 text-sm mt-1 font-semibold">{feedback}</p>
+      )}
+
       {editando && (
         <div className="flex gap-2 mt-2 justify-end">
           <button
@@ -77,10 +114,6 @@ export default function TelefonoEditable({ initialValue }: Props) {
             Cancelar
           </button>
         </div>
-      )}
-
-      {feedback && (
-        <p className="text-center mt-2 text-green-600 font-semibold">{feedback}</p>
       )}
     </div>
   );
