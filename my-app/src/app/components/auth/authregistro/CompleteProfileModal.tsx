@@ -1,8 +1,9 @@
 /* import { backendip } from "@/libs/authServices"; */
 import styles from "./RegisterModal.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 export default function CompleteProfileModal({
   onComplete,
@@ -18,12 +19,46 @@ export default function CompleteProfileModal({
   const [birthDay, setBirthDay] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthYear, setBirthYear] = useState("");
+  const [birthError, setBirthError] = useState("");
   const [phoneValue, setPhoneValue] = useState("");
   const [phoneError, setPhoneError] = useState(false);
   const [phoneMessage, setPhoneMessage] = useState("");
   const [error, setError] = useState("");
   const userEmail = localStorage.getItem("google_email");
    
+  useEffect(() => {
+    if (!birthDay || !birthMonth || !birthYear) {
+      setBirthError("");
+      return;
+    }
+
+    const selectedDate = new Date(
+      Number(birthYear),
+      Number(birthMonth) - 1,
+      Number(birthDay)
+    );
+
+    const today = new Date();
+
+    if (selectedDate > today) {
+      setBirthError("La fecha no puede ser futura");
+      return;
+    }
+
+    let age = today.getFullYear() - selectedDate.getFullYear();
+    const m = today.getMonth() - selectedDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < selectedDate.getDate())) {
+      age--;
+    }
+
+    if (age < 18) {
+      setBirthError("Debes tener al menos 18 años");
+    } else if (age > 85) {
+      setBirthError("La edad máxima permitida es 85 años");
+    } else {
+      setBirthError("");
+    }
+  }, [birthDay, birthMonth, birthYear]); // 🔁 DEPENDENCIAS
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,6 +185,7 @@ export default function CompleteProfileModal({
     onClose(); */
   };
 
+  
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -222,6 +258,11 @@ export default function CompleteProfileModal({
               </select>
             </div>
           </div>
+          {birthError && (
+            <p style={{ color: "#E30000", fontSize: "0.75rem", marginTop: "0.25rem" }}>
+               {birthError}
+           </p>
+          )}     
 
           {/* Teléfono */}
           <div className={styles.halfInput}>
