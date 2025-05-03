@@ -1,6 +1,8 @@
 /* import { backendip } from "@/libs/authServices"; */
 import styles from "./RegisterModal.module.css";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CompleteProfileModal({
   onComplete,
@@ -248,8 +250,27 @@ export default function CompleteProfileModal({
           </button>
         </form>
 
-        <button className={styles.close} onClick={onClose}>✕</button>
+        <button
+           className={styles.close}
+           onClick={() => {
+               toast.info("Registro cancelado", {
+                 position: "top-center",
+                  autoClose: 2500,
+                hideProgressBar: false,
+                 closeOnClick: true,
+                 pauseOnHover: false,
+                 draggable: false,
+                 theme: "light",
+               });
+               setTimeout(() => {
+                onClose();
+              }, 2000); 
+             }}
+        >
+             ✕
+        </button>
       </div>
+      <ToastContainer />
     </div>
   );
 }
