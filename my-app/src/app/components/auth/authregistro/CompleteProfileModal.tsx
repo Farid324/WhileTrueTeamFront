@@ -14,6 +14,7 @@ export default function CompleteProfileModal({
   onSuccess?: () => void;
 }) {
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthYear, setBirthYear] = useState("");
@@ -22,12 +23,18 @@ export default function CompleteProfileModal({
   const [phoneMessage, setPhoneMessage] = useState("");
   const [error, setError] = useState("");
   const userEmail = localStorage.getItem("google_email");
+   
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name.trim()) {
       setError("El nombre es obligatorio");
+      return;
+    }
+
+    if (name.trim().length < 3) {
+      setNameError("El nombre debe tener al menos 3 caracteres");
       return;
     }
 
@@ -166,6 +173,12 @@ export default function CompleteProfileModal({
                 const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
                 if (regex.test(input) || input === "") {
                   setName(input);
+
+                  if (input.trim().length > 0 && input.trim().length < 3) {
+                      setNameError("El nombre debe tener al menos 3 caracteres");
+                  } else {
+                    setNameError("");
+                  }
                 }
               }}
               pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
@@ -173,6 +186,11 @@ export default function CompleteProfileModal({
               className={styles.input}
               required
             />
+            {nameError && (
+              <p style={{ color: "#E30000", fontSize: "0.75rem", marginTop: "0.25rem" }}>
+                {nameError}
+              </p>
+            )}
           </div>
 
           {/* Fecha de nacimiento */}
@@ -252,16 +270,30 @@ export default function CompleteProfileModal({
 
         <button
            className={styles.close}
-           onClick={() => {
+           onClick={async() => {
                toast.info("Registro cancelado", {
                  position: "top-center",
                   autoClose: 2500,
-                hideProgressBar: false,
+                 hideProgressBar: false,
                  closeOnClick: true,
                  pauseOnHover: false,
                  draggable: false,
                  theme: "light",
                });
+
+               try {
+                const email = localStorage.getItem("google_email");
+                if (email) {
+                  await fetch("http://localhost:3001/api/delete-incomplete-user", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                  });
+                }
+              } catch (err) {
+                console.error("No se pudo eliminar el usuario incompleto", err);
+              } 
+
                setTimeout(() => {
                 onClose();
               }, 2000); 
