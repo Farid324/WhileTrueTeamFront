@@ -6,8 +6,8 @@ import UserIcon from '@/app/components/Icons/User';
 
 interface Props {
   initialValue: string;
-  campoEnEdicion: string | null; // 👈 nuevo prop
-  setCampoEnEdicion: (campo: string | null) => void; // 👈 nuevo prop
+  campoEnEdicion: string | null;
+  setCampoEnEdicion: (campo: string | null) => void;
 }
 
 export default function NombreEditable({ initialValue, campoEnEdicion, setCampoEnEdicion }: Props) {
@@ -17,18 +17,27 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
   const [feedback, setFeedback] = useState('');
   const [errorMensaje, setErrorMensaje] = useState('');
 
-  // ✅ Validación en tiempo real
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nuevoValor = e.target.value;
+    let nuevoValor = e.target.value;
+
+    // Capitalizar primera letra automáticamente
+    if (nuevoValor.length > 0) {
+      nuevoValor = nuevoValor.charAt(0).toUpperCase() + nuevoValor.slice(1);
+    }
+
+    setValorTemporal(nuevoValor);
+
+    if (nuevoValor.length === 0) {
+      setErrorMensaje('El nombre no puede estar vacío.');
+      return;
+    }
 
     if (nuevoValor.length > 50) {
       setErrorMensaje('El nombre no puede superar los 50 caracteres.');
       return;
     }
 
-    setValorTemporal(nuevoValor);
-
-    if (nuevoValor.length > 0 && nuevoValor.length < 3) {
+    if (nuevoValor.length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
       return;
     }
@@ -49,41 +58,18 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
       return;
     }
 
-    // Todo válido ✅
     setErrorMensaje('');
   };
 
   const handleGuardar = async () => {
     const nombreAValidar = valorTemporal.trim();
 
-    if (nombreAValidar.length < 3) {
-      setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
-      return;
-    }
-
-    const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
-    if (!soloLetrasRegex.test(nombreAValidar)) {
-      setErrorMensaje('El nombre solo puede contener letras y espacios.');
-      return;
-    }
-
-    if (/\s{2,}/.test(nombreAValidar)) {
-      setErrorMensaje('El nombre no debe contener más de un espacio entre palabras.');
-      return;
-    }
-
-    if (/^\s|\s$/.test(nombreAValidar)) {
-      setErrorMensaje('El nombre no debe comenzar ni terminar con espacios.');
-      return;
-    }
-
     try {
       const response = await updateUserField('nombre_completo', nombreAValidar);
       console.log('✅ Nombre actualizado en la base de datos:', response);
-      //await updateUserField('nombre_completo', nombreAValidar);
       setValor(nombreAValidar);
       setEditando(false);
-      setCampoEnEdicion(null); // ✅ liberamos edición global
+      setCampoEnEdicion(null);
       setFeedback('Nombre actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err: any) {
@@ -97,14 +83,13 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
     setEditando(false);
     setErrorMensaje('');
     setFeedback('');
-    setCampoEnEdicion(null); // ✅ liberamos edición global
+    setCampoEnEdicion(null);
   };
 
   return (
     <div className="relative mb-4 font-[var(--tamaña-bold)]">
       <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
 
-      {/* Contenedor solo del input + íconos */}
       <div className="relative">
         <input
           type="text"
@@ -119,12 +104,10 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
           }`}
         />
 
-        {/* Ícono izquierdo (sin cambios) */}
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#11295B]">
           <UserIcon />
         </div>
 
-        {/* Ícono derecho (Pencil) */}
         {!editando && (
           <div
             className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer ${
@@ -133,7 +116,7 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
             onClick={() => {
               if (!campoEnEdicion) {
                 setEditando(true);
-                setCampoEnEdicion('nombre'); // ✅ marcamos como en edición
+                setCampoEnEdicion('nombre');
               }
             }}
           >
@@ -142,7 +125,6 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
         )}
       </div>
 
-      {/* Mensajes debajo del input */}
       {errorMensaje && (
         <p className="text-red-500 text-sm mt-1">{errorMensaje}</p>
       )}
@@ -150,12 +132,16 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
         <p className="text-green-600 text-sm mt-1">{feedback}</p>
       )}
 
-      {/* Botones debajo del input */}
       {editando && (
         <div className="flex gap-2 mt-2 justify-end">
           <button
             onClick={handleGuardar}
-            className="px-4 py-1 bg-[var(--naranja-46)] text-[var(--blanco)] rounded-lg hover:bg-[var(--naranja)] transition cursor-pointer shadow-[var(--sombra)]"
+            disabled={!!errorMensaje || valorTemporal.trim() === ''} // 👈 NUEVO: deshabilita si hay error o está vacío
+            className={`px-4 py-1 rounded-lg transition cursor-pointer shadow-[var(--sombra)] ${
+              !!errorMensaje || valorTemporal.trim() === ''
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[var(--naranja-46)] text-[var(--blanco)] hover:bg-[var(--naranja)]'
+            }`}
           >
             Guardar
           </button>

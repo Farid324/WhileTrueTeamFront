@@ -18,8 +18,12 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
   const [errorMensaje, setErrorMensaje] = useState('');
 
   const validarTelefono = (telefono: string) => {
-    const soloNumeros = /^[0-9]*$/;
+    if (telefono.length === 0) {
+      setErrorMensaje('El teléfono no puede estar vacío.');
+      return false;
+    }
 
+    const soloNumeros = /^[0-9]*$/;
     if (!soloNumeros.test(telefono)) {
       setErrorMensaje('Formato inválido, ingrese solo números.');
       return false;
@@ -30,13 +34,11 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
       return false;
     }
 
-    // ✅ Nueva validación: debe comenzar con 6 o 7
     if (!/^[67]/.test(telefono)) {
       setErrorMensaje('El teléfono debe comenzar con 6 o 7.');
       return false;
     }
 
-    // Si todo está bien
     setErrorMensaje('');
     return true;
   };
@@ -50,7 +52,7 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
       await updateUserField('telefono', valorTemporal);
       setValor(valorTemporal);
       setEditando(false);
-      setCampoEnEdicion(null); // 👈 Limpiamos el campo en edición
+      setCampoEnEdicion(null);
       setFeedback('Teléfono actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
@@ -62,7 +64,7 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
     setValorTemporal(valor);
     setErrorMensaje('');
     setEditando(false);
-    setCampoEnEdicion(null); // 👈 Limpiamos el campo en edición
+    setCampoEnEdicion(null);
   };
 
   return (
@@ -77,12 +79,11 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
             const value = e.target.value;
             if (value.length <= 8) {
               setValorTemporal(value);
-              if (value.length === 8) validarTelefono(value);
-              //validarTelefono(value); // Valida mientras se escribe
+              validarTelefono(value); // ✅ siempre validar mientras escribe
             }
           }}
           readOnly={!editando}
-          placeholder={editando ? "Ingresar número de teléfono" : ""}
+          placeholder={editando ? 'Ingresar número de teléfono' : ''}
           className={`w-full border-2 rounded-md px-10 py-2 focus:outline-none focus:ring-1 shadow-[0_4px_10px_rgba(0,0,0,0.4)] ${
             editando
               ? 'bg-white border-[var(--azul-oscuro)] ring-[var(--azul-oscuro)]'
@@ -109,7 +110,6 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
         )}
       </div>
 
-      {/* Mensajes de error o éxito */}
       {errorMensaje && (
         <p className="text-red-500 text-sm mt-1">{errorMensaje}</p>
       )}
@@ -121,7 +121,12 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
         <div className="flex gap-2 mt-2 justify-end">
           <button
             onClick={handleGuardar}
-            className="px-4 py-1 bg-[var(--naranja-46)] text-[var(--blanco)] rounded-lg hover:bg-[var(--naranja)] transition cursor-pointer shadow-[var(--sombra)]"
+            disabled={!!errorMensaje || valorTemporal.trim() === ''} // 👈 NUEVO: error o vacío
+            className={`px-4 py-1 rounded-lg transition cursor-pointer shadow-[var(--sombra)] ${
+              !!errorMensaje || valorTemporal.trim() === ''
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[var(--naranja-46)] text-[var(--blanco)] hover:bg-[var(--naranja)]'
+            }`}
           >
             Guardar
           </button>
