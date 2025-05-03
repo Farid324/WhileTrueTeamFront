@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Upload } from "lucide-react";
 
 interface Props {
   onNext: (data: {
     placa: string;
     soat: string;
     imagenes: File[];
+    id_vehiculo: number;
   }) => void;
   onClose: () => void;
 }
@@ -25,6 +26,7 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const validarPlaca = (valor: string) => {
     const match = valor.match(/^(\d{3,4})([A-Z]{3})$/);
@@ -33,7 +35,7 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     return numero >= 0 && numero <= 6399;
   };
 
-  const validarSOAT = (valor: string) => /^[A-Z0-9]{6,10}$/.test(valor);
+  const validarSOAT = (valor: string) => /^[A-Z0-9]{8,12}$/.test(valor);
 
   const camposValidos = () =>
     validarPlaca(placa) &&
@@ -64,6 +66,13 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
         ["image/jpeg", "image/png"].includes(file.type) &&
         file.size <= 5 * 1024 * 1024
     );
+
+    if (validFiles.length !== files.length) {
+      setErrors((prev) => ({
+        ...prev,
+        imagenes: "Solo se permiten imágenes JPG/PNG de hasta 5MB"
+      }));
+    }
 
     const totalImagenes = [...imagenes, ...validFiles];
 
@@ -107,6 +116,11 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     if (e.dataTransfer.files) {
       agregarImagenes(Array.from(e.dataTransfer.files));
     }
+    
+    // Reset input value to allow uploading the same file again if needed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleRemoveImage = (index: number) => {
@@ -122,31 +136,52 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const nuevosErrores: typeof errors = {};
-
+  
     if (!validarPlaca(placa)) nuevosErrores.placa = "Formato de placa inválido";
     if (!validarSOAT(soat)) nuevosErrores.soat = "Formato de seguro inválido";
-
-    if (imagenes.length > 6) {
-      nuevosErrores.imagenes = "Solo puedes subir hasta 6 imágenes del auto";
-    } else if (
-      imagenes.some(
-        (img) => !["image/jpeg", "image/png"].includes(img.type)
-      )
-    ) {
-      nuevosErrores.imagenes = "Formato de imagen inválido";
-    } else if (imagenes.length < 3) {
-      nuevosErrores.imagenes =
-        "Debes subir al menos 3 imágenes del auto (frontal, lateral y trasera)";
+    if (imagenes.length < 3 || imagenes.length > 6) {
+      nuevosErrores.imagenes = "Debes subir entre 3 y 6 imágenes";
     }
-
+  
     setErrors(nuevosErrores);
-
-    if (Object.keys(nuevosErrores).length === 0) {
-      onNext({ placa, soat, imagenes });
+  
+    if (Object.keys(nuevosErrores).length > 0) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No se encontró el token de autenticación.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("placa", placa);
+    formData.append("soat", soat);
+    imagenes.forEach((file) => formData.append("imagenes", file));
+  
+    try {
+      const response = await fetch("http://localhost:3001/registro-vehiculo", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+  
+      const data = await response.json();
+      if (response.ok && data.vehiculo?.id_vehiculo) {
+        onNext({ placa, soat, imagenes, id_vehiculo: data.vehiculo.id_vehiculo });
+      }
+      else {
+        alert(data.message || "Error al registrar vehículo");
+      }
+    } catch (error) {
+      console.error("Error al enviar los datos del vehículo:", error);
+      alert("Error de red o servidor.");
     }
   };
+  
 
   useEffect(() => {
     return () => {
@@ -154,7 +189,7 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
         URL.revokeObjectURL(URL.createObjectURL(img))
       );
     };
-  }, [imagenes]);
+  }, []);
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
@@ -254,8 +289,11 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            Subir imagen / Arrastra aquí
+            <Upload className="mx-auto mb-2 w-6 h-6" />
+            <p className="font-medium">Subir imágenes del vehículo</p>
+            <p className="text-xs text-gray-500">Haz clic o arrastra aquí tus imágenes</p>
           </div>
+          
           <input
             ref={fileInputRef}
             type="file"
@@ -264,6 +302,7 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
             onChange={handleImagenesChange}
             className="hidden"
           />
+          
           {errors.imagenes ? (
             <p className="text-sm text-red-500 mt-2">{errors.imagenes}</p>
           ) : (
@@ -272,29 +311,35 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
             </p>
           )}
 
-          <div className="flex flex-wrap mt-3 gap-3">
-            {imagenes.map((img, idx) => {
-              const src = URL.createObjectURL(img);
-              return (
-                <div key={`${idx}-${img.name}`} className="relative w-20 h-20">
-                  <img
-                    src={src}
-                    alt={`imagen-${idx}`}
-                    onClick={() => setPreviewImg(src)}
-                    className="object-cover w-full h-full rounded border border-gray-300 cursor-pointer"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(idx)}
-                    title="Eliminar imagen"
-                    className="absolute -top-2 -right-2 bg-[#11295B] text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
-                  >
-                    <X size={12} />
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {/* Vista previa de imágenes */}
+          {imagenes.length > 0 && (
+            <div className="flex flex-wrap mt-3 gap-3">
+              {imagenes.map((img, idx) => {
+                const src = URL.createObjectURL(img);
+                return (
+                  <div key={`${idx}-${img.name}`} className="relative w-20 h-20">
+                    <img
+                      src={src}
+                      alt={`imagen-${idx}`}
+                      onClick={() => setPreviewImg(src)}
+                      className="object-cover w-full h-full rounded border border-gray-300 cursor-pointer"
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveImage(idx);
+                      }}
+                      title="Eliminar imagen"
+                      className="absolute -top-2 -right-2 bg-[#11295B] text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Botón Siguiente */}
@@ -324,7 +369,10 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
               className="w-full h-auto rounded-xl shadow-xl"
             />
             <button
-              onClick={() => setPreviewImg(null)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setPreviewImg(null);
+              }}
               title="Cerrar imagen"
               className="absolute top-2 right-2 text-white text-xl bg-[#11295B]/70 hover:bg-[#11295B] rounded-full w-8 h-8 flex items-center justify-center transition-colors"
             >
