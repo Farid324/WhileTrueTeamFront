@@ -6,9 +6,11 @@ import UserIcon from '@/app/components/Icons/User';
 
 interface Props {
   initialValue: string;
+  campoEnEdicion: string | null; // 👈 nuevo prop
+  setCampoEnEdicion: (campo: string | null) => void; // 👈 nuevo prop
 }
 
-export default function NombreEditable({ initialValue }: Props) {
+export default function NombreEditable({ initialValue, campoEnEdicion, setCampoEnEdicion }: Props) {
   const [valor, setValor] = useState(initialValue);
   const [editando, setEditando] = useState(false);
   const [valorTemporal, setValorTemporal] = useState(initialValue);
@@ -19,7 +21,6 @@ export default function NombreEditable({ initialValue }: Props) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nuevoValor = e.target.value;
 
-    // No dejar escribir más de 50 caracteres
     if (nuevoValor.length > 50) {
       setErrorMensaje('El nombre no puede superar los 50 caracteres.');
       return;
@@ -27,26 +28,22 @@ export default function NombreEditable({ initialValue }: Props) {
 
     setValorTemporal(nuevoValor);
 
-    // Validación mínimo 3 caracteres
     if (nuevoValor.length > 0 && nuevoValor.length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
       return;
     }
 
-    // Validación solo letras y espacios
     const soloLetrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
     if (!soloLetrasRegex.test(nuevoValor)) {
       setErrorMensaje('El nombre solo puede contener letras y espacios.');
       return;
     }
 
-    // Validar múltiples espacios consecutivos
     if (/\s{2,}/.test(nuevoValor)) {
       setErrorMensaje('El nombre no debe contener más de un espacio entre palabras.');
       return;
     }
 
-    // Validar si empieza o termina con espacio
     if (/^\s|\s$/.test(nuevoValor)) {
       setErrorMensaje('El nombre no debe comenzar ni terminar con espacios.');
       return;
@@ -59,7 +56,6 @@ export default function NombreEditable({ initialValue }: Props) {
   const handleGuardar = async () => {
     const nombreAValidar = valorTemporal.trim();
 
-    // --- Replicar validaciones antes de enviar ---
     if (nombreAValidar.length < 3) {
       setErrorMensaje('El nombre debe tener al menos 3 caracteres.');
       return;
@@ -76,16 +72,16 @@ export default function NombreEditable({ initialValue }: Props) {
       return;
     }
 
-    if (/^\s|\s$/.test(valorTemporal)) {
+    if (/^\s|\s$/.test(nombreAValidar)) {
       setErrorMensaje('El nombre no debe comenzar ni terminar con espacios.');
       return;
     }
 
-    // --- Si todo está bien ---
     try {
       await updateUserField('nombre_completo', nombreAValidar);
       setValor(nombreAValidar);
       setEditando(false);
+      setCampoEnEdicion(null); // ✅ liberamos edición global
       setFeedback('Nombre actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
@@ -94,10 +90,11 @@ export default function NombreEditable({ initialValue }: Props) {
   };
 
   const handleCancelar = () => {
-    setValorTemporal(valor); // Restaurar original
+    setValorTemporal(valor);
     setEditando(false);
     setErrorMensaje('');
     setFeedback('');
+    setCampoEnEdicion(null); // ✅ liberamos edición global
   };
 
   return (
@@ -119,7 +116,7 @@ export default function NombreEditable({ initialValue }: Props) {
           }`}
         />
 
-        {/* Ícono izquierdo */}
+        {/* Ícono izquierdo (sin cambios) */}
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#11295B]">
           <UserIcon />
         </div>
@@ -127,8 +124,15 @@ export default function NombreEditable({ initialValue }: Props) {
         {/* Ícono derecho (Pencil) */}
         {!editando && (
           <div
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer"
-            onClick={() => setEditando(true)}
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer ${
+              campoEnEdicion && campoEnEdicion !== 'nombre' ? 'opacity-50 pointer-events-none' : ''
+            }`}
+            onClick={() => {
+              if (!campoEnEdicion) {
+                setEditando(true);
+                setCampoEnEdicion('nombre'); // ✅ marcamos como en edición
+              }
+            }}
           >
             <MdiPencil />
           </div>
