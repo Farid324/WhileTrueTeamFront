@@ -12,18 +12,20 @@ interface Props {
     imagenes: File[];
   };
   paymentData: {
-    cardNumber: string;
-    expiration: string;
-    cvv: string;
-    cardHolder: string;
+    cardNumber?: string;
+    expiration?: string;
+    cvv?: string;
+    cardHolder?: string;
+    qrImage?: File | null;
+    efectivoDetalle?: string;
   };
 }
 
-const CompleteProfileModal: React.FC<Props> = ({ 
-  onComplete, 
-  onClose, 
-  vehicleData, 
-  paymentData 
+const CompleteProfileModal: React.FC<Props> = ({
+  onComplete,
+  onClose,
+  vehicleData,
+  paymentData,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,57 +35,89 @@ const CompleteProfileModal: React.FC<Props> = ({
   const handleComplete = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
-      // Simular envío de datos al backend (reemplazar con tu lógica real)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Éxito
-      setSuccess(true);
-      
-      // Cerrar después de mostrar éxito
-      setTimeout(() => {
-        onComplete();
-      }, 2000);
-      
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No se encontró el token de autenticación.");
+        setIsLoading(false);
+        return;
+      }
+
+      const formData = new FormData();
+
+      // Vehículo
+      formData.append("placa", vehicleData.placa);
+      formData.append("soat", vehicleData.soat);
+      vehicleData.imagenes.forEach((img) => formData.append("imagenes", img));
+
+      // Método de pago
+      if (paymentData.cardNumber) {
+        formData.append("tipo", "card");
+        formData.append("numero_tarjeta", paymentData.cardNumber);
+        formData.append("fecha_expiracion", paymentData.expiration ?? "");
+        formData.append("cvv", paymentData.cvv ?? "");
+        formData.append("titular", paymentData.cardHolder ?? "");
+      } else if (paymentData.qrImage) {
+        formData.append("tipo", "qr");
+        formData.append("qrImage", paymentData.qrImage);
+      } else if (paymentData.efectivoDetalle) {
+        formData.append("tipo", "cash");
+        formData.append("detalles_metodo", paymentData.efectivoDetalle);
+      }
+
+      const response = await fetch("http://localhost:3001/api/registro-host", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSuccess(true);
+        setTimeout(() => {
+          onComplete();
+        }, 2000);
+      } else {
+        setError(result.message || "Ocurrió un error al registrar.");
+      }
     } catch (err) {
-      setError("Error al completar el registro. Inténtalo de nuevo.");
+      console.error("❌ Error al enviar datos:", err);
+      setError("Error de red o servidor.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Función mejorada para cerrar al hacer clic en el overlay
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && !isLoading) {
       onClose();
     }
   };
 
-  // Agregar manejo de la tecla Escape para cerrar el modal
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !isLoading) {
         onClose();
       }
     };
-    
     window.addEventListener("keydown", handleEscapeKey);
-    
     return () => {
       window.removeEventListener("keydown", handleEscapeKey);
     };
   }, [onClose, isLoading]);
 
-  // Mostrar solo los últimos 4 dígitos de la tarjeta
-  const maskedCardNumber = paymentData.cardNumber.replace(/\s/g, "").replace(/\d(?=\d{4})/g, "•");
+  const maskedCardNumber = paymentData.cardNumber?.replace(/\s/g, "").replace(/\d(?=\d{4})/g, "•") ?? "";
 
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40"
       onClick={handleOverlayClick}
     >
-      <div 
+      <div
         ref={modalRef}
         className="bg-white text-[#11295B] p-10 rounded-3xl shadow-2xl max-w-xl w-full relative"
       >
@@ -112,7 +146,6 @@ const CompleteProfileModal: React.FC<Props> = ({
           </div>
         ) : (
           <>
-            {/* Resumen de datos del vehículo */}
             <div className="mb-6 bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold text-lg mb-2 text-[#11295B]">Datos del vehículo</h3>
               <div className="grid grid-cols-2 gap-2">
@@ -121,58 +154,56 @@ const CompleteProfileModal: React.FC<Props> = ({
                   <p className="font-semibold">{vehicleData.placa}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Número de seguro</p>
+                  <p className="text-gray-500 text-sm">SOAT</p>
                   <p className="font-semibold">{vehicleData.soat}</p>
                 </div>
                 <div className="col-span-2">
                   <p className="text-gray-500 text-sm">Imágenes</p>
-                  <p className="font-semibold">{vehicleData.imagenes.length} imágenes cargadas</p>
+                  <p className="font-semibold">{vehicleData.imagenes.length} imágenes</p>
                 </div>
               </div>
             </div>
 
-            {/* Resumen de datos de pago */}
             <div className="mb-8 bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold text-lg mb-2 text-[#11295B]">Método de pago</h3>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="col-span-2">
-                  <p className="text-gray-500 text-sm">Tarjeta</p>
-                  <p className="font-semibold">{maskedCardNumber}</p>
+              {paymentData.cardNumber ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="col-span-2">
+                    <p className="text-gray-500 text-sm">Tarjeta</p>
+                    <p className="font-semibold">{maskedCardNumber}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Expira</p>
+                    <p className="font-semibold">{paymentData.expiration}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Titular</p>
+                    <p className="font-semibold">{paymentData.cardHolder}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Expiración</p>
-                  <p className="font-semibold">{paymentData.expiration}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Titular</p>
-                  <p className="font-semibold">{paymentData.cardHolder}</p>
-                </div>
-              </div>
+              ) : paymentData.qrImage ? (
+                <p className="font-semibold text-sm">Pago con QR</p>
+              ) : (
+                <p className="font-semibold text-sm">Pago en efectivo</p>
+              )}
             </div>
 
-            {error && (
-              <div className="bg-red-50 text-red-500 p-3 rounded-lg mb-4 text-sm">
-                {error}
-              </div>
-            )}
+            {error && <div className="bg-red-100 text-red-600 text-sm p-3 rounded mb-4">{error}</div>}
 
             <div className="flex gap-4">
-              {/* Botón Cancelar */}
               <button
                 onClick={onClose}
                 disabled={isLoading}
                 className="w-1/3 border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold text-lg transition-all hover:bg-gray-100"
-                type="button"
               >
                 Cancelar
               </button>
-              
               <button
                 onClick={handleComplete}
                 disabled={isLoading}
-                className={`w-2/3 text-white py-3 rounded-xl font-semibold text-lg transition-all 
-                  ${isLoading ? "bg-[#FCA311]/60 cursor-wait" : "bg-[#FCA311] hover:bg-[#e29510]"}`}
-                type="button"
+                className={`w-2/3 text-white py-3 rounded-xl font-semibold text-lg transition-all ${
+                  isLoading ? "bg-[#FCA311]/60 cursor-wait" : "bg-[#FCA311] hover:bg-[#e29510]"
+                }`}
               >
                 {isLoading ? "Procesando..." : "Confirmar y finalizar"}
               </button>
@@ -185,3 +216,4 @@ const CompleteProfileModal: React.FC<Props> = ({
 };
 
 export default CompleteProfileModal;
+

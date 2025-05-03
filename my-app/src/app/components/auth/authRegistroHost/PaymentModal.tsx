@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { X, CreditCard, QrCode, Trash2, ZoomIn, DollarSign } from "lucide-react";
+import { X, CreditCard, QrCode, ZoomIn, DollarSign, Trash2 } from "lucide-react";
 
 interface Props {
   onClose: () => Promise<void>;
   onNext: (data: {
+    tipo: "card" | "qr" | "cash";
     cardNumber?: string;
     expiration?: string;
     cvv?: string;
@@ -30,18 +31,23 @@ export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
+
     if (!termsAccepted) newErrors.terms = "Debes aceptar los términos";
 
     if (selectedOption === "card") {
       const num = cardNumber.replace(/\s/g, "");
-      if (!/^[0-9]{16}$/.test(num)) newErrors.cardNumber = "Ingresa los 16 dígitos de su tarjeta sin espacios";
+      if (!/^\d{16}$/.test(num)) newErrors.cardNumber = "Ingresa los 16 dígitos de tu tarjeta";
       if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) newErrors.expiryDate = "Fecha inválida (MM/YY)";
-      if (!/^[0-9]{3,4}$/.test(cvv)) newErrors.cvv = "CVV inválido (3 o 4 dígitos)";
+      if (!/^\d{3,4}$/.test(cvv)) newErrors.cvv = "CVV inválido (3 o 4 dígitos)";
       if (!cardHolder.trim()) newErrors.cardHolder = "Nombre del titular requerido";
     } else if (selectedOption === "qr") {
-      if (!qrImage) newErrors.qrImage = "Formato de imagen inválido.";
+      if (!qrImage) {
+        newErrors.qrImage = "Debes subir una imagen QR";
+      } else if (!/\.(jpg|jpeg|png)$/i.test(qrImage.name)) {
+        newErrors.qrImage = "Formato inválido. Solo .jpg, .jpeg o .png";
+      }
     } else if (selectedOption === "cash") {
-      if (!cashDetail.trim()) newErrors.cashDetail = "Formato incorrecto, ingrese montos enteros";
+      if (!cashDetail.trim()) newErrors.cashDetail = "Debes proporcionar una descripción para el efectivo";
     } else {
       newErrors.method = "Selecciona una forma de pago";
     }
@@ -52,24 +58,46 @@ export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
 
   const handleSubmit = () => {
     if (!validate()) return;
+
     if (selectedOption === "card") {
-      onNext({ cardNumber, expiration: expiryDate, cvv, cardHolder });
+      onNext({
+        tipo: "card",
+        cardNumber,
+        expiration: expiryDate,
+        cvv,
+        cardHolder,
+      });
     } else if (selectedOption === "qr") {
-      onNext({ qrImage });
+      onNext({
+        tipo: "qr",
+        qrImage,
+      });
     } else if (selectedOption === "cash") {
-      onNext({ efectivoDetalle: cashDetail });
+      onNext({
+        tipo: "cash",
+        efectivoDetalle: cashDetail,
+      });
     }
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      setQrImage(file);
-      setPreviewImg(URL.createObjectURL(file));
-      setErrors((prev) => ({ ...prev, qrImage: "" }));
-    }
-  };
+      e.preventDefault();
+      const file = e.dataTransfer.files?.[0];
+      if (file) {
+        setQrImage(file);
+        setPreviewImg(URL.createObjectURL(file));
+        setErrors((prev) => ({ ...prev, qrImage: "" }));
+      }
+    };
+  
+    const handleDeleteImage = () => {
+      setQrImage(null);
+      setPreviewImg(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''; // 🛠️ Forzar reset para permitir re-subir la misma imagen
+      }
+    };
+    
 
   const handleQrImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -80,15 +108,24 @@ export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
     }
   };
 
-  const handleDeleteImage = () => {
+  const handleCancel = async () => {
+    setSelectedOption(null);
+    setCardNumber("");
+    setExpiryDate("");
+    setCvv("");
+    setCardHolder("");
     setQrImage(null);
     setPreviewImg(null);
+    setCashDetail("");
+    setErrors({});
+    setTermsAccepted(false);
+    await onClose(); // ← esto eliminará el vehículo si el usuario cancela
   };
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
       <div className="bg-white p-10 rounded-3xl shadow-2xl max-w-xl w-full relative text-[#11295B]">
-        <button onClick={onClose} className="absolute right-6 top-6 hover:text-red-500 transition">
+        <button onClick={handleCancel} className="absolute right-6 top-6 hover:text-red-500 transition">
           <X size={24} />
         </button>
 
@@ -122,27 +159,66 @@ export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
 
           {/* QR */}
           <div className={`rounded-xl shadow-md border-[1.5px] ${selectedOption === "qr" ? "border-[#11295B]" : "border-gray-300"}`}>
-            <div className="flex items-center pl-4 py-3 border-b cursor-pointer" onClick={() => setSelectedOption("qr")}> 
+            <div
+              className="flex items-center pl-4 py-3 border-b cursor-pointer"
+              onClick={() => setSelectedOption("qr")}
+            >
               <input type="radio" checked={selectedOption === "qr"} readOnly className="mr-2 accent-[#11295B]" />
-              <label className="text-sm font-medium flex items-center"><QrCode size={16} className="mr-1" /> Imagen de QR</label>
+              <label className="text-sm font-medium flex items-center">
+                <QrCode size={16} className="mr-1" /> Imagen de QR
+              </label>
             </div>
+
             {selectedOption === "qr" && (
               <div className="p-4">
-                <div onDrop={handleDrop} onDragOver={(e) => e.preventDefault()} onClick={() => fileInputRef.current?.click()} className={`relative w-32 h-24 border-[1.5px] border-dashed rounded-xl bg-gray-50 flex items-center justify-center cursor-pointer hover:bg-gray-100 ${errors.qrImage ? "border-[#DC2626]" : "border-[#11295B]"}`}>
+                <label className="block font-semibold mb-1 text-[#11295B]">Imagen QR</label>
+                <p className="text-sm text-gray-600 mb-2">Asegúrate que el código sea legible</p>
+
+                <div
+                  className={`relative w-32 h-24 border-[1.5px] border-dashed rounded-xl text-center flex items-center justify-center cursor-pointer transition-all duration-200 ${
+                    errors.qrImage ? "border-[#DC2626]" : "border-[#11295B] hover:bg-gray-100"
+                  }`}
+                  onClick={() => fileInputRef.current?.click()}
+                  onDrop={handleDrop}
+                  onDragOver={(e) => e.preventDefault()}
+                >
                   {previewImg ? (
                     <>
                       <img src={previewImg} alt="QR" className="w-full h-full object-contain rounded" />
-                      <ZoomIn className="absolute bottom-1 right-1 text-white bg-black/50 rounded-full w-4 h-4" />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setQrImage(null);
+                          setPreviewImg(null);
+                        }}
+                        className="absolute top-1 right-1 bg-[#11295B] p-1 rounded-full hover:bg-[#11295B]"
+                        title="Eliminar imagen"
+                      >
+                        <X size={14} className="text-white" />
+                      </button>
                     </>
                   ) : (
                     <QrCode size={24} className="text-gray-400" />
                   )}
                 </div>
-                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleQrImageChange} className="hidden" />
-                {errors.qrImage && <p className="text-sm text-[#DC2626] text-center mt-2">{errors.qrImage}</p>}
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleQrImageChange}
+                  className="hidden"
+                />
+
+                {errors.qrImage ? (
+                  <p className="text-sm text-[#DC2626] text-center mt-2">{errors.qrImage}</p>
+                ) : (
+                  <p className="text-xs text-gray-500 mt-2">*Solo formatos .jpg, .jpeg o .png</p>
+                )}
               </div>
             )}
           </div>
+
 
           {/* EFECTIVO */}
           <div className={`rounded-xl shadow-md border-[1.5px] ${selectedOption === "cash" ? "border-[#11295B]" : "border-gray-300"}`}>
