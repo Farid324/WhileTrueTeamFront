@@ -1,491 +1,176 @@
-// PaymentRegistrationModal.tsx
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { X, CheckCircle, CreditCard, DollarSign, QrCode, Trash2 } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { X, CreditCard, QrCode, Trash2, ZoomIn, DollarSign } from "lucide-react";
 
 interface Props {
   onClose: () => Promise<void>;
   onNext: (data: {
-    cardNumber: string;
-    expiration: string;
-    cvv: string;
-    cardHolder: string;
+    cardNumber?: string;
+    expiration?: string;
+    cvv?: string;
+    cardHolder?: string;
+    qrImage?: File | null;
+    efectivoDetalle?: string;
   }) => void;
 }
 
 export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
-  const [selectedOption, setSelectedOption] = useState<"card" | "other" | "qr">("card");
+  const [selectedOption, setSelectedOption] = useState<"card" | "qr" | "cash" | null>(null);
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [cardHolder, setCardHolder] = useState("");
-  const [otherOption, setOtherOption] = useState("");
   const [qrImage, setQrImage] = useState<File | null>(null);
+  const [cashDetail, setCashDetail] = useState("");
   const [previewImg, setPreviewImg] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [errors, setErrors] = useState<{
-    cardNumber?: string;
-    expiryDate?: string;
-    cvv?: string;
-    cardHolder?: string;
-    otherOption?: string;
-    qrImage?: string;
-    terms?: string;
-  }>({});
-
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !isLoading) handleCancel();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isLoading]);
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget && !isLoading) handleCancel();
-  };
-
-  const handleCancel = async () => {
-    try {
-      const idVehiculo = localStorage.getItem("id_vehiculo");
-      const token = localStorage.getItem("token");
-      if (idVehiculo && token) {
-        await fetch(`http://localhost:3001/api/vehiculos/eliminar-vehiculo/${idVehiculo}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        localStorage.removeItem("id_vehiculo");
-      }
-    } catch (err) {
-      console.error("Error al eliminar vehículo:", err);
-    } finally {
-      await onClose();
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors: typeof errors = {};
-    let isValid = true;
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!termsAccepted) newErrors.terms = "Debes aceptar los términos";
 
     if (selectedOption === "card") {
-      if (!cardNumber) {
-        newErrors.cardNumber = "Campo requerido";
-        isValid = false;
-      } else if (!/^\d{4} \d{4} \d{4} \d{4}$/.test(cardNumber)) {
-        newErrors.cardNumber = "Número de tarjeta inválido";
-        isValid = false;
-      }
-      if (!expiryDate || !/^\d{2}\/\d{2}$/.test(expiryDate)) {
-        newErrors.expiryDate = "Fecha inválida";
-        isValid = false;
-      }
-      if (!cvv || !/^\d{3,4}$/.test(cvv)) {
-        newErrors.cvv = "CVV inválido";
-        isValid = false;
-      }
-      if (!cardHolder || cardHolder.trim().length < 3) {
-        newErrors.cardHolder = "Nombre inválido";
-        isValid = false;
-      }
-    }
-
-    if (selectedOption === "other" && !otherOption.trim()) {
-      newErrors.otherOption = "Campo requerido";
-      isValid = false;
-    }
-
-    if (selectedOption === "qr" && !qrImage) {
-      newErrors.qrImage = "Imagen requerida";
-      isValid = false;
-    }
-
-    if (!termsAccepted) {
-      newErrors.terms = "Debes aceptar los términos y condiciones";
-      isValid = false;
+      const num = cardNumber.replace(/\s/g, "");
+      if (!/^[0-9]{16}$/.test(num)) newErrors.cardNumber = "Ingresa los 16 dígitos de su tarjeta sin espacios";
+      if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) newErrors.expiryDate = "Fecha inválida (MM/YY)";
+      if (!/^[0-9]{3,4}$/.test(cvv)) newErrors.cvv = "CVV inválido (3 o 4 dígitos)";
+      if (!cardHolder.trim()) newErrors.cardHolder = "Nombre del titular requerido";
+    } else if (selectedOption === "qr") {
+      if (!qrImage) newErrors.qrImage = "Formato de imagen inválido.";
+    } else if (selectedOption === "cash") {
+      if (!cashDetail.trim()) newErrors.cashDetail = "Formato incorrecto, ingrese montos enteros";
+    } else {
+      newErrors.method = "Selecciona una forma de pago";
     }
 
     setErrors(newErrors);
-    return isValid;
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-    setIsLoading(true);
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("No se encontró el token de autenticación");
-      setIsLoading(false);
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("tipo", selectedOption);
-
+  const handleSubmit = () => {
+    if (!validate()) return;
     if (selectedOption === "card") {
-      formData.append("numero_tarjeta", cardNumber.replace(/\s/g, ""));
-      formData.append("fecha_expiracion", expiryDate);
-      formData.append("titular", cardHolder);
-    } else if (selectedOption === "other") {
-      formData.append("detalles_metodo", otherOption);
-    } else if (selectedOption === "qr" && qrImage) {
-      formData.append("imagen_qr", qrImage);
-    }
-
-    try {
-      const res = await fetch("http://localhost:3001/api/pagos", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        onNext({ cardNumber, expiration: expiryDate, cvv, cardHolder });
-      } else {
-        alert(data.message || "Error al guardar método de pago");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
+      onNext({ cardNumber, expiration: expiryDate, cvv, cardHolder });
+    } else if (selectedOption === "qr") {
+      onNext({ qrImage });
+    } else if (selectedOption === "cash") {
+      onNext({ efectivoDetalle: cashDetail });
     }
   };
 
-  const formatCardNumber = (value: string) => value.replace(/\D/g, "").substring(0, 16).replace(/(\d{4})(?=\d)/g, "$1 ");
-  const formatExpiryDate = (value: string) => {
-    const cleaned = value.replace(/\D/g, "").substring(0, 4);
-    return cleaned.length > 2 ? `${cleaned.slice(0, 2)}/${cleaned.slice(2)}` : cleaned;
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setQrImage(file);
+      setPreviewImg(URL.createObjectURL(file));
+      setErrors((prev) => ({ ...prev, qrImage: "" }));
+    }
+  };
+
+  const handleQrImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setQrImage(file);
+      setPreviewImg(URL.createObjectURL(file));
+      setErrors((prev) => ({ ...prev, qrImage: "" }));
+    }
   };
 
   const handleDeleteImage = () => {
     setQrImage(null);
     setPreviewImg(null);
-    setErrors((prev) => ({ ...prev, qrImage: undefined }));
   };
 
-  const handleQrImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    if (file) {
-      setQrImage(file);
-      setPreviewImg(URL.createObjectURL(file));
-      setErrors((prev) => ({ ...prev, qrImage: undefined }));
-    } else {
-      setQrImage(null);
-      setPreviewImg(null);
-      setErrors((prev) => ({ ...prev, qrImage: "Imagen requerida" }));
-    }
-  };
-
-  const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCvv(e.target.value.replace(/\D/g, "").substring(0, 4));
-  };
-
-  const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExpiryDate(formatExpiryDate(e.target.value));
-  };
-
-  const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardHolder(e.target.value);
-  };
-
-  
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      onClick={handleOverlayClick}
-    >
-      <div 
-        ref={modalRef}
-        className="bg-white rounded-3xl shadow-xl w-full max-w-md relative p-6 text-[#11295B]"
-      >
-        {/* Botón de cerrar */}
-        <button 
-          onClick={handleCancel}
-          className="absolute right-6 top-6 text-[#11295B] hover:text-red-500 transition-colors"
-          disabled={isLoading}
-          aria-label="Cerrar"
-        >
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
+      <div className="bg-white p-10 rounded-3xl shadow-2xl max-w-xl w-full relative text-[#11295B]">
+        <button onClick={onClose} className="absolute right-6 top-6 hover:text-red-500 transition">
           <X size={24} />
         </button>
 
-        {/* Cabecera */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-center text-[#11295B]">Bienvenido a</h2>
-          <h1 className="text-3xl font-bold text-center text-[#FCA311] mb-2">REDIBO</h1>
-          <p className="text-center text-sm text-gray-600">Elige cómo recibir el pago de tus rentas</p>
+        <h2 className="text-lg font-semibold text-center">Bienvenido a</h2>
+        <h1 className="text-3xl font-bold text-center text-[#FCA311] mb-1">REDIBO</h1>
+        <h3 className="text-xl font-semibold text-center mb-2">FORMAS DE PAGO</h3>
+        <p className="text-center text-sm text-gray-600 mb-6">Elige cómo recibir el pago de tus rentas</p>
+
+        <div className="space-y-6">
+          {/* TARJETA */}
+          <div className={`rounded-xl shadow-md border-[1.5px] ${selectedOption === "card" ? "border-[#11295B]" : "border-gray-300"}`}>
+            <div className="flex items-center pl-4 py-3 border-b cursor-pointer" onClick={() => setSelectedOption("card")}> 
+              <input type="radio" checked={selectedOption === "card"} readOnly className="mr-2 accent-[#11295B]" />
+              <label className="text-sm font-medium flex items-center"><CreditCard size={16} className="mr-1" /> Número de tarjeta</label>
+            </div>
+            {selectedOption === "card" && (
+              <div className="p-4 space-y-3">
+                <input value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} placeholder="1111 2222 3333 4444" className={`w-full border-[1.5px] rounded-lg px-4 py-3 text-sm outline-none ${errors.cardNumber ? "border-[#DC2626] text-[#DC2626] placeholder-[#DC2626]" : "border-[#11295B]"}`} />
+                {errors.cardNumber && <p className="text-sm text-[#DC2626] text-center -mt-2">{errors.cardNumber}</p>}
+                <div className="grid grid-cols-2 gap-2">
+                  <input value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} placeholder="MM/YY" className={`border-[1.5px] rounded-lg px-4 py-3 text-sm outline-none ${errors.expiryDate ? "border-[#DC2626] text-[#DC2626] placeholder-[#DC2626]" : "border-[#11295B]"}`} />
+                  <input value={cvv} onChange={(e) => setCvv(e.target.value)} placeholder="CVV" className={`border-[1.5px] rounded-lg px-4 py-3 text-sm outline-none ${errors.cvv ? "border-[#DC2626] text-[#DC2626] placeholder-[#DC2626]" : "border-[#11295B]"}`} />
+                </div>
+                {errors.expiryDate && <p className="text-sm text-[#DC2626] text-center -mt-2">{errors.expiryDate}</p>}
+                {errors.cvv && <p className="text-sm text-[#DC2626] text-center -mt-2">{errors.cvv}</p>}
+                <input value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} placeholder="Nombre del titular" className={`w-full border-[1.5px] rounded-lg px-4 py-3 text-sm outline-none ${errors.cardHolder ? "border-[#DC2626] text-[#DC2626] placeholder-[#DC2626]" : "border-[#11295B]"}`} />
+                {errors.cardHolder && <p className="text-sm text-[#DC2626] text-center -mt-2">{errors.cardHolder}</p>}
+              </div>
+            )}
+          </div>
+
+          {/* QR */}
+          <div className={`rounded-xl shadow-md border-[1.5px] ${selectedOption === "qr" ? "border-[#11295B]" : "border-gray-300"}`}>
+            <div className="flex items-center pl-4 py-3 border-b cursor-pointer" onClick={() => setSelectedOption("qr")}> 
+              <input type="radio" checked={selectedOption === "qr"} readOnly className="mr-2 accent-[#11295B]" />
+              <label className="text-sm font-medium flex items-center"><QrCode size={16} className="mr-1" /> Imagen de QR</label>
+            </div>
+            {selectedOption === "qr" && (
+              <div className="p-4">
+                <div onDrop={handleDrop} onDragOver={(e) => e.preventDefault()} onClick={() => fileInputRef.current?.click()} className={`relative w-32 h-24 border-[1.5px] border-dashed rounded-xl bg-gray-50 flex items-center justify-center cursor-pointer hover:bg-gray-100 ${errors.qrImage ? "border-[#DC2626]" : "border-[#11295B]"}`}>
+                  {previewImg ? (
+                    <>
+                      <img src={previewImg} alt="QR" className="w-full h-full object-contain rounded" />
+                      <ZoomIn className="absolute bottom-1 right-1 text-white bg-black/50 rounded-full w-4 h-4" />
+                    </>
+                  ) : (
+                    <QrCode size={24} className="text-gray-400" />
+                  )}
+                </div>
+                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleQrImageChange} className="hidden" />
+                {errors.qrImage && <p className="text-sm text-[#DC2626] text-center mt-2">{errors.qrImage}</p>}
+              </div>
+            )}
+          </div>
+
+          {/* EFECTIVO */}
+          <div className={`rounded-xl shadow-md border-[1.5px] ${selectedOption === "cash" ? "border-[#11295B]" : "border-gray-300"}`}>
+            <div className="flex items-center pl-4 py-3 border-b cursor-pointer" onClick={() => setSelectedOption("cash")}> 
+              <input type="radio" checked={selectedOption === "cash"} readOnly className="mr-2 accent-[#11295B]" />
+              <label className="text-sm font-medium flex items-center"><DollarSign size={16} className="mr-1" /> Dinero efectivo</label>
+            </div>
+            {selectedOption === "cash" && (
+              <div className="p-4">
+                <textarea value={cashDetail} onChange={(e) => setCashDetail(e.target.value)} placeholder="Descripcion" className={`w-full h-24 border-[1.5px] rounded-lg px-4 py-3 text-sm outline-none resize-none ${errors.cashDetail ? "border-[#DC2626] text-[#DC2626] placeholder-[#DC2626]" : "border-[#11295B]"}`} />
+                {errors.cashDetail && <p className="text-sm text-[#DC2626] text-center mt-2">{errors.cashDetail}</p>}
+              </div>
+            )}
+          </div>
         </div>
 
-        {showSuccessMessage ? (
-          <div className="flex flex-col items-center py-4">
-            <CheckCircle size={36} className="text-green-500 mb-1" />
-            <h3 className="text-base font-semibold text-[#11295B]">¡Registro exitoso!</h3>
-            <p className="text-xs text-gray-600">Tu método de pago ha sido registrado.</p>
-          </div>
-        ) : (
-          <>
-          {/* Opciones de pago */}
-          <div className="space-y-4">
-            {/* Opción de tarjeta */}
-            <div className="relative">
-              <div className={`border ${errors.cardNumber ? "border-red-500" : "border-gray-300"} rounded-lg`}>
-                <div className="flex items-center pl-4 py-3 border-b border-gray-200">
-                  <input
-                    type="radio"
-                    id="cardOption"
-                    checked={selectedOption === "card"}
-                    onChange={() => setSelectedOption("card")}
-                    className="mr-2"
-                  />
-                  <label htmlFor="cardOption" className="text-sm font-medium flex items-center">
-                    <CreditCard size={16} className="mr-1" />
-                    Número de tarjeta
-                  </label>
-                </div>
-                
-                <div className={`${selectedOption !== "card" ? "opacity-60" : ""} p-4 space-y-3`}>
-                  {/* Número de tarjeta */}
-                  <input
-                    type="text"
-                    placeholder="1111 1111 1111 1111"
-                    value={cardNumber}
-                    onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-                    disabled={selectedOption !== "card"}
-                    className={`w-full border rounded-lg px-4 py-2 outline-none text-sm placeholder:text-gray-400
-                      ${errors.cardNumber ? "border-red-500" : "border-gray-300"}
-                      ${selectedOption !== "card" ? "bg-gray-100" : "bg-white"}`}
-                  />
-                  {errors.cardNumber && (
-                    <p className="text-xs text-red-500">{errors.cardNumber}</p>
-                  )}
-                  
-                  <div className="grid grid-cols-2 gap-2">
-                    {/* Fecha de expiración */}
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      value={expiryDate}
-                      onChange={handleExpiryDateChange}
-                      disabled={selectedOption !== "card"}
-                      className={`border rounded-lg px-4 py-2 outline-none text-sm placeholder:text-gray-400
-                        ${errors.expiryDate ? "border-red-500" : "border-gray-300"}
-                        ${selectedOption !== "card" ? "bg-gray-100" : "bg-white"}`}
-                    />
-                    
-                    {/* CVV */}
-                    <input
-                      type="text"
-                      placeholder="CVV"
-                      value={cvv}
-                      onChange={handleCVVChange}
-                      disabled={selectedOption !== "card"}
-                      className={`border rounded-lg px-4 py-2 outline-none text-sm placeholder:text-gray-400
-                        ${errors.cvv ? "border-red-500" : "border-gray-300"}
-                        ${selectedOption !== "card" ? "bg-gray-100" : "bg-white"}`}
-                    />
-                  </div>
-                  
-                  {/* Errores de fecha y CVV */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      {errors.expiryDate && (
-                        <p className="text-xs text-red-500">{errors.expiryDate}</p>
-                      )}
-                    </div>
-                    <div>
-                      {errors.cvv && (
-                        <p className="text-xs text-red-500">{errors.cvv}</p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Nombre del titular */}
-                  <input
-                    type="text"
-                    placeholder="Nombre del titular"
-                    value={cardHolder}
-                    onChange={handleCardHolderChange}
-                    disabled={selectedOption !== "card"}
-                    className={`w-full border rounded-lg px-4 py-2 outline-none text-sm placeholder:text-gray-400
-                      ${errors.cardHolder ? "border-red-500" : "border-gray-300"}
-                      ${selectedOption !== "card" ? "bg-gray-100" : "bg-white"}`}
-                  />
-                  {errors.cardHolder && (
-                    <p className="text-xs text-red-500">{errors.cardHolder}</p>
-                  )}
-                </div>
-              </div>
-            </div>
+        {/* TÉRMINOS */}
+        <div className="flex items-start mt-6">
+          <input type="checkbox" checked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} className="mt-1 mr-2 accent-[#FCA311]" />
+          <label className="text-xs text-gray-600">He leído y acepto los <span className="text-[#FCA311] font-medium">Términos y condiciones</span>.</label>
+        </div>
+        {errors.terms && <p className="text-sm text-[#DC2626] text-center mt-2">{errors.terms}</p>}
+        {errors.method && <p className="text-sm text-[#DC2626] text-center mt-2">{errors.method}</p>}
 
-            {/* Opción de otros métodos */}
-            <div className="relative">
-              <div className={`border ${errors.otherOption ? "border-red-500" : "border-gray-300"} rounded-lg`}>
-                <div className="flex items-center pl-4 py-3 border-b border-gray-200">
-                  <input
-                    type="radio"
-                    id="otherOption"
-                    checked={selectedOption === "other"}
-                    onChange={() => setSelectedOption("other")}
-                    className="mr-2"
-                  />
-                  <label htmlFor="otherOption" className="text-sm font-medium flex items-center">
-                    <DollarSign size={16} className="mr-1" />
-                    Dinero efectivo
-                  </label>
-                </div>
-                
-                <div className="p-4">
-                  <input
-                    type="text"
-                    placeholder="Ingrese los detalles para el pago en efectivo"
-                    value={otherOption}
-                    onChange={(e) => {
-                      setOtherOption(e.target.value);
-                      if (!e.target.value.trim()) {
-                        setErrors(prev => ({ ...prev, otherOption: "Campo requerido" }));
-                      } else {
-                        setErrors(prev => ({ ...prev, otherOption: undefined }));
-                      }
-                    }}
-                    disabled={selectedOption !== "other"}
-                    className={`w-full border rounded-lg px-4 py-2 outline-none text-sm placeholder:text-gray-400
-                      ${errors.otherOption ? "border-red-500" : "border-gray-300"}
-                      ${selectedOption !== "other" ? "bg-gray-100" : "bg-white"}`}
-                  />
-                  {errors.otherOption && (
-                    <p className="text-xs text-red-500 mt-1">{errors.otherOption}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Opción de imagen QR */}
-            <div className="relative">
-              <div className={`border ${errors.qrImage ? "border-red-500" : "border-gray-300"} rounded-lg`}>
-                <div className="flex items-center pl-4 py-3 border-b border-gray-200">
-                  <input
-                    type="radio"
-                    id="qrOption"
-                    checked={selectedOption === "qr"}
-                    onChange={() => setSelectedOption("qr")}
-                    className="mr-2"
-                  />
-                  <label htmlFor="qrOption" className="text-sm font-medium flex items-center">
-                    <QrCode size={16} className="mr-1" />
-                    Imagen de QR
-                  </label>
-                </div>
-                
-                <div className="p-4">
-                  <div className="flex">
-                    <div 
-                      className="w-32 h-24 border border-dashed rounded bg-gray-100 flex items-center justify-center cursor-pointer relative"
-                      onClick={() => selectedOption === "qr" && fileInputRef.current?.click()}
-                    >
-                      {previewImg ? (
-                        <img src={previewImg} alt="QR" className="w-full h-full object-contain" />
-                      ) : (
-                        <QrCode size={24} className="text-gray-400" />
-                      )}
-                    </div>
-                    
-                    <div className="ml-4 flex flex-col justify-center">
-                      <button
-                        type="button"
-                        onClick={() => selectedOption === "qr" && fileInputRef.current?.click()}
-                        className="bg-[#FCA311] text-white px-4 py-1 rounded-lg text-sm mb-2"
-                        disabled={selectedOption !== "qr"}
-                      >
-                        Confirmar
-                      </button>
-                      
-                      <div 
-                        className="bg-[#11295B] rounded-full w-8 h-8 flex items-center justify-center cursor-pointer"
-                        onClick={handleDeleteImage}
-                      >
-                        <Trash2 size={16} className="text-white" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/jpeg, image/png"
-                    onChange={handleQrImageChange}
-                    className="hidden"
-                  />
-                  
-                  {errors.qrImage && (
-                    <p className="text-xs text-red-500 mt-2">{errors.qrImage}</p>
-                  )}
-                  {previewImg && (
-                    <p className="text-xs text-gray-500 mt-2">Formato de imagen válido.</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Términos y condiciones */}
-          <div className="flex items-start my-6">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={termsAccepted}
-              onChange={() => {
-                setTermsAccepted(!termsAccepted);
-                if (termsAccepted) {
-                  setErrors(prev => ({ ...prev, terms: undefined }));
-                }
-              }}
-              className="mt-1 mr-2"
-            />
-            <label htmlFor="terms" className="text-xs text-gray-600">
-              He leído y acepto los <span className="text-[#FCA311] font-medium cursor-pointer">Términos y condiciones</span> del Host de la página.
-            </label>
-          </div>
-          {errors.terms && (
-            <p className="text-xs text-red-500 -mt-4 mb-4">{errors.terms}</p>
-          )}
-
-          {/* Botones de acción */}
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleCancel}
-              disabled={isLoading}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-8 rounded-full transition-colors"
-            >
-              Cancelar
-            </button>
-            
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isLoading || showSuccessMessage}
-              className={`${
-                isLoading 
-                  ? "bg-[#FCA311]/60 cursor-wait" 
-                  : showSuccessMessage
-                    ? "bg-[#FCA311]/60 cursor-default"
-                    : termsAccepted 
-                      ? "bg-[#FCA311] hover:bg-[#e29510]" 
-                      : "bg-[#FCA311]/60 cursor-not-allowed"
-              } text-white font-medium py-2 px-8 rounded-full transition-colors`}
-            >
-              {isLoading ? "Procesando..." : "Registrar"}
-            </button>
-          </div>
-          </>
-        )}
+        <div className="flex justify-between mt-8">
+          <button onClick={onClose} className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-8 rounded-full">Cancelar</button>
+          <button onClick={handleSubmit} className="bg-[#FCA311] hover:bg-[#e29510] text-white font-semibold py-2 px-8 rounded-full">Registrar</button>
+        </div>
       </div>
     </div>
   );
