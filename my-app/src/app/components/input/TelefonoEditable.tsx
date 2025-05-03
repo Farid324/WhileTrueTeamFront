@@ -6,9 +6,11 @@ import PhoneIcon from '@/app/components/Icons/Phone';
 
 interface Props {
   initialValue: string;
+  campoEnEdicion: string | null;
+  setCampoEnEdicion: (campo: string | null) => void;
 }
 
-export default function TelefonoEditable({ initialValue }: Props) {
+export default function TelefonoEditable({ initialValue, campoEnEdicion, setCampoEnEdicion }: Props) {
   const [valor, setValor] = useState(initialValue);
   const [editando, setEditando] = useState(false);
   const [valorTemporal, setValorTemporal] = useState(initialValue);
@@ -28,6 +30,13 @@ export default function TelefonoEditable({ initialValue }: Props) {
       return false;
     }
 
+    // ✅ Nueva validación: debe comenzar con 6 o 7
+    if (!/^[67]/.test(telefono)) {
+      setErrorMensaje('El teléfono debe comenzar con 6 o 7.');
+      return false;
+    }
+
+    // Si todo está bien
     setErrorMensaje('');
     return true;
   };
@@ -41,6 +50,7 @@ export default function TelefonoEditable({ initialValue }: Props) {
       await updateUserField('telefono', valorTemporal);
       setValor(valorTemporal);
       setEditando(false);
+      setCampoEnEdicion(null); // 👈 Limpiamos el campo en edición
       setFeedback('Teléfono actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
@@ -52,6 +62,7 @@ export default function TelefonoEditable({ initialValue }: Props) {
     setValorTemporal(valor);
     setErrorMensaje('');
     setEditando(false);
+    setCampoEnEdicion(null); // 👈 Limpiamos el campo en edición
   };
 
   return (
@@ -64,10 +75,10 @@ export default function TelefonoEditable({ initialValue }: Props) {
           value={editando ? valorTemporal : valor}
           onChange={(e) => {
             const value = e.target.value;
-            // Solo permitimos máximo 8 caracteres ingresados en el input
             if (value.length <= 8) {
               setValorTemporal(value);
-              validarTelefono(value); // Valida mientras se escribe
+              if (value.length === 8) validarTelefono(value);
+              //validarTelefono(value); // Valida mientras se escribe
             }
           }}
           readOnly={!editando}
@@ -83,8 +94,15 @@ export default function TelefonoEditable({ initialValue }: Props) {
         </div>
         {!editando && (
           <div
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer"
-            onClick={() => setEditando(true)}
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 cursor-pointer ${
+              campoEnEdicion && campoEnEdicion !== 'telefono' ? 'opacity-50 pointer-events-none' : ''
+            }`}
+            onClick={() => {
+              if (!campoEnEdicion) {
+                setEditando(true);
+                setCampoEnEdicion('telefono');
+              }
+            }}
           >
             <MdiPencil />
           </div>
