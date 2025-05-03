@@ -46,7 +46,6 @@ export default function RegisterModal({
   const [confirmPasswordValue, setConfirmPasswordValue] = useState(
     localStorage.getItem("register_confirmPassword") || ""
   );
-
   const [phoneValue, setPhoneValue] = useState(
     localStorage.getItem("register_phone") || ""
   );
