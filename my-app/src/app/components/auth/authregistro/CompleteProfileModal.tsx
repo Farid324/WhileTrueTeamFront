@@ -168,17 +168,21 @@ export default function CompleteProfileModal({
               name="name"
               value={name}
               placeholder="Ingrese su nombre completo"
+              maxLength={50}
               onChange={(e) => {
                 const input = e.target.value;
                 const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
+
                 if (regex.test(input) || input === "") {
                   setName(input);
 
                   if (input.trim().length > 0 && input.trim().length < 3) {
                       setNameError("El nombre debe tener al menos 3 caracteres");
-                  } else {
-                    setNameError("");
-                  }
+                 } else if (input.trim().length > 49) {
+                  setNameError("El nombre no debe exceder los 50 caracteres");
+                 } else {
+                   setNameError("");
+                 }
                 }
               }}
               pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
@@ -187,7 +191,7 @@ export default function CompleteProfileModal({
               required
             />
             {nameError && (
-              <p style={{ color: "#E30000", fontSize: "0.75rem", marginTop: "0.25rem" }}>
+              <p style={{ color: "#E30000", fontSize: "0.75rem", marginTop: "0.5rem" }}>
                 {nameError}
               </p>
             )}
