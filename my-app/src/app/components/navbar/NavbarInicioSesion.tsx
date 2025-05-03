@@ -1,24 +1,40 @@
 'use client';
-
 import { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
+import { useUser } from '@/hooks/useUser';
+
+import Link from 'next/link';
 export default function NavbarInicioSesion() {
   const [activeBtn, setActiveBtn] = useState(0);
+  //Token nombre de usuario
+  const user = useUser();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado del menú
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/'); // 🔥 Te saca al login
+  };
+
 
   return (
-    <div className="px-6 md:px-20 lg:px-40 py-4 border-b border-[rgba(0,0,0,0.05)] font-[var(--fuente-principal)] bg-[var(--blanco)]">
+    <div className="px-6 md:px-20 lg:px-40 py-4  border-b border-[rgba(0,0,0,0.05)] font-[var(--fuente-principal)] bg-[var(--blanco)]">
       <nav className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0">
-        
+      <Link href="/home/homePage">
         <h1 className="text-3xl md:text-4xl text-[var(--naranja)] font-[var(--tamaño-black)] drop-shadow-[var(--sombra)]">
           REDIBO
         </h1>
+      </Link>
 
         <div className="flex overflow-x-auto md:overflow-visible relative w-full md:w-auto justify-start md:justify-center">
           {[1, 2, 3, 4, 5].map((n, i) => (
             <button
               key={i}
               onClick={() => setActiveBtn(i)}
-              className={`relative px-6 md:px-12 py-[0.2rem] border-[#00000033] text-[var(--azul-oscuro)] 
+              className={`relative px-6 md:px-12 py-[0.2rem] border border-[#00000033] text-[var(--azul-oscuro)] 
                 font-[var(--tamaño-regular)] bg-[var(--blanco)] shadow-[var(--sombra)] text-sm md:text-base
                 ${i === 0 ? 'rounded-l-full border-r-0' : ''}
                 ${i === 4 ? 'rounded-r-full border-l-0' : ''}
@@ -37,9 +53,11 @@ export default function NavbarInicioSesion() {
           ))}
         </div>
 
-        <div className="flex justify-between md:justify-end items-center w-full md:w-auto gap-0 bg-[var(--naranja)] rounded-[20px] shadow-[var(--sombra)] overflow-hidden">
-            <button className="flex-1 md:flex-none px-4 md:px-8 py-[0.4rem] font-[var(--tamaña-bold)] text-[var(--blanco)] text-sm md:text-base whitespace-nowrap">
-                Nombre Usuario
+        <div className="relative z-[1000] flex items-center gap-0 bg-[var(--naranja)] rounded-[20px] shadow-[var(--sombra)] overflow-visible">
+            <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            className="flex-1 md:flex-none px-4 md:px-8 py-[0.4rem] font-[var(--tamaña-bold)] text-[var(--blanco)] text-sm md:text-base whitespace-nowrap">
+                {user?.nombre_completo || 'Nombre Usuario'}
             </button>
             <div className="flex items-center justify-center px-3 md:px-4">
                 <svg
@@ -55,8 +73,37 @@ export default function NavbarInicioSesion() {
                 />
                 </svg>
             </div>
+            
+            {/* Componente menú */}
+            {isMenuOpen && (
+              <ProfileMenu onLogout={handleLogout} router={router} />
+            )}
         </div>
       </nav>
+    </div>
+  );
+}
+
+function ProfileMenu({ onLogout, router }: { onLogout: () => void; router: ReturnType<typeof useRouter> }) {
+  return (
+    <div className="absolute right-0 top-full mt-2 w-40 bg-[var(--blanco)] border rounded-lg shadow-lg z-[9999] font-[var(--tamaña-bold)]">
+      <button 
+        className="block w-full text-left px-4 py-2 text-[var(--naranja)] hover:bg-[var(--naranja-46)] rounded-t-lg"
+        onClick={() => router.push('/home/homePage/userPerfil')}
+      >
+        <h2 className="hover:text-[var(--blanco)]">Ver perfil</h2>
+      </button>
+      <button 
+        className="block w-full text-left px-4 py-2 text-[var(--naranja)] hover:bg-[var(--naranja-46)]"
+      >
+        <h2 className="hover:text-[var(--blanco)]">X opción</h2>
+      </button>
+      <button 
+        className="block w-full text-left px-4 py-2 text-[var(--naranja)] hover:bg-[var(--naranja-46)] rounded-b-lg"
+        onClick={onLogout}
+      >
+        <h2 className="hover:text-[var(--blanco)]">Cerrar sesión</h2>
+      </button>
     </div>
   );
 }
