@@ -134,52 +134,32 @@ export default function registroDriver() {
   }
 
   return (
-    <div className="bg-[var(--blanco)] min-h-screen"> 
-      <div className="fixed top-0 w-full z-50 bg-white shadow-md">
+    <div className="bg-[var(--blanco)] min-h-screen flex flex-col"> 
+      <div className="fixed top-0 w-full z-50 bg-white shadow-none border-b border-gray-200">
         <NavbarPerfilUsuario />
       </div>
-      
-      <div className="mt-24 h-[1000px] md:h-[680px] bg-white w-full items-center justify-center">
-        <div className="p-8 pl-20 pr-8 w-full max-w-[1300px] text-center">
-          <h2 className="text-2xl font-bold mb-6 text-[#11295B]">REGISTRO COMO DRIVER</h2>
-          <p className="text-sm text-gray-600">Conviértete en driver y ayuda a otros usuarios a llegar a sus destinos. Regístrate y activa tu disponibilidad para empezar a recibir solicitudes de viaje.</p>
+
+      <div className="mt-28 px-8 w-full flex justify-center">
+        <div className="max-w-[1300px] w-full">
+          <h2 className="text-[1.8rem] font-bold mb-4 text-[#11295B] text-center">REGISTRO COMO DRIVER</h2>
+          <p className="text-base text-[#333] leading-relaxed text-left max-w-[1100px] mx-auto">
+            Conviértete en driver y ayuda a otros usuarios a llegar a sus destinos. Regístrate y activa tu disponibilidad para empezar a recibir solicitudes de viaje.
+            <br />
+            En este paso te pediremos una foto de perfil, datos personales para que los usuarios se relacionen con tu perfil, también añadirás fotos de tu licencia de conducir. Finalmente tendrás las opciones para elegir un método de pago.
+          </p>
         </div>
+      </div>
 
-      
-        {/* Columna izquierda - Foto de perfil */}
-        <div className="p-8 pl-20 pr-8 w-full max-w-[1300px]">
-          <h2 className="text-2xl font-bold mb-6 text-[#11295B]">Datos personales y de licencia</h2>
 
-          {/* Aquí empieza la fila horizontal */}
-          <div className="flex gap-10">
-            {/* Columna izquierda - subir imagen */}
-            <div className="w-1/2 bg-gray-100 p-4 rounded-xl">
-              <label className="font-semibold text-[#11295B]">Foto de perfil</label>
-              <p className="text-sm text-gray-600">Sube una foto para que los usuarios la vean</p>
-              <div
-                className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
-                onClick={() => perfilRef.current?.click()}
-              >
-                <span className="text-[#11295B] font-semibold z-10 relative">
-                  {perfil ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
-                </span>
-              </div>
-              <input
-                ref={perfilRef}
-                type="file"
-                accept="image/jpeg, image/png"
-                className="hidden"
-                onChange={(e) => handleFileChange(e, 'perfil')}
-              />
-              {errorPerfil && <p className="text-sm text-red-500 mt-1">{errorPerfil}</p>}
-              {renderImagePreview(perfil, 'perfil')}
-            </div>
+      <div className="mt-7 w-full flex justify-center">
+        <div className="p-8 w-full max-w-[1300px] flex gap-8">
+          
+          {/* Columna izquierda - Datos personales */}
+          <div className="w-1/2 space-y-4">
+            <h2 className="text-2xl font-bold text-[#11295B] mb-6">DATOS PERSONALES Y DE LICENCIA</h2>
 
-            {/* Columna derecha */}
-            <div className="w-1/2 bg-gray-100 py-4 rounded-xl">            
-              
-              {/* Primera fila */}
-              <div className="flex w-full gap-4">
+            {/* Fila 1: Nombre y sexo */}
+            <div className="flex w-full gap-4">
                 <div className="w-2/3 relative">
                 <img
                   src="/userIcon.svg" // Cambia esto por la ruta de tu icono
@@ -336,70 +316,49 @@ export default function registroDriver() {
               <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
                 Fecha de vencimiento
               </span>
+              </div>
             </div>
-        </div>
+          </div>
 
-      </div>
-    
-      </div>
+          {/* Columna derecha - Imágenes */}
+          <div className="w-1/2 space-y-6">
+            <h2 className="text-2xl font-bold text-[#11295B] mb-2">DATOS PERSONALES Y DE LICENCIA</h2>
+
+            {/* Imagen anverso */}
+            <div className="bg-gray-100 p-4 rounded-xl">
+              <label className="font-semibold text-[#11295B]">Imagen anverso de la Licencia</label>
+              <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
+              <div
+                className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
+                onClick={() => anversoRef.current?.click()}
+              >
+                <span className="text-[#11295B] font-semibold z-10 relative">
+                  {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
+                </span>
+              </div>
+              <input ref={anversoRef} type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handleFileChange(e, 'anverso')} />
+              {renderImagePreview(anverso, 'anverso')}
+            </div>
+
+            {/* Imagen reverso */}
+            <div className="bg-gray-100 p-4 rounded-xl">
+              <label className="font-semibold text-[#11295B]">Imagen reverso de la Licencia</label>
+              <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
+              <div
+                className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
+                onClick={() => reversoRef.current?.click()}
+              >
+                <span className="text-[#11295B] font-semibold z-10 relative">
+                  {reverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
+                </span>
+              </div>
+              <input ref={reversoRef} type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handleFileChange(e, 'reverso')} />
+              {renderImagePreview(reverso, 'reverso')}
+            </div>
+          </div>
+        </div>
       
-    </div>
-</div>
-
-
-
-
-      {/* Sección de carga de imágenes de licencia */}
-      <div className="p-8 pl-20 pr-8 w-full max-w-[1300px]">
-        <h2 className="text-2xl font-bold mb-6 text-[#11295B]">Fotos de Licencia de Conducir</h2>
-        <div className="flex flex-col gap-8 max-w-xl">
-          {/* Imagen anverso */}
-          <div className="bg-gray-100 p-4 rounded-xl">
-            <label className="font-semibold text-[#11295B]">Imagen anverso de la licencia</label>
-            <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
-            <div
-              className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
-              onClick={() => anversoRef.current?.click()}
-            >
-                <span className="text-[#11295B] font-semibold z-10 relative">
-                {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
-                </span>
-            </div>
-            <input
-              ref={anversoRef}
-              type="file"
-              accept="image/jpeg, image/png"
-              className="hidden"
-              onChange={(e) => handleFileChange(e, 'anverso')}
-            />
-            {errorAnverso && <p className="text-sm text-red-500 mt-1">{errorAnverso}</p>}
-            {renderImagePreview(anverso, 'anverso')}
-          </div>
-
-          {/* Imagen reverso */}
-          <div className="bg-gray-100 p-4 rounded-xl">
-            <label className="font-semibold text-[#11295B]">Imagen reverso de la licencia</label>
-            <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
-            <div
-              className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
-              onClick={() => reversoRef.current?.click()}
-            >
-                <span className="text-[#11295B] font-semibold z-10 relative">
-                {reverso ? 'Cambiar imagen' : 'Subir imagen / Arrastra aquí'}
-                </span>
-            </div>
-            <input
-              ref={reversoRef}
-              type="file"
-              accept="image/jpeg, image/png"
-              className="hidden"
-              onChange={(e) => handleFileChange(e, 'reverso')}
-            />
-            {errorReverso && <p className="text-sm text-red-500 mt-1">{errorReverso}</p>}
-            {renderImagePreview(reverso, 'reverso')}
-          </div>
-        </div>
       </div>
-    </div>
+  </div>
   );
 }
