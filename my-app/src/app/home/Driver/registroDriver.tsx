@@ -2,6 +2,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import NavbarPerfilUsuario from '@/app/components/navbar/NavbarPerfilUsuario';
 import { X } from 'lucide-react';
+import User from '@/app/components/Icons/User';
+import Phone from '@/app/components/Icons/Phone';
+import LicenciaConductor from '@/app/components/Icons/LicenciaConductor';
+import Pencil from '@/app/components/Icons/Pencil';
+import Calendar from '@/app/components/Icons/Calendar';
 
 export default function registroDriver() {
   const [isLoading, setIsLoading] = useState(true);
@@ -154,18 +159,17 @@ export default function registroDriver() {
       <div className="mt-7 w-full flex justify-center">
         <div className="p-8 w-full max-w-[1300px] flex gap-8">
           
+
           {/* Columna izquierda - Datos personales */}
           <div className="w-1/2 space-y-4">
             <h2 className="text-2xl font-bold text-[#11295B] mb-6">DATOS PERSONALES Y DE LICENCIA</h2>
 
             {/* Fila 1: Nombre y sexo */}
             <div className="flex w-full gap-4">
-                <div className="w-2/3 relative">
-                <img
-                  src="/userIcon.svg" // Cambia esto por la ruta de tu icono
-                  alt="Icono user"
-                  className="absolute left-4 top-1/4  w-6 h-6"
-                />
+              <div className="w-2/3 relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <User className="w-6 h-6 text-[#11295B]" />
+                </div>
                 <input
                   type="text"
                   id="name"
@@ -179,146 +183,140 @@ export default function registroDriver() {
                   Nombre completo
                 </span>
               </div>
-                {/* Sexo */}
+
+              {/* Sexo */}
               <div className="w-1/3 relative">
-              <span className="absolute left-3 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
-                Sexo
-              </span>
-              <select
-                id="sexo"
-                name="sexo"
-                value={sexo}
-                onChange={(e) => setSexo(e.target.value)}
-                className="w-full pt-6 pb-2 px-3 rounded-lg border border-[#11295B] text-[#11295B] focus:outline-none focus:ring-1 focus:ring-[#11295B]"
-                required
-              >
-                <option value="" disabled hidden>Seleccionar</option>
-                <option value="femenino">Femenino</option>
-                <option value="masculino">Masculino</option>
-              </select>
-            </div>
-            </div>
-              <div className="relative w-full mt-4">
-            <img
-                  src="/userIcon.svg" // Cambia esto por la ruta de tu icono
-                  alt="Icono user"
-                  className="absolute left-4 top-1/4  w-6 h-6"
-                />
-                <input
-                  type="text"
-                  id="telefono"
-                  name="telefono"
-                  value={telefonoUsuario}
-                  placeholder="77777777"
-                  onChange={(e) => setTelefonoUsuario(e.target.value)}
-                  className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
-                />
-                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
-                  Telefono
-                </span>
-            </div>
-
-            <div className="relative w-full mt-4">
-            <img
-                  src="/userIcon.svg" // Cambia esto por la ruta de tu icono
-                  alt="Icono user"
-                  className="absolute left-4 top-1/4  w-6 h-6"
-                />
-                <input
-                  type="NroLicencia"
-                  id="NroLicencia"
-                  name="NroLicencia"
-                  value={NroLicencia}
-                  placeholder="00000000"
-                  onChange={(e) => setNroLicencia(e.target.value)}
-                  className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
-                />
-                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
-                  Nro de licencia
-                </span>
-            </div>
-
-              <div className="relative w-full mt-4">
-                <img
-                  src="/licenciaIcon.svg" // Cambia por el ícono que quieras usar
-                  alt="Icono licencia"
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5"
-                />
-                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
-                  Categoria
+                <span className="absolute left-3 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
+                  Sexo
                 </span>
                 <select
-                  id="categoria"
-                  name="categoria"
-                  value={categoriaLicencia}
-                  onChange={(e) => setCategoriaLicencia(e.target.value)}
-                  className="w-full pt-6 pb-2 pl-12 pr-3 rounded-lg border border-[#11295B] text-[#11295B] focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                  id="sexo"
+                  name="sexo"
+                  value={sexo}
+                  onChange={(e) => setSexo(e.target.value)}
+                  className="w-full pt-6 pb-2 px-3 rounded-lg border border-[#11295B] text-[#11295B] focus:outline-none focus:ring-1 focus:ring-[#11295B]"
                   required
                 >
                   <option value="" disabled hidden>Seleccionar</option>
-                  <option value="Particular(P)">Particular(P)</option>
-                  <option value="Profesional A">Profesional A</option>
-                  <option value="Profesional B">Profesional B</option>
-                  <option value="Profesional C">Profesional C</option>
-                  <option value="Motorista (T)">Motorista (T)</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
                 </select>
+              </div>
             </div>
-              {/* Ultima fila */}
-              <div className="flex w-full mt-4 gap-4">
-            {/* Fecha de emisión */}
-            <div className="w-1/2 relative">
-              <img
-                src="/userIcon.svg"
-                alt="Icono user"
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5"
-              />
+
+            <div className="relative w-full mt-4">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <Phone className="w-6 h-6 text-[#11295B]" />
+              </div>
               <input
-                type="date"
-                id="fechaEmision"
-                value={fechaEmision}
-                onChange={(e) => {
-                  const value = (e.target as HTMLInputElement).value;
-                  if (validarFechaEmision(value)) {
-                    setFechaEmisionState(value);
-                  } else {
-                    alert('La fecha de emisión no puede ser futura.');
-                  }
-                }}
+                type="text"
+                id="telefono"
+                name="telefono"
+                value={telefonoUsuario}
+                placeholder="77777777"
+                onChange={(e) => setTelefonoUsuario(e.target.value)}
                 className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
               />
-              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
-                Fecha de emisión
+              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
+                Teléfono
               </span>
             </div>
 
-            {/* Fecha de vencimiento */}
-            <div className="w-1/2 relative">
-              <img
-                src="/userIcon.svg"
-                alt="Icono user"
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5"
-              />
+            <div className="relative w-full mt-4">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <LicenciaConductor className="w-6 h-6 text-[#11295B]" />
+              </div>
               <input
-                type="date"
-                id="fechaVencimiento"
-                name="fechaVencimiento"
-                value={fechaVencimiento}
-                onChange={(e) => {
-                  const value = (e.target as HTMLInputElement).value;
-                  if (validarFechaVencimiento(value)) {
-                    setFechaVencimientoState(value);
-                  } else {
-                    alert('La fecha de vencimiento debe ser igual o posterior a la fecha actual.');
-                  }
-                }}
+                type="NroLicencia"
+                id="NroLicencia"
+                name="NroLicencia"
+                value={NroLicencia}
+                placeholder="00000000"
+                onChange={(e) => setNroLicencia(e.target.value)}
                 className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
               />
-              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
-                Fecha de vencimiento
+              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
+                Nro de licencia
               </span>
+            </div>
+
+            <div className="relative w-full mt-4">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <Pencil className="w-6 h-6 text-[#11295B]" />
+              </div>
+              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
+                Categoría
+              </span>
+              <select
+                id="categoria"
+                name="categoria"
+                value={categoriaLicencia}
+                onChange={(e) => setCategoriaLicencia(e.target.value)}
+                className="w-full pt-6 pb-2 pl-12 pr-3 rounded-lg border border-[#11295B] text-[#11295B] focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                required
+              >
+                <option value="" disabled hidden>Seleccionar</option>
+                <option value="Particular(P)">Particular(P)</option>
+                <option value="Profesional A">Profesional A</option>
+                <option value="Profesional B">Profesional B</option>
+                <option value="Profesional C">Profesional C</option>
+                <option value="Motorista (T)">Motorista (T)</option>
+              </select>
+            </div>
+
+            {/* Última fila */}
+            <div className="flex w-full mt-4 gap-4">
+              {/* Fecha de emisión */}
+              <div className="w-1/2 relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <Calendar className="w-6 h-6 text-[#11295B]" />
+                </div>
+                <input
+                  type="date"
+                  id="fechaEmision"
+                  value={fechaEmision}
+                  onChange={(e) => {
+                    const value = (e.target as HTMLInputElement).value;
+                    if (validarFechaEmision(value)) {
+                      setFechaEmisionState(value);
+                    } else {
+                      alert('La fecha de emisión no puede ser futura.');
+                    }
+                  }}
+                  className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                />
+                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
+                  Fecha de emisión
+                </span>
+              </div>
+
+              {/* Fecha de vencimiento */}
+              <div className="w-1/2 relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <Calendar className="w-6 h-6 text-[#11295B]" />
+                </div>
+                <input
+                  type="date"
+                  id="fechaVencimiento"
+                  name="fechaVencimiento"
+                  value={fechaVencimiento}
+                  onChange={(e) => {
+                    const value = (e.target as HTMLInputElement).value;
+                    if (validarFechaVencimiento(value)) {
+                      setFechaVencimientoState(value);
+                    } else {
+                      alert('La fecha de vencimiento debe ser igual o posterior a la fecha actual.');
+                    }
+                  }}
+                  className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                />
+                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
+                  Fecha de vencimiento
+                </span>
               </div>
             </div>
           </div>
+
 
           {/* Columna derecha - Imágenes */}
           <div className="w-1/2 space-y-6">
