@@ -188,7 +188,7 @@ export default function registroDriver() {
       valido = false;
     } else if (!validarNroLicencia(NroLicencia)) {
       setErrorLicencia(true);
-      setMensajeErrorLicencia('Debe tener entre 5 y 10 caracteres alfanuméricos');
+      setMensajeErrorLicencia('Debe tener hasta 8 caracteres alfanuméricos');
       valido = false;
     } else {
       setErrorLicencia(false);
@@ -336,10 +336,10 @@ export default function registroDriver() {
                 placeholder="77777777"
                 onChange={(e) => setTelefonoUsuario(e.target.value)}
                 className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
-                  errorTelefono
+                  errorLicencia
                     ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
                     : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
-                }`}
+                }`}                
               />
               {errorTelefono && (
                 <p className="text-sm text-red-500 mt-1">{mensajeErrorTelefono}</p>
@@ -434,9 +434,9 @@ export default function registroDriver() {
                       : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
                   } focus:outline-none focus:ring-1`}
                 />
-                {errorFechaEmision && mensajeErrorFechaEmision && (
-                  <p className="text-sm text-red-500 mt-1">{mensajeErrorFechaEmision}</p>
-                )}
+              {errorFechaEmision && mensajeErrorFechaEmision && (
+                <p className="text-sm text-red-500 mt-1">{mensajeErrorFechaEmision}</p>
+              )}
                 <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorFechaEmision ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Fecha de emisión
                 </span>
