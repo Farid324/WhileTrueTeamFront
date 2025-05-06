@@ -25,6 +25,20 @@ export default function registroDriver() {
   const [fechaVencimiento, setFechaVencimientoState] = useState<string>('');
   const [fechaEmision, setFechaEmisionState] = useState<string>('');
 
+  const [errorSexo, setErrorSexo] = useState(false);
+  const [mensajeErrorSexo, setMensajeErrorSexo] = useState('');
+  const [errorTelefono, setErrorTelefono] = useState(false);
+  const [mensajeErrorTelefono, setMensajeErrorTelefono] = useState('');
+  const [errorLicencia, setErrorLicencia] = useState(false);
+  const [mensajeErrorLicencia, setMensajeErrorLicencia] = useState('');
+  const [errorCategoria, setErrorCategoria] = useState(false);
+  const [mensajeErrorCategoria, setMensajeErrorCategoria] = useState('');
+  const [errorFechaEmision, setErrorFechaEmision] = useState(false);
+  const [mensajeErrorFechaEmision, setMensajeErrorFechaEmision] = useState('');
+  const [errorFechaVencimiento, setErrorFechaVencimiento] = useState(false);
+  const [mensajeErrorFechaVencimiento, setMensajeErrorFechaVencimiento] = useState('');
+
+
   const anversoRef = useRef<HTMLInputElement>(null);
   const reversoRef = useRef<HTMLInputElement>(null);
   const perfilRef = useRef<HTMLInputElement>(null);
@@ -103,7 +117,7 @@ export default function registroDriver() {
   };
 
   const validarTelefono = (telefono: string): boolean => {
-    const regex = /^\d{10}$/; // 10 dígitos
+    const regex = /^\d{8$/; // 10 dígitos
     return regex.test(telefono);
   };
 
@@ -137,6 +151,105 @@ export default function registroDriver() {
   function setFechaVencimiento(value: string): void {
     throw new Error('Function not implemented.');
   }
+
+
+
+
+
+
+    const validarCampos = () => {
+    let valido = true;
+
+    if (!sexo) {
+      setErrorSexo(true);
+      setMensajeErrorSexo('Seleccione una opción');
+      valido = false;
+    } else {
+      setErrorSexo(false);
+      setMensajeErrorSexo('');
+    }    
+    
+    if (!telefonoUsuario) {
+      setErrorTelefono(true);
+      setMensajeErrorTelefono('Este campo no puede estar vacío');
+      valido = false;
+    } else if (!validarTelefono(telefonoUsuario)) {
+      setErrorTelefono(true);
+      setMensajeErrorTelefono('Ingresa un número de teléfono válido de 8 dígitos')
+      valido = false;
+    } else {
+      setErrorTelefono(false);
+      setMensajeErrorTelefono('');
+    }
+
+    if (!NroLicencia) {
+      setErrorLicencia(true);
+      setMensajeErrorLicencia('Este campo no puede estar vacío');
+      valido = false;
+    } else if (!validarNroLicencia(NroLicencia)) {
+      setErrorLicencia(true);
+      setMensajeErrorLicencia('Debe tener entre 5 y 10 caracteres alfanuméricos');
+      valido = false;
+    } else {
+      setErrorLicencia(false);
+      setMensajeErrorLicencia('');
+    }    
+
+    if (!categoriaLicencia) {
+      setErrorCategoria(true);
+      setMensajeErrorCategoria('Seleccione una categoría de licencia');
+      valido = false;
+    } else {
+      setErrorCategoria(false);
+      setMensajeErrorCategoria('');
+    }    
+
+    if (!fechaEmision) {
+      setErrorFechaEmision(true);
+      setMensajeErrorFechaEmision('Seleccione una fecha');
+      valido = false;
+    } else if (!validarFechaEmision(fechaEmision)) {
+      setErrorFechaEmision(true);
+      setMensajeErrorFechaEmision('La fecha no puede ser posterior a hoy');
+      valido = false;
+    } else {
+      setErrorFechaEmision(false);
+      setMensajeErrorFechaEmision('');
+    }    
+
+    if (!fechaVencimiento) {
+      setErrorFechaVencimiento(true);
+      setMensajeErrorFechaVencimiento('Seleccione una fecha');
+      valido = false;
+    } else if (!validarFechaVencimiento(fechaVencimiento)) {
+      setErrorFechaVencimiento(true);
+      setMensajeErrorFechaVencimiento('La fecha debe ser posterior a hoy');
+      valido = false;
+    } else {
+      setErrorFechaVencimiento(false);
+      setMensajeErrorFechaVencimiento('');
+    }    
+
+    return valido;
+  };
+
+
+  const handleSubmit = () => {
+    const esValido = validarCampos();
+
+    if (!esValido) {
+      console.log("Hay errores en el formulario");
+      return;
+    }
+
+    // Aquí iría la lógica para continuar, guardar datos o avanzar a otro paso
+    console.log("Formulario válido. Listo para enviar.");
+  };
+
+
+
+
+
 
   return (
     <div className="bg-[var(--blanco)] min-h-screen flex flex-col"> 
@@ -186,7 +299,7 @@ export default function registroDriver() {
 
               {/* Sexo */}
               <div className="w-1/3 relative">
-                <span className="absolute left-3 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
+                <span className={`absolute left-3 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorSexo ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Sexo
                 </span>
                 <select
@@ -194,19 +307,26 @@ export default function registroDriver() {
                   name="sexo"
                   value={sexo}
                   onChange={(e) => setSexo(e.target.value)}
-                  className="w-full pt-6 pb-2 px-3 rounded-lg border border-[#11295B] text-[#11295B] focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                  className={`w-full pt-6 pb-2 px-3 rounded-lg border focus:outline-none focus:ring-1 ${
+                    errorSexo
+                      ? 'border-red-500 text-red-500 focus:ring-red-500'
+                      : 'border-[#11295B] text-[#11295B] focus:ring-[#11295B]'
+                  }`}
                   required
                 >
                   <option value="" disabled hidden>Seleccionar</option>
                   <option value="femenino">Femenino</option>
                   <option value="masculino">Masculino</option>
                 </select>
+                {errorSexo && mensajeErrorSexo && (
+                  <p className="text-sm text-red-500 mt-1">{mensajeErrorSexo}</p>
+                )}
               </div>
             </div>
 
             <div className="relative w-full mt-4">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                <Phone className="w-6 h-6 text-[#11295B]" />
+                <Phone className={`w-6 h-6 ${errorTelefono ? 'text-red-500' : 'text-[#11295B]'}`} />
               </div>
               <input
                 type="text"
@@ -215,36 +335,52 @@ export default function registroDriver() {
                 value={telefonoUsuario}
                 placeholder="77777777"
                 onChange={(e) => setTelefonoUsuario(e.target.value)}
-                className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
+                  errorTelefono
+                    ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
+                    : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
+                }`}
               />
-              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
+              {errorTelefono && (
+                <p className="text-sm text-red-500 mt-1">{mensajeErrorTelefono}</p>
+              )}
+              <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 ${errorTelefono ? 'text-red-500' : 'text-[#11295B]'}`}>
                 Teléfono
               </span>
             </div>
 
+
             <div className="relative w-full mt-4">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                <LicenciaConductor className="w-6 h-6 text-[#11295B]" />
+                <LicenciaConductor className={`w-6 h-6 ${errorLicencia ? 'text-red-500' : 'text-[#11295B]'}`} />
               </div>
               <input
-                type="NroLicencia"
+                type="text"
                 id="NroLicencia"
                 name="NroLicencia"
                 value={NroLicencia}
                 placeholder="00000000"
                 onChange={(e) => setNroLicencia(e.target.value)}
-                className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
+                  errorLicencia
+                    ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
+                    : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
+                }`}
               />
-              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
+              {errorLicencia && mensajeErrorLicencia && (
+                <p className="text-sm text-red-500 mt-1">{mensajeErrorLicencia}</p>
+              )}
+              <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 ${errorLicencia ? 'text-red-500' : 'text-[#11295B]'}`}>
                 Nro de licencia
               </span>
             </div>
 
+
             <div className="relative w-full mt-4">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                <Pencil className="w-6 h-6 text-[#11295B]" />
+                <Pencil className={`w-6 h-6 ${errorCategoria ? 'text-red-500' : 'text-[#11295B]'}`} />
               </div>
-              <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold  px-1">
+              <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorCategoria ? 'text-red-500' : 'text-[#11295B]'}`}>
                 Categoría
               </span>
               <select
@@ -252,7 +388,11 @@ export default function registroDriver() {
                 name="categoria"
                 value={categoriaLicencia}
                 onChange={(e) => setCategoriaLicencia(e.target.value)}
-                className="w-full pt-6 pb-2 pl-12 pr-3 rounded-lg border border-[#11295B] text-[#11295B] focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                className={`w-full pt-6 pb-2 pl-12 pr-3 rounded-lg border focus:outline-none focus:ring-1 ${
+                  errorCategoria
+                    ? 'border-red-500 text-red-500 focus:ring-red-500'
+                    : 'border-[#11295B] text-[#11295B] focus:ring-[#11295B]'
+                }`}
                 required
               >
                 <option value="" disabled hidden>Seleccionar</option>
@@ -262,38 +402,51 @@ export default function registroDriver() {
                 <option value="Profesional C">Profesional C</option>
                 <option value="Motorista (T)">Motorista (T)</option>
               </select>
+              {errorCategoria && mensajeErrorCategoria && (
+                <p className="text-sm text-red-500 mt-1">{mensajeErrorCategoria}</p>
+              )}
             </div>
+
 
             {/* Última fila */}
             <div className="flex w-full mt-4 gap-4">
               {/* Fecha de emisión */}
               <div className="w-1/2 relative">
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <Calendar className="w-6 h-6 text-[#11295B]" />
+                  <Calendar className={`w-6 h-6 ${errorFechaEmision ? 'text-red-500' : 'text-[#11295B]'}`} />
                 </div>
                 <input
                   type="date"
                   id="fechaEmision"
                   value={fechaEmision}
                   onChange={(e) => {
-                    const value = (e.target as HTMLInputElement).value;
+                    const value = e.target.value;
                     if (validarFechaEmision(value)) {
                       setFechaEmisionState(value);
+                      setErrorFechaEmision(false);
                     } else {
-                      alert('La fecha de emisión no puede ser futura.');
+                      setErrorFechaEmision(true);
                     }
                   }}
-                  className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                  className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border ${
+                    errorFechaEmision
+                      ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
+                      : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
+                  } focus:outline-none focus:ring-1`}
                 />
-                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
+                {errorFechaEmision && mensajeErrorFechaEmision && (
+                  <p className="text-sm text-red-500 mt-1">{mensajeErrorFechaEmision}</p>
+                )}
+                <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorFechaEmision ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Fecha de emisión
                 </span>
               </div>
 
+
               {/* Fecha de vencimiento */}
               <div className="w-1/2 relative">
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <Calendar className="w-6 h-6 text-[#11295B]" />
+                  <Calendar className={`w-6 h-6 ${errorFechaVencimiento ? 'text-red-500' : 'text-[#11295B]'}`} />
                 </div>
                 <input
                   type="date"
@@ -301,16 +454,24 @@ export default function registroDriver() {
                   name="fechaVencimiento"
                   value={fechaVencimiento}
                   onChange={(e) => {
-                    const value = (e.target as HTMLInputElement).value;
+                    const value = e.target.value;
                     if (validarFechaVencimiento(value)) {
                       setFechaVencimientoState(value);
+                      setErrorFechaVencimiento(false);
                     } else {
-                      alert('La fecha de vencimiento debe ser igual o posterior a la fecha actual.');
+                      setErrorFechaVencimiento(true);
                     }
                   }}
-                  className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:outline-none focus:ring-1 focus:ring-[#11295B]"
+                  className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border ${
+                    errorFechaVencimiento
+                      ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
+                      : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
+                  } focus:outline-none focus:ring-1`}
                 />
-                <span className="absolute left-12 top-[0.4rem] text-xs text-[#11295B] font-bold px-1 z-10">
+                {errorFechaVencimiento && mensajeErrorFechaVencimiento && (
+                  <p className="text-sm text-red-500 mt-1">{mensajeErrorFechaVencimiento}</p>
+                )}
+                <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorFechaVencimiento ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Fecha de vencimiento
                 </span>
               </div>
@@ -352,6 +513,15 @@ export default function registroDriver() {
               </div>
               <input ref={reversoRef} type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handleFileChange(e, 'reverso')} />
               {renderImagePreview(reverso, 'reverso')}
+            </div>
+            
+            <div className="flex justify-end mt-12 pr-6">
+            <button
+              onClick={handleSubmit}
+              className="bg-[#FFD180] hover:bg-[#ffc86c] text-white font-semibold px-8 py-2 rounded-full transition duration-200 ease-in-out"
+            >
+              Continuar
+            </button>
             </div>
           </div>
         </div>
