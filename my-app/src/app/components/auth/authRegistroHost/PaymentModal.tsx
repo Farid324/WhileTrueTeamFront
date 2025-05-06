@@ -130,6 +130,9 @@ export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
     } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
       setErrors(prev => ({ ...prev, cardHolder: "Solo caracteres alfabéticos permitidos" }));
       return false;
+    } else if (/\s{2,}/.test(value)) {
+      setErrors(prev => ({ ...prev, cardHolder: "No se puede poner doble espacio" }));
+      return false;
     } else {
       setErrors(prev => ({ ...prev, cardHolder: "" }));
       return true;
@@ -193,8 +196,14 @@ export default function PaymentRegistrationModal({ onClose, onNext }: Props) {
 
   // Manejo del nombre del titular
   const handleCardHolderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCardHolder(value);
+    let value = e.target.value;
+    // Reemplazar múltiples espacios consecutivos con un solo espacio
+    value = value.replace(/\s{2,}/g, " ");
+    
+    // Permitir solo letras, espacios y limitar a un máximo de 30 caracteres
+    if (/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value) && value.length <= 30) {
+      setCardHolder(value);
+    }
     
     // Validación en tiempo real mientras escribe
     if (touched.cardHolder) {

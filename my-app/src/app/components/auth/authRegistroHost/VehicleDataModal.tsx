@@ -8,6 +8,7 @@ interface Props {
     placa: string;
     soat: string;
     imagenes: File[];
+    id_vehiculo: number;
   }) => void;
   onClose: () => void;
 }
@@ -181,7 +182,10 @@ const VehicleDataModal: React.FC<Props> = ({ onNext, onClose }) => {
 
     if (Object.keys(nuevosErrores).length > 0) return;
 
-    onNext({ placa, soat, imagenes });
+    onNext({
+      placa, soat, imagenes,
+      id_vehiculo: 0
+    });
   };
 
   // Función para manejar los cambios en el campo de placa con formato específico
