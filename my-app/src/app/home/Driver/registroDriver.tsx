@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import NavbarPerfilUsuario from '@/app/components/navbar/NavbarPerfilUsuario';
 import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import User from '@/app/components/Icons/User';
 import Phone from '@/app/components/Icons/Phone';
 import LicenciaConductor from '@/app/components/Icons/LicenciaConductor';
@@ -38,6 +39,7 @@ export default function registroDriver() {
   const [errorFechaVencimiento, setErrorFechaVencimiento] = useState(false);
   const [mensajeErrorFechaVencimiento, setMensajeErrorFechaVencimiento] = useState('');
 
+  const router = useRouter();
 
   const anversoRef = useRef<HTMLInputElement>(null);
   const reversoRef = useRef<HTMLInputElement>(null);
@@ -117,7 +119,7 @@ export default function registroDriver() {
   };
 
   const validarTelefono = (telefono: string): boolean => {
-    const regex = /^\d{8$/; // 10 dígitos
+    const regex = /^\d{8}$/; // 10 dígitos
     return regex.test(telefono);
   };
 
@@ -234,7 +236,7 @@ export default function registroDriver() {
   };
 
 
-  const handleSubmit = () => {
+  {/*const handleSubmit = () => {
     const esValido = validarCampos();
 
     if (!esValido) {
@@ -244,7 +246,26 @@ export default function registroDriver() {
 
     // Aquí iría la lógica para continuar, guardar datos o avanzar a otro paso
     console.log("Formulario válido. Listo para enviar.");
+  };*/}
+  const handleSubmit = () => {
+    const esValido = validarCampos();
+    if (!esValido) return;
+  
+    const data = {
+      sexo: sexo,
+      telefono: telefonoUsuario,
+      nro_licencia: NroLicencia,
+      categoria: categoriaLicencia,
+      fecha_emision: fechaEmision,
+      fecha_vencimiento: fechaVencimiento,
+      anverso: anverso, // tipo File
+      reverso: reverso  // tipo File
+    };
+  
+    localStorage.setItem("registroDriverPaso1", JSON.stringify(data));
+    router.push("/home/Driver/seleccionarRenter");
   };
+  
 
 
 
