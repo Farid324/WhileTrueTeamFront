@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/useUser';
@@ -8,22 +9,65 @@ import FiltersBar from '@/app/components/filters/FiltersBar';
 import Footer from '@/app/components/footer/FooterLogin';
 import LoginModal from '@/app/components/auth/authInicioSesion/LoginModal';
 import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
-import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleDataModal'; // Nuevo modal importado
+import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleDataModal';
+import PaymentModal from '@/app/components/auth/authRegistroHost/PaymentModal';
+import CompleteProfileModal from '@/app/components/auth/authRegistroHost/CompleteProfileModal';
 
 export default function MainHome() {
-  const [activeModal, setActiveModal] = useState<
-    'login' | 'register' | 'vehicleData' | null
-  >(null);
+  const [activeModal, setActiveModal] = useState<'login' | 'register' | 'vehicleData' | 'paymentData' | 'completeProfile' | null>(null);
+
+  const [vehicleData, setVehicleData] = useState<{
+    placa: string;
+    soat: string;
+    imagenes: File[];
+    id_vehiculo: number;
+  } | null>(null);
+
+  const [paymentData, setPaymentData] = useState<{
+    cardNumber: string;
+    expiration: string;
+    cvv: string;
+    cardHolder: string;
+  } | null>(null);
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const router = useRouter();
   const user = useUser();
 
-  useEffect(() => {
+   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/');
     }
   }, [user, router]);
+
+  const displayToast = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
+  const handleVehicleDataSubmit = (data: {
+    placa: string;
+    soat: string;
+    imagenes: File[];
+    id_vehiculo: number;
+  }) => {
+    setVehicleData(data);
+    setActiveModal("paymentData");
+  };
+
+  const handlePaymentDataSubmit = (data: { cardNumber: string; expiration: string; cvv: string; cardHolder: string }) => {
+    setPaymentData(data);
+    setActiveModal('completeProfile');
+  };
+
+  const handleRegistrationComplete = () => {
+    setActiveModal(null);
+    displayToast('¡Tu registro como host fue completado exitosamente!');
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
@@ -62,15 +106,41 @@ export default function MainHome() {
 
       {activeModal === 'vehicleData' && (
         <VehicleDataModal
-          onNext={(data) => {
-            console.log('Datos del vehículo:', data);
-            // Aquí puedes pasar al siguiente modal o guardar en contexto global
-            setActiveModal(null); // Cambiar a 'paymentModal' más adelante
-          }}
+          onNext={handleVehicleDataSubmit}
           onClose={() => setActiveModal(null)}
         />
+      )}
+
+      {activeModal === 'paymentData' && vehicleData && (
+        <PaymentModal
+          onNext={handlePaymentDataSubmit}
+          onClose={async () => {
+            if (vehicleData?.id_vehiculo) {
+              const token = localStorage.getItem("token");
+              await fetch(`http://localhost:3001/api/vehiculos/eliminar-vehiculo/${vehicleData.id_vehiculo}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
+              });
+            }
+            setActiveModal(null);
+          }}
+        />
+      )}
+
+      {activeModal === 'completeProfile' && vehicleData && paymentData && (
+        <CompleteProfileModal
+          vehicleData={vehicleData}
+          paymentData={paymentData}
+          onComplete={handleRegistrationComplete}
+          onClose={() => setActiveModal('paymentData')}
+        />
+      )}
+
+      {showToast && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
+          {toastMessage}
+        </div>
       )}
     </div>
   );
 }
-
