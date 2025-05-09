@@ -16,6 +16,7 @@ const UserBrowser = () => {
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,7 +78,13 @@ const UserBrowser = () => {
   const handleRegisterDriver = async () => {
     try {
       const datosPaso1 = localStorage.getItem("registroDriverPaso1");
-  
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No se encontró el token de autenticación.");
+        setLoading(false);
+        return;
+      }
+
       if (!datosPaso1) {
         alert("❌ No se encontraron datos del paso 1");
         return;
@@ -94,7 +101,8 @@ const UserBrowser = () => {
   
       const res = await fetch("http://localhost:3001/api/registro-driver", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,},
         credentials: "include",
         body: JSON.stringify({
           sexo,
