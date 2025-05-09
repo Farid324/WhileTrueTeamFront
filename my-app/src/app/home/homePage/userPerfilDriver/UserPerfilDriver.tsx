@@ -2,6 +2,7 @@
 import React from "react";
 import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
 import PerfilIcon from "@/app/components/Icons/Perfil";
+import PhoneIcon from "@/app/components/Icons/Phone";
 
 export default function UserPerfilDriver() {
   return (
@@ -26,6 +27,7 @@ export default function UserPerfilDriver() {
 
           {/* Campos lado derecho */}
           <div className="flex flex-col w-full md:w-2/3 gap-4">
+            {/* Nombre completo + sexo */}
             <div className="flex flex-col md:flex-row gap-4 w-full">
               {/* Nombre Completo */}
               <div className="flex-1">
@@ -50,6 +52,20 @@ export default function UserPerfilDriver() {
                   className="w-full text-center py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
                   readOnly
                 />
+              </div>
+            </div>
+
+            {/* Teléfono */}
+            <div className="flex flex-col w-full">
+              <label className="text-sm font-semibold text-gray-700">Teléfono</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="77777777"
+                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                  readOnly
+                />
+                <PhoneIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
               </div>
             </div>
           </div>
