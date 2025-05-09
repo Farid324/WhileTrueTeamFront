@@ -5,6 +5,7 @@ import PerfilIcon from "@/app/components/Icons/Perfil";
 import PhoneIcon from "@/app/components/Icons/Phone";
 import LicenciaConductorIcon from "@/app/components/Icons/LicenciaConductor";
 import CategoriaIcon from "@/app/components/Icons/Categoria";
+import CalendarIcon from "@/app/components/Icons/Calendar";
 
 export default function UserPerfilDriver() {
   return (
@@ -31,7 +32,6 @@ export default function UserPerfilDriver() {
           <div className="flex flex-col w-full md:w-2/3 gap-4">
             {/* Nombre completo + sexo */}
             <div className="flex flex-col md:flex-row gap-4 w-full">
-              {/* Nombre Completo */}
               <div className="flex-1">
                 <label className="text-sm font-semibold text-gray-700">Nombre Completo:</label>
                 <div className="relative">
@@ -44,8 +44,6 @@ export default function UserPerfilDriver() {
                   <PerfilIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
                 </div>
               </div>
-
-              {/* Sexo */}
               <div className="w-1/4">
                 <label className="text-sm font-semibold text-gray-700">Sexo</label>
                 <input
@@ -96,6 +94,19 @@ export default function UserPerfilDriver() {
                   readOnly
                 />
                 <CategoriaIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+              </div>
+            </div>
+
+            {/* Fecha de Emisión */}
+            <div className="flex flex-col w-full">
+              <label className="text-sm font-semibold text-gray-700">Fecha de Emisión</label>
+              <div className="relative">
+                <input
+                  type="date"
+                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none text-[#1E3A8A] font-semibold"
+                  readOnly
+                />
+                <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
               </div>
             </div>
           </div>
