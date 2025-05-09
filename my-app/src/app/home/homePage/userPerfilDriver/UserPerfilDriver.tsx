@@ -6,6 +6,7 @@ import PhoneIcon from "@/app/components/Icons/Phone";
 import LicenciaConductorIcon from "@/app/components/Icons/LicenciaConductor";
 import CategoriaIcon from "@/app/components/Icons/Categoria";
 import CalendarIcon from "@/app/components/Icons/Calendar";
+import UserIcon from "@/app/components/Icons/User";
 
 export default function UserPerfilDriver() {
   return (
@@ -15,7 +16,7 @@ export default function UserPerfilDriver() {
 
       <main className="min-h-screen bg-white px-16 py-12">
         {/* Título */}
-        <h1 className="text-center text-2xl font-bold text-[#1E3A8A] uppercase mb-10">
+        <h1 className="text-center text-2xl font-bold text-[#11295B] uppercase mb-10">
           INFORMACION PERSONAL DRIVER
         </h1>
 
@@ -24,7 +25,7 @@ export default function UserPerfilDriver() {
           {/* Imagen de perfil */}
           <div className="flex justify-start">
             <div className="w-36 h-36 bg-gray-100 rounded-3xl border border-black flex items-center justify-center shadow-sm">
-              <PerfilIcon className="w-20 h-20 text-black" />
+              <UserIcon className="w-20 h-20 text-[#000000]" />
             </div>
           </div>
 
@@ -33,23 +34,23 @@ export default function UserPerfilDriver() {
             {/* Nombre completo + sexo */}
             <div className="flex flex-col md:flex-row gap-4 w-full">
               <div className="flex-1">
-                <label className="text-sm font-semibold text-gray-700">Nombre Completo:</label>
+                <label className="text-sm font-semibold text-[#11295B]">Nombre Completo:</label>
                 <div className="relative">
                   <input
                     type="text"
                     placeholder="Example"
-                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
                     readOnly
                   />
-                  <PerfilIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                  <PerfilIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
                 </div>
               </div>
               <div className="w-1/4">
-                <label className="text-sm font-semibold text-gray-700">Sexo</label>
+                <label className="text-sm font-semibold text-[#11295B]">Sexo</label>
                 <input
                   type="text"
                   placeholder="M o F"
-                  className="w-full text-center py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                  className="w-full text-center py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
               </div>
@@ -57,71 +58,69 @@ export default function UserPerfilDriver() {
 
             {/* Teléfono */}
             <div className="flex flex-col w-full">
-              <label className="text-sm font-semibold text-gray-700">Teléfono</label>
+              <label className="text-sm font-semibold text-[#11295B]">Teléfono</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="77777777"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
-                <PhoneIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                <PhoneIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
               </div>
             </div>
 
             {/* Licencia de Conducir */}
             <div className="flex flex-col w-full">
-              <label className="text-sm font-semibold text-gray-700">Licencia de Conducir</label>
+              <label className="text-sm font-semibold text-[#11295B]">Licencia de Conducir</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="12345678"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
-                <LicenciaConductorIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                <LicenciaConductorIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
               </div>
             </div>
 
             {/* Categoría */}
             <div className="flex flex-col w-full">
-              <label className="text-sm font-semibold text-gray-700">Categoría</label>
+              <label className="text-sm font-semibold text-[#11295B]">Categoría</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="A, B, C, P"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
-                <CategoriaIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                <CategoriaIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
               </div>
             </div>
 
             {/* Fecha de Emisión + Fecha de Vencimiento */}
             <div className="flex flex-col md:flex-row gap-4 w-full">
-              {/* Fecha de Emisión */}
               <div className="w-full">
-                <label className="text-sm font-semibold text-gray-700">Fecha de Emisión</label>
+                <label className="text-sm font-semibold text-[#11295B]">Fecha de Emisión</label>
                 <div className="relative">
                   <input
                     type="date"
-                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none text-[#1E3A8A] font-semibold"
+                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow font-semibold text-[#11295B]"
                     readOnly
                   />
-                  <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                  <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
                 </div>
               </div>
 
-              {/* Fecha de Vencimiento */}
               <div className="w-full">
-                <label className="text-sm font-semibold text-gray-700">Fecha de Vencimiento</label>
+                <label className="text-sm font-semibold text-[#11295B]">Fecha de Vencimiento</label>
                 <div className="relative">
                   <input
                     type="date"
-                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none text-[#1E3A8A] font-semibold"
+                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow font-semibold text-[#11295B]"
                     readOnly
                   />
-                  <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                  <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
                 </div>
               </div>
             </div>
