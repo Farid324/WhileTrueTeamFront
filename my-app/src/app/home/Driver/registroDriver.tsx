@@ -267,11 +267,6 @@ export default function registroDriver() {
   };
   
 
-
-
-
-
-
   return (
     <div className="bg-[var(--blanco)] min-h-screen flex flex-col"> 
       <div className="fixed top-0 w-full z-50 bg-white shadow-none border-b border-gray-200">
