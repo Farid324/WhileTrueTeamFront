@@ -9,6 +9,7 @@ import LicenciaConductor from '@/app/components/Icons/LicenciaConductor';
 import Categoria from '@/app/components/Icons/Categoria';
 import Calendar from '@/app/components/Icons/Calendar';
 import Sexo from '@/app/components/Icons/Sexo';
+import { useUser } from '@/hooks/useUser';
 
 
 export default function registroDriver() {
@@ -50,7 +51,18 @@ export default function registroDriver() {
   const reversoRef = useRef<HTMLInputElement>(null);
   const perfilRef = useRef<HTMLInputElement>(null);
 
+  const user = useUser();
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setIsError(true);
+    } else {
+      setNombreUsuario(user?.nombre_completo || '');
+      setIsLoading(false);
+    }
+  }, [user]);
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -107,7 +119,6 @@ export default function registroDriver() {
     const file = e.target.files?.[0];
     if (!file) return;
   
-    // ✅ Verificar si ya hay una imagen cargada
     if (tipo === 'anverso' && anverso) {
       setErrorAnverso('Ya se ha cargado una imagen. Elimina la actual para subir otra.');
       return;
@@ -121,7 +132,6 @@ export default function registroDriver() {
       return;
     }
   
-    // ✅ Validar tipo de archivo (solo PNG)
     if (file.type !== 'image/png') {
       const errorMsg = 'Solo se permiten imágenes en formato PNG';
       if (tipo === 'anverso') {
@@ -139,7 +149,6 @@ export default function registroDriver() {
       return;
     }
   
-    // ✅ Validar tamaño máximo (5MB)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       const errorMsg = 'La imagen no debe superar los 5MB';
@@ -158,7 +167,6 @@ export default function registroDriver() {
       return;
     }
   
-    // ✅ Validar dimensiones mínimas
     const img = new Image();
     img.onload = () => {
       if (img.width < 500 || img.height < 500) {
@@ -178,7 +186,6 @@ export default function registroDriver() {
         return;
       }
   
-      // ✅ Todo está bien
       if (tipo === 'anverso') {
         setAnverso(file);
         setErrorAnverso(null);
@@ -247,13 +254,13 @@ export default function registroDriver() {
   };
 
   const validarTelefono = (telefono: string): boolean => {
-    const regex = /^[67]\d{7}$/; // empieza con 6 o 7, seguido de 7 dígitos (total 8)
+    const regex = /^[67]\d{7}$/; 
     return regex.test(telefono);
   };
   
 
   const validarNroLicencia = (nroLicencia: string): boolean => {
-    const regex = /^[A-Z0-9]{5,10}$/; // 5 a 10 caracteres alfanuméricos
+    const regex = /^[A-Z0-9]{5,10}$/;
     return regex.test(nroLicencia);
   }
 
@@ -453,17 +460,13 @@ export default function registroDriver() {
 
               {/* Sexo */}
               <div className="w-1/3 relative">
-                {/* Icono */}
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
                   <Sexo className={`w-6 h-6 ${errorSexo ? 'text-red-500' : 'text-[#11295B]'}`} />
                 </div>
-
-                {/* Label */}
                 <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorSexo ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Sexo
                 </span>
 
-                {/* Select */}
                 <select
                   id="sexo"
                   name="sexo"
@@ -492,7 +495,6 @@ export default function registroDriver() {
                   <option value="masculino">Masculino</option>
                 </select>
 
-                {/* Mensaje de error */}
                 {errorSexo && mensajeErrorSexo && (
                   <p className="text-sm text-red-500 mt-1">{mensajeErrorSexo}</p>
                 )}
@@ -515,18 +517,14 @@ export default function registroDriver() {
                 onChange={(e) => {
                   const input = e.target.value;
 
-                  // Solo permitir números
                   if (!/^\d*$/.test(input)) return;
 
-                  // Limitar a 8 caracteres
                   if (input.length > 8) return;
 
-                  // Solo permitir que comience con 6 o 7 (o vacío para borrar)
                   if (input.length === 1 && !/^[67]$/.test(input)) return;
 
                   setTelefonoUsuario(input);
 
-                  // Validaciones en tiempo real
                   if (input === '') {
                     setErrorTelefono(true);
                     setMensajeErrorTelefono('Este campo no puede estar vacío');
@@ -570,15 +568,12 @@ export default function registroDriver() {
                 onChange={(e) => {
                   const input = e.target.value;
 
-                  // Solo permitir números
                   if (!/^\d*$/.test(input)) return;
 
-                  // Máximo 9 dígitos
                   if (input.length > 9) return;
 
                   setNroLicencia(input);
 
-                  // Validaciones en tiempo real
                   if (input === '') {
                     setErrorLicencia(true);
                     setMensajeErrorLicencia('Este campo no puede estar vacío');
@@ -761,7 +756,7 @@ export default function registroDriver() {
                 <div
                   className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-20"
                   onClick={() => anversoRef.current?.click()}
-                  onDragOver={(e) => e.preventDefault()} // 🔄 necesario para permitir drop
+                  onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => {
                     e.preventDefault();
                     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
@@ -792,7 +787,6 @@ export default function registroDriver() {
                   <p className="text-sm text-red-500 mt-2">{mensajeErrorAnverso}</p>
                 )}
 
-                {/* 🔴 Mensaje de validación */}
                 {errorAnverso && (
                   <p className="text-sm text-red-500 mt-1">{errorAnverso}</p>
                 )}
@@ -836,8 +830,6 @@ export default function registroDriver() {
                   <p className="text-sm text-red-500 mt-2">{mensajeErrorReverso}</p>
                 )}
 
-
-                {/* 🔴 Mensaje de validación */}
                 {errorReverso && (
                   <p className="text-sm text-red-500 mt-1">{errorReverso}</p>
                 )}
