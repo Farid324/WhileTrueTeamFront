@@ -56,6 +56,7 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
       setFeedback('Teléfono actualizado exitosamente.');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
+      console.error('❌ Error al guardar:', err);
       setFeedback('Hubo un error al guardar.');
     }
   };
@@ -111,10 +112,10 @@ export default function TelefonoEditable({ initialValue, campoEnEdicion, setCamp
       </div>
 
       {errorMensaje && (
-        <p className="text-red-500 text-sm mt-1">{errorMensaje}</p>
+        <p className="text-[var(--rojo)] text-sm mb-1 mt-1">{errorMensaje}</p>
       )}
       {!errorMensaje && feedback && (
-        <p className="text-green-600 text-sm mt-1 font-semibold">{feedback}</p>
+        <p className="text-[var(--verde)] text-sm mb-1 mt-1 font-semibold">{feedback}</p>
       )}
 
       {editando && (
