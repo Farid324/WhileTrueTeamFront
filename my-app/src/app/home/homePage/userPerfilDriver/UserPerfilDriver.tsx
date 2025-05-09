@@ -15,25 +15,42 @@ export default function UserPerfilDriver() {
           INFORMACION PERSONAL DRIVER
         </h1>
 
+        {/* Contenedor principal: Imagen + campos */}
         <div className="flex flex-col md:flex-row gap-10 items-start">
-          {/* Imagen */}
+          {/* Imagen de perfil */}
           <div className="flex justify-start">
             <div className="w-36 h-36 bg-gray-100 rounded-3xl border border-black flex items-center justify-center shadow-sm">
               <PerfilIcon className="w-20 h-20 text-black" />
             </div>
           </div>
 
-          {/* Campo Nombre Completo */}
-          <div className="flex flex-col w-full md:w-2/3 gap-2">
-            <label className="text-sm font-semibold text-gray-700">Nombre Completo:</label>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Example"
-                className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
-                readOnly
-              />
-              <PerfilIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+          {/* Campos lado derecho */}
+          <div className="flex flex-col w-full md:w-2/3 gap-4">
+            <div className="flex flex-col md:flex-row gap-4 w-full">
+              {/* Nombre Completo */}
+              <div className="flex-1">
+                <label className="text-sm font-semibold text-gray-700">Nombre Completo:</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Example"
+                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                    readOnly
+                  />
+                  <PerfilIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                </div>
+              </div>
+
+              {/* Sexo */}
+              <div className="w-1/4">
+                <label className="text-sm font-semibold text-gray-700">Sexo</label>
+                <input
+                  type="text"
+                  placeholder="M o F"
+                  className="w-full text-center py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#1E3A8A]"
+                  readOnly
+                />
+              </div>
             </div>
           </div>
         </div>
