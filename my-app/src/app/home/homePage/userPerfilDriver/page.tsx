@@ -1,10 +1,4 @@
-import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
+import UserPerfilDriver from './UserPerfilDriver';
 
-export default function Page() {
-  return (
-    <>
-      <NavbarPerfilUsuario />
-      <div className="min-h-screen bg-white"></div>
-    </>
-  );
-}
+export default UserPerfilDriver;
+
