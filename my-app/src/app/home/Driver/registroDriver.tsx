@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import User from '@/app/components/Icons/User';
 import Phone from '@/app/components/Icons/Phone';
 import LicenciaConductor from '@/app/components/Icons/LicenciaConductor';
-import Pencil from '@/app/components/Icons/Pencil';
+import Categoria from '@/app/components/Icons/Categoria';
 import Calendar from '@/app/components/Icons/Calendar';
+import Sexo from '@/app/components/Icons/Sexo';
+
 
 export default function registroDriver() {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +43,9 @@ export default function registroDriver() {
 
   const router = useRouter();
 
+  const [mensajeErrorAnverso, setMensajeErrorAnverso] = useState('');
+  const [mensajeErrorReverso, setMensajeErrorReverso] = useState('');
+
   const anversoRef = useRef<HTMLInputElement>(null);
   const reversoRef = useRef<HTMLInputElement>(null);
   const perfilRef = useRef<HTMLInputElement>(null);
@@ -56,11 +61,44 @@ export default function registroDriver() {
     }
   }, []);
 
-  const validateFile = (file: File): boolean => {
-    const validTypes = ['image/jpeg', 'image/png'];
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    return validTypes.includes(file.type) && file.size <= maxSize;
+  useEffect(() => {
+    const handleDragOver = (e: DragEvent) => e.preventDefault();
+    const handleDrop = (e: DragEvent) => e.preventDefault();
+  
+    window.addEventListener("dragover", handleDragOver);
+    window.addEventListener("drop", handleDrop);
+  
+    return () => {
+      window.removeEventListener("dragover", handleDragOver);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, []);
+  
+
+  const validateFile = (file: File, tipo: 'anverso' | 'reverso' | 'perfil') => {
+    return new Promise<{ valido: boolean; mensaje?: string }>((resolve) => {
+      const validType = file.type === 'image/png';
+      if (!validType) {
+        resolve({ valido: false, mensaje: 'Solo se permiten imágenes en formato PNG.' });
+        return;
+      }
+  
+      const img = new Image();
+      img.onload = () => {
+        if (img.width < 500 || img.height < 500) {
+          resolve({ valido: false, mensaje: 'La imagen es ilegible. Por favor, envíe una foto clara de su licencia.' });
+        } else {
+          resolve({ valido: true });
+        }
+      };
+      img.onerror = () => {
+        resolve({ valido: false, mensaje: 'No se pudo cargar la imagen.' });
+      };
+  
+      img.src = URL.createObjectURL(file);
+    });
   };
+  
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -68,26 +106,116 @@ export default function registroDriver() {
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    if (!validateFile(file)) {
-      const errorMsg = 'Formato inválido o tamaño mayor a 5MB';
-      tipo === 'anverso' ? setErrorAnverso(errorMsg) : setErrorReverso(errorMsg);
+  
+    // ✅ Verificar si ya hay una imagen cargada
+    if (tipo === 'anverso' && anverso) {
+      setErrorAnverso('Ya se ha cargado una imagen. Elimina la actual para subir otra.');
       return;
     }
-
-    if (tipo === 'anverso') {
-      setAnverso(file);
-      setErrorAnverso(null);
-    } else {
-      setReverso(file);
-      setErrorReverso(null);
+    if (tipo === 'reverso' && reverso) {
+      setErrorReverso('Ya se ha cargado una imagen. Elimina la actual para subir otra.');
+      return;
     }
-
-    if (tipo === 'perfil') {
-      setPerfil(file);
-      setErrorPerfil(null);
+    if (tipo === 'perfil' && perfil) {
+      setErrorPerfil('Ya se ha cargado una imagen. Elimina la actual para subir otra.');
+      return;
     }
+  
+    // ✅ Validar tipo de archivo (solo PNG)
+    if (file.type !== 'image/png') {
+      const errorMsg = 'Solo se permiten imágenes en formato PNG';
+      if (tipo === 'anverso') {
+        setErrorAnverso(errorMsg);
+        setAnverso(null);
+      }
+      if (tipo === 'reverso') {
+        setErrorReverso(errorMsg);
+        setReverso(null);
+      }
+      if (tipo === 'perfil') {
+        setErrorPerfil(errorMsg);
+        setPerfil(null);
+      }
+      return;
+    }
+  
+    // ✅ Validar tamaño máximo (5MB)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      const errorMsg = 'La imagen no debe superar los 5MB';
+      if (tipo === 'anverso') {
+        setErrorAnverso(errorMsg);
+        setAnverso(null);
+      }
+      if (tipo === 'reverso') {
+        setErrorReverso(errorMsg);
+        setReverso(null);
+      }
+      if (tipo === 'perfil') {
+        setErrorPerfil(errorMsg);
+        setPerfil(null);
+      }
+      return;
+    }
+  
+    // ✅ Validar dimensiones mínimas
+    const img = new Image();
+    img.onload = () => {
+      if (img.width < 500 || img.height < 500) {
+        const errorMsg = 'La imagen es ilegible. Por favor, sube una imagen de al menos 500x500 píxeles.';
+        if (tipo === 'anverso') {
+          setErrorAnverso(errorMsg);
+          setAnverso(null);
+        }
+        if (tipo === 'reverso') {
+          setErrorReverso(errorMsg);
+          setReverso(null);
+        }
+        if (tipo === 'perfil') {
+          setErrorPerfil(errorMsg);
+          setPerfil(null);
+        }
+        return;
+      }
+  
+      // ✅ Todo está bien
+      if (tipo === 'anverso') {
+        setAnverso(file);
+        setErrorAnverso(null);
+      }
+      if (tipo === 'reverso') {
+        setReverso(file);
+        setErrorReverso(null);
+      }
+      if (tipo === 'perfil') {
+        setPerfil(file);
+        setErrorPerfil(null);
+      }
+    };
+  
+    img.onerror = () => {
+      const errorMsg = 'No se pudo leer la imagen. Intenta con otra.';
+      if (tipo === 'anverso') {
+        setErrorAnverso(errorMsg);
+        setAnverso(null);
+      }
+      if (tipo === 'reverso') {
+        setErrorReverso(errorMsg);
+        setReverso(null);
+      }
+      if (tipo === 'perfil') {
+        setErrorPerfil(errorMsg);
+        setPerfil(null);
+      }
+    };
+  
+    img.src = URL.createObjectURL(file);
   };
+  
+  
+
+  
+  
 
   const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
     if (tipo === 'anverso') {
@@ -119,9 +247,10 @@ export default function registroDriver() {
   };
 
   const validarTelefono = (telefono: string): boolean => {
-    const regex = /^\d{8}$/; // 10 dígitos
+    const regex = /^[67]\d{7}$/; // empieza con 6 o 7, seguido de 7 dígitos (total 8)
     return regex.test(telefono);
   };
+  
 
   const validarNroLicencia = (nroLicencia: string): boolean => {
     const regex = /^[A-Z0-9]{5,10}$/; // 5 a 10 caracteres alfanuméricos
@@ -175,9 +304,13 @@ export default function registroDriver() {
       setErrorTelefono(true);
       setMensajeErrorTelefono('Este campo no puede estar vacío');
       valido = false;
-    } else if (!validarTelefono(telefonoUsuario)) {
+    } else if (!/^[67]/.test(telefonoUsuario)) {
       setErrorTelefono(true);
-      setMensajeErrorTelefono('Ingresa un número de teléfono válido de 8 dígitos')
+      setMensajeErrorTelefono('El número debe comenzar con 6 o 7');
+      valido = false;
+    } else if (!/^\d{8}$/.test(telefonoUsuario)) {
+      setErrorTelefono(true);
+      setMensajeErrorTelefono('El número debe tener exactamente 8 dígitos');
       valido = false;
     } else {
       setErrorTelefono(false);
@@ -320,15 +453,34 @@ export default function registroDriver() {
 
               {/* Sexo */}
               <div className="w-1/3 relative">
-                <span className={`absolute left-3 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorSexo ? 'text-red-500' : 'text-[#11295B]'}`}>
+                {/* Icono */}
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <Sexo className={`w-6 h-6 ${errorSexo ? 'text-red-500' : 'text-[#11295B]'}`} />
+                </div>
+
+                {/* Label */}
+                <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorSexo ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Sexo
                 </span>
+
+                {/* Select */}
                 <select
                   id="sexo"
                   name="sexo"
                   value={sexo}
-                  onChange={(e) => setSexo(e.target.value)}
-                  className={`w-full pt-6 pb-2 px-3 rounded-lg border focus:outline-none focus:ring-1 ${
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSexo(value);
+
+                    if (!value) {
+                      setErrorSexo(true);
+                      setMensajeErrorSexo('Seleccione una opción');
+                    } else {
+                      setErrorSexo(false);
+                      setMensajeErrorSexo('');
+                    }
+                  }}
+                  className={`w-full pt-6 pb-2 pl-12 pr-3 rounded-lg border focus:outline-none focus:ring-1 ${
                     errorSexo
                       ? 'border-red-500 text-red-500 focus:ring-red-500'
                       : 'border-[#11295B] text-[#11295B] focus:ring-[#11295B]'
@@ -339,11 +491,16 @@ export default function registroDriver() {
                   <option value="femenino">Femenino</option>
                   <option value="masculino">Masculino</option>
                 </select>
+
+                {/* Mensaje de error */}
                 {errorSexo && mensajeErrorSexo && (
                   <p className="text-sm text-red-500 mt-1">{mensajeErrorSexo}</p>
                 )}
               </div>
+
             </div>
+
+
 
             <div className="relative w-full mt-4">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -355,12 +512,40 @@ export default function registroDriver() {
                 name="telefono"
                 value={telefonoUsuario}
                 placeholder="77777777"
-                onChange={(e) => setTelefonoUsuario(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+
+                  // Solo permitir números
+                  if (!/^\d*$/.test(input)) return;
+
+                  // Limitar a 8 caracteres
+                  if (input.length > 8) return;
+
+                  // Solo permitir que comience con 6 o 7 (o vacío para borrar)
+                  if (input.length === 1 && !/^[67]$/.test(input)) return;
+
+                  setTelefonoUsuario(input);
+
+                  // Validaciones en tiempo real
+                  if (input === '') {
+                    setErrorTelefono(true);
+                    setMensajeErrorTelefono('Este campo no puede estar vacío');
+                  } else if (!/^[67]/.test(input)) {
+                    setErrorTelefono(true);
+                    setMensajeErrorTelefono('El número debe comenzar con 6 o 7');
+                  } else if (input.length < 8) {
+                    setErrorTelefono(true);
+                    setMensajeErrorTelefono('El número debe tener exactamente 8 dígitos');
+                  } else {
+                    setErrorTelefono(false);
+                    setMensajeErrorTelefono('');
+                  }
+                }}
                 className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
-                  errorLicencia
+                  errorTelefono
                     ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
                     : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
-                }`}                
+                }`}
               />
               {errorTelefono && (
                 <p className="text-sm text-red-500 mt-1">{mensajeErrorTelefono}</p>
@@ -371,9 +556,10 @@ export default function registroDriver() {
             </div>
 
 
+
             <div className="relative w-full mt-4">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                <LicenciaConductor className={`w-6 h-6 ${errorLicencia ? 'text-red-500' : 'text-[#11295B]'}`} />
+              <LicenciaConductor className={`w-6 h-6 ${errorLicencia ? 'text-red-500' : 'text-[#11295B]'}`} />
               </div>
               <input
                 type="text"
@@ -381,7 +567,32 @@ export default function registroDriver() {
                 name="NroLicencia"
                 value={NroLicencia}
                 placeholder="00000000"
-                onChange={(e) => setNroLicencia(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+
+                  // Solo permitir números
+                  if (!/^\d*$/.test(input)) return;
+
+                  // Máximo 9 dígitos
+                  if (input.length > 9) return;
+
+                  setNroLicencia(input);
+
+                  // Validaciones en tiempo real
+                  if (input === '') {
+                    setErrorLicencia(true);
+                    setMensajeErrorLicencia('Este campo no puede estar vacío');
+                  } else if (input.length < 6) {
+                    setErrorLicencia(true);
+                    setMensajeErrorLicencia('Debe tener mínimo 6 dígitos');
+                  } else if (input.length > 9) {
+                    setErrorLicencia(true);
+                    setMensajeErrorLicencia('No debe superar los 9 dígitos');
+                  } else {
+                    setErrorLicencia(false);
+                    setMensajeErrorLicencia('');
+                  }
+                }}
                 className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
                   errorLicencia
                     ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
@@ -397,9 +608,10 @@ export default function registroDriver() {
             </div>
 
 
+
             <div className="relative w-full mt-4">
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                <Pencil className={`w-6 h-6 ${errorCategoria ? 'text-red-500' : 'text-[#11295B]'}`} />
+                <Categoria className={`w-6 h-6 ${errorCategoria ? 'text-red-500' : 'text-[#11295B]'}`} />
               </div>
               <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorCategoria ? 'text-red-500' : 'text-[#11295B]'}`}>
                 Categoría
@@ -408,7 +620,18 @@ export default function registroDriver() {
                 id="categoria"
                 name="categoria"
                 value={categoriaLicencia}
-                onChange={(e) => setCategoriaLicencia(e.target.value)}
+                onChange={(e) => {
+                  const valor = e.target.value;
+                  setCategoriaLicencia(valor);
+
+                  if (valor === '') {
+                    setErrorCategoria(true);
+                    setMensajeErrorCategoria('Seleccione una categoría válida');
+                  } else {
+                    setErrorCategoria(false);
+                    setMensajeErrorCategoria('');
+                  }
+                }}
                 className={`w-full pt-6 pb-2 pl-12 pr-3 rounded-lg border focus:outline-none focus:ring-1 ${
                   errorCategoria
                     ? 'border-red-500 text-red-500 focus:ring-red-500'
@@ -423,10 +646,12 @@ export default function registroDriver() {
                 <option value="Profesional C">Profesional C</option>
                 <option value="Motorista (T)">Motorista (T)</option>
               </select>
+
               {errorCategoria && mensajeErrorCategoria && (
                 <p className="text-sm text-red-500 mt-1">{mensajeErrorCategoria}</p>
               )}
             </div>
+
 
 
             {/* Última fila */}
@@ -442,11 +667,23 @@ export default function registroDriver() {
                   value={fechaEmision}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (validarFechaEmision(value)) {
-                      setFechaEmisionState(value);
-                      setErrorFechaEmision(false);
-                    } else {
+                    setFechaEmisionState(value);
+
+                    const esValida = validarFechaEmision(value);
+                    const esMayorQueVencimiento = fechaVencimiento && new Date(value) > new Date(fechaVencimiento);
+
+                    if (!value) {
                       setErrorFechaEmision(true);
+                      setMensajeErrorFechaEmision('Seleccione una fecha');
+                    } else if (!esValida) {
+                      setErrorFechaEmision(true);
+                      setMensajeErrorFechaEmision('La fecha no puede ser posterior a hoy');
+                    } else if (esMayorQueVencimiento) {
+                      setErrorFechaEmision(true);
+                      setMensajeErrorFechaEmision('No puede ser mayor que la fecha de vencimiento');
+                    } else {
+                      setErrorFechaEmision(false);
+                      setMensajeErrorFechaEmision('');
                     }
                   }}
                   className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border ${
@@ -455,13 +692,14 @@ export default function registroDriver() {
                       : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
                   } focus:outline-none focus:ring-1`}
                 />
-              {errorFechaEmision && mensajeErrorFechaEmision && (
-                <p className="text-sm text-red-500 mt-1">{mensajeErrorFechaEmision}</p>
-              )}
+                {errorFechaEmision && mensajeErrorFechaEmision && (
+                  <p className="text-sm text-red-500 mt-1">{mensajeErrorFechaEmision}</p>
+                )}
                 <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 z-10 ${errorFechaEmision ? 'text-red-500' : 'text-[#11295B]'}`}>
                   Fecha de emisión
                 </span>
               </div>
+
 
 
               {/* Fecha de vencimiento */}
@@ -476,11 +714,23 @@ export default function registroDriver() {
                   value={fechaVencimiento}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (validarFechaVencimiento(value)) {
-                      setFechaVencimientoState(value);
-                      setErrorFechaVencimiento(false);
-                    } else {
+                    setFechaVencimientoState(value);
+
+                    const esValida = validarFechaVencimiento(value);
+                    const esMenorQueEmision = fechaEmision && new Date(value) < new Date(fechaEmision);
+
+                    if (!value) {
                       setErrorFechaVencimiento(true);
+                      setMensajeErrorFechaVencimiento('Seleccione una fecha');
+                    } else if (!esValida) {
+                      setErrorFechaVencimiento(true);
+                      setMensajeErrorFechaVencimiento('La fecha debe ser posterior a hoy');
+                    } else if (esMenorQueEmision) {
+                      setErrorFechaVencimiento(true);
+                      setMensajeErrorFechaVencimiento('No puede ser menor que la fecha de emisión');
+                    } else {
+                      setErrorFechaVencimiento(false);
+                      setMensajeErrorFechaVencimiento('');
                     }
                   }}
                   className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border ${
@@ -504,37 +754,95 @@ export default function registroDriver() {
           <div className="w-1/2 space-y-6">
             <h2 className="text-2xl font-bold text-[#11295B] mb-2">DATOS PERSONALES Y DE LICENCIA</h2>
 
-            {/* Imagen anverso */}
-            <div className="bg-gray-100 p-4 rounded-xl">
-              <label className="font-semibold text-[#11295B]">Imagen anverso de la Licencia</label>
-              <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
-              <div
-                className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
-                onClick={() => anversoRef.current?.click()}
-              >
-                <span className="text-[#11295B] font-semibold z-10 relative">
-                  {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
-                </span>
-              </div>
-              <input ref={anversoRef} type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handleFileChange(e, 'anverso')} />
-              {renderImagePreview(anverso, 'anverso')}
-            </div>
+             {/* Imagen anverso */}
+              <div className="bg-gray-100 p-4 rounded-xl">
+                <label className="font-semibold text-[#11295B]">Imagen anverso de la Licencia</label>
+                <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
+                <div
+                  className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-20"
+                  onClick={() => anversoRef.current?.click()}
+                  onDragOver={(e) => e.preventDefault()} // 🔄 necesario para permitir drop
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                      const droppedFile = e.dataTransfer.files[0];
+                      const fakeEvent = {
+                        target: {
+                          files: [droppedFile]
+                        }
+                      } as unknown as React.ChangeEvent<HTMLInputElement>;                      
+                      handleFileChange(fakeEvent, 'anverso');
+                    }
+                  }}
+                >
+                  <span className="text-[#11295B] font-semibold z-10 relative">
+                    {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
+                  </span>
+                </div>
 
-            {/* Imagen reverso */}
-            <div className="bg-gray-100 p-4 rounded-xl">
-              <label className="font-semibold text-[#11295B]">Imagen reverso de la Licencia</label>
-              <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
-              <div
-                className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-15"
-                onClick={() => reversoRef.current?.click()}
-              >
-                <span className="text-[#11295B] font-semibold z-10 relative">
-                  {reverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
-                </span>
+                <input
+                  ref={anversoRef}
+                  type="file"
+                  accept="image/png"
+                  className="hidden"
+                  onChange={(e) => handleFileChange(e, 'anverso')}
+                />
+                {renderImagePreview(anverso, 'anverso')}
+                {mensajeErrorAnverso && (
+                  <p className="text-sm text-red-500 mt-2">{mensajeErrorAnverso}</p>
+                )}
+
+                {/* 🔴 Mensaje de validación */}
+                {errorAnverso && (
+                  <p className="text-sm text-red-500 mt-1">{errorAnverso}</p>
+                )}
               </div>
-              <input ref={reversoRef} type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handleFileChange(e, 'reverso')} />
-              {renderImagePreview(reverso, 'reverso')}
-            </div>
+
+              {/* Imagen reverso */}
+              <div className="bg-gray-100 p-4 rounded-xl">
+                <label className="font-semibold text-[#11295B]">Imagen reverso de la Licencia</label>
+                <p className="text-sm text-gray-600">Toma la foto en un lugar bien iluminado</p>
+                <div
+                  className="mt-2 border border-dashed border-gray-400 bg-gray-200 rounded text-center cursor-pointer hover:bg-gray-300 flex items-center justify-center h-20"
+                  onClick={() => reversoRef.current?.click()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                      const droppedFile = e.dataTransfer.files[0];
+                      const fakeEvent = {
+                        target: {
+                          files: [droppedFile]
+                        }
+                      } as unknown as React.ChangeEvent<HTMLInputElement>;
+                      handleFileChange(fakeEvent, 'reverso');
+                    }
+                  }}
+                  onDragOver={(e) => e.preventDefault()}
+                >
+                  <span className="text-[#11295B] font-semibold z-10 relative">
+                    {reverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
+                  </span>
+                </div>
+
+                <input
+                  ref={reversoRef}
+                  type="file"
+                  accept="image/png"
+                  className="hidden"
+                  onChange={(e) => handleFileChange(e, 'reverso')}
+                />
+                {renderImagePreview(reverso, 'reverso')}
+                {mensajeErrorReverso && (
+                  <p className="text-sm text-red-500 mt-2">{mensajeErrorReverso}</p>
+                )}
+
+
+                {/* 🔴 Mensaje de validación */}
+                {errorReverso && (
+                  <p className="text-sm text-red-500 mt-1">{errorReverso}</p>
+                )}
+              </div>
+
             
             <div className="flex justify-end mt-12 pr-6">
             <button
