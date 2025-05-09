@@ -837,16 +837,28 @@ export default function registroDriver() {
 
             
             <div className="flex justify-end mt-12 pr-6">
-            <button
-              onClick={handleSubmit}
-              className="bg-[#FFD180] hover:bg-[#ffc86c] text-white font-semibold px-8 py-2 rounded-full transition duration-200 ease-in-out"
-            >
-              Continuar
-            </button>
+            
+
+
+              <div className="flex justify-end gap-8 mt-12 px-6">
+                <button
+                  onClick={() => router.push('/home/homePage')}
+                  className="min-w-[160px] bg-[#E0E0E0] hover:bg-[#d6d6d6] text-[#11295B] font-semibold px-10 py-3 rounded-full transition duration-200 ease-in-out"
+                >
+                  Atrás
+                </button>
+
+                <button
+                  onClick={handleSubmit}
+                  className="min-w-[160px] bg-[#FFD180] hover:bg-[#ffc86c] text-white font-semibold px-10 py-3 rounded-full transition duration-200 ease-in-out"
+                >
+                  Continuar
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
-      
       </div>
   </div>
   );
