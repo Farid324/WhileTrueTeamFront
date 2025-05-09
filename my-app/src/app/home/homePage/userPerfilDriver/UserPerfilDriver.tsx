@@ -97,16 +97,32 @@ export default function UserPerfilDriver() {
               </div>
             </div>
 
-            {/* Fecha de Emisión */}
-            <div className="flex flex-col w-full">
-              <label className="text-sm font-semibold text-gray-700">Fecha de Emisión</label>
-              <div className="relative">
-                <input
-                  type="date"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none text-[#1E3A8A] font-semibold"
-                  readOnly
-                />
-                <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+            {/* Fecha de Emisión + Fecha de Vencimiento */}
+            <div className="flex flex-col md:flex-row gap-4 w-full">
+              {/* Fecha de Emisión */}
+              <div className="w-full">
+                <label className="text-sm font-semibold text-gray-700">Fecha de Emisión</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none text-[#1E3A8A] font-semibold"
+                    readOnly
+                  />
+                  <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                </div>
+              </div>
+
+              {/* Fecha de Vencimiento */}
+              <div className="w-full">
+                <label className="text-sm font-semibold text-gray-700">Fecha de Vencimiento</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow focus:outline-none text-[#1E3A8A] font-semibold"
+                    readOnly
+                  />
+                  <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-gray-500" />
+                </div>
               </div>
             </div>
           </div>
