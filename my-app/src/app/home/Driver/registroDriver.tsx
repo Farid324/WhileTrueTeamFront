@@ -19,8 +19,6 @@ export default function registroDriver() {
   const [reverso, setReverso] = useState<File | null>(null);
   const [perfil, setPerfil] = useState<File | null>(null);
   const [errorPerfil, setErrorPerfil] = useState<string | null>(null);
-  const [errorAnverso, setErrorAnverso] = useState<string | null>(null);
-  const [errorReverso, setErrorReverso] = useState<string | null>(null);
   const [nombreUsuario, setNombreUsuario] = useState<string>('');
   const [sexo, setSexo] = useState<string>('');
   const [telefonoUsuario, setTelefonoUsuario] = useState<string>('');
@@ -41,6 +39,9 @@ export default function registroDriver() {
   const [mensajeErrorFechaEmision, setMensajeErrorFechaEmision] = useState('');
   const [errorFechaVencimiento, setErrorFechaVencimiento] = useState(false);
   const [mensajeErrorFechaVencimiento, setMensajeErrorFechaVencimiento] = useState('');
+  const [errorAnverso, setErrorAnverso] = useState<string | null>(null);
+  const [errorReverso, setErrorReverso] = useState<string | null>(null);
+
 
   const router = useRouter();
 
@@ -370,6 +371,20 @@ export default function registroDriver() {
     } else {
       setErrorFechaVencimiento(false);
       setMensajeErrorFechaVencimiento('');
+    }    
+
+    if (!anverso) {
+      setErrorAnverso('Debe subir la imagen del anverso de la licencia');
+      valido = false;
+    } else {
+      setErrorAnverso(null);
+    }
+    
+    if (!reverso) {
+      setErrorReverso('Debe subir la imagen del reverso de la licencia');
+      valido = false;
+    } else {
+      setErrorReverso(null);
     }    
 
     return valido;
