@@ -6,7 +6,6 @@ import PhoneIcon from "@/app/components/Icons/Phone";
 import LicenciaConductorIcon from "@/app/components/Icons/LicenciaConductor";
 import CategoriaIcon from "@/app/components/Icons/Categoria";
 import CalendarIcon from "@/app/components/Icons/Calendar";
-import UserIcon from "@/app/components/Icons/User";
 
 export default function UserPerfilDriver() {
   return (
@@ -25,7 +24,7 @@ export default function UserPerfilDriver() {
           {/* Imagen de perfil */}
           <div className="flex justify-start">
             <div className="w-36 h-36 bg-gray-100 rounded-3xl border border-black flex items-center justify-center shadow-sm">
-              <UserIcon className="w-20 h-20 text-[#000000]" />
+              <PerfilIcon className="w-20 h-20 text-black" />
             </div>
           </div>
 
@@ -39,7 +38,7 @@ export default function UserPerfilDriver() {
                   <input
                     type="text"
                     placeholder="Example"
-                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
+                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] placeholder:text-gray-400 font-semibold text-[#11295B]"
                     readOnly
                   />
                   <PerfilIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -50,7 +49,7 @@ export default function UserPerfilDriver() {
                 <input
                   type="text"
                   placeholder="M o F"
-                  className="w-full text-center py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
+                  className="w-full text-center py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
               </div>
@@ -63,7 +62,7 @@ export default function UserPerfilDriver() {
                 <input
                   type="text"
                   placeholder="77777777"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
+                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
                 <PhoneIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -77,7 +76,7 @@ export default function UserPerfilDriver() {
                 <input
                   type="text"
                   placeholder="12345678"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
+                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
                 <LicenciaConductorIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -91,7 +90,7 @@ export default function UserPerfilDriver() {
                 <input
                   type="text"
                   placeholder="A, B, C, P"
-                  className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow placeholder:text-gray-400 font-semibold text-[#11295B]"
+                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] placeholder:text-gray-400 font-semibold text-[#11295B]"
                   readOnly
                 />
                 <CategoriaIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -105,7 +104,7 @@ export default function UserPerfilDriver() {
                 <div className="relative">
                   <input
                     type="date"
-                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow font-semibold text-[#11295B]"
+                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] font-semibold text-[#11295B]"
                     readOnly
                   />
                   <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -117,7 +116,7 @@ export default function UserPerfilDriver() {
                 <div className="relative">
                   <input
                     type="date"
-                    className="w-full pl-10 py-2 border-2 border-gray-400 rounded shadow font-semibold text-[#11295B]"
+                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] font-semibold text-[#11295B]"
                     readOnly
                   />
                   <CalendarIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
