@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { debounce } from "lodash";
 import { FiMail, FiPhone, FiSearch, FiPlusCircle, FiX } from "react-icons/fi";
+import NavbarPerfilUsuario from '@/app/components/navbar/NavbarPerfilUsuario';
 
 interface User {
   id_usuario: number;
@@ -186,8 +187,14 @@ const UserBrowser = () => {
 
   return (
     
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white">
+      {/* Navbar fijo */}
+      <div className="fixed top-0 w-full z-50 bg-white shadow-sm border-b border-gray-200">
+        <NavbarPerfilUsuario />
+      </div>
+
+      {/* Contenedor principal con margen top suficiente */}
+      <div className="max-w-7xl mx-auto pt-25 px-6">
         <h1 className="text-3xl font-bold text-[#1E3A8A] mb-4">Seleccionar Renters</h1>
         
         {/* Input de búsqueda */}
@@ -227,66 +234,49 @@ const UserBrowser = () => {
           <p className="text-center text-gray-600">No se encontraron usuarios.</p>
         ) : (
           <div className="relative mt-4">
-            {/* Flecha izquierda */}
-            <button
-              onClick={scrollLeft}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white shadow rounded-full hover:bg-gray-100"
-              aria-label="Scroll left"
-            >
-              ←
-            </button>
+            {/* Contenedor con flechas y carrusel */}
+            <div className="flex items-center">
+              
+              {/* Flecha izquierda */}
+              <button
+                onClick={scrollLeft}
+                className="w-10 h-10 flex items-center justify-center bg-[#1E3A8A] rounded-full shadow-md hover:bg-blue-800 text-white mr-2"
+                aria-label="Scroll left"
+              >
+                ←
+              </button>
 
-            {/* Contenedor de cards */}
-            <div
-              ref={scrollRef}
-              className="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth px-12"
-              style={{ scrollBehavior: "smooth" }}
-            >
-              {filteredUsers.map((user) => (
-                <UserCard
-                  key={user.id_usuario}
-                  user={user}
-                  isSelected={selectedUsers.some(
-                    (u) => u.id_usuario === user.id_usuario
-                  )}
-                  onAction={handleAddUser}
-                />
-              ))}
+              {/* Carrusel de cards */}
+              <div
+                ref={scrollRef}
+                className="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth"
+                style={{ scrollBehavior: "smooth", maxWidth: "calc(100% - 96px)" }}
+              >
+                {filteredUsers.map((user) => (
+                  <UserCard
+                    key={user.id_usuario}
+                    user={user}
+                    isSelected={selectedUsers.some(
+                      (u) => u.id_usuario === user.id_usuario
+                    )}
+                    onAction={handleAddUser}
+                  />
+                ))}
+              </div>
+
+              {/* Flecha derecha */}
+              <button
+                onClick={scrollRight}
+                className="w-10 h-10 flex items-center justify-center bg-[#1E3A8A] rounded-full shadow-md hover:bg-blue-800 text-white ml-2"
+                aria-label="Scroll right"
+              >
+                →
+              </button>
             </div>
-
-            {/* Flecha derecha */}
-            <button
-              onClick={scrollRight}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md hover:bg-gray-200 transition duration-200"
-              aria-label="Scroll right"
-            >
-              →
-            </button>
           </div>
+
         )}
 
-        {/* grilla usuarios seleccionados */}
-        {/*{selectedUsers.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Renters seleccionados</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {selectedUsers.map((user) => (
-                <UserCard
-                  key={user.id_usuario}
-                  user={user}
-                  isSelected={true}
-                  onAction={() => handleRemoveUser(user.id_usuario)}
-                />
-              ))}
-            </div>
-            <button
-              onClick={handleRegisterDriver}
-              className="mt-6 px-6 py-3 bg-green-600 text-white rounded-lg"
-            >
-              Registrar driver con renters
-            </button>
-          </div>
-      )}*/}
 
       {/* Tabla visual de renters seleccionados */}
       {selectedUsers.length > 0 && (
