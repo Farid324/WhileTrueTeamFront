@@ -138,6 +138,9 @@ const UserBrowser = () => {
       router.push("/home/homePage");
       // setShowSuccessModal(true); 
       alert("Driver registrado con éxito ✅");
+
+      //window.location.href = "/home/homePage?success=driver";
+
   
       setSelectedUsers([]);
       localStorage.removeItem("selectedRenters");
