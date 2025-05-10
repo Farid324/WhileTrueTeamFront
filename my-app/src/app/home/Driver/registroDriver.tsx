@@ -13,11 +13,10 @@ import { useUser } from '@/hooks/useUser';
 
 
 
-// 👇 Agrega esto antes de tu componente principal
 const uploadImageToCloudinary = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "redibo_driver"); // Cambia si usas otro preset
+  formData.append("upload_preset", "redibo_driver"); 
 
   try {
     const response = await fetch("https://api.cloudinary.com/v1_1/do94h9rbw/image/upload", {
@@ -440,7 +439,6 @@ export default function registroDriver() {
     const handleSubmit = async () => {
       const esValido = validarCampos();
       if (!esValido || !anverso || !reverso) {
-        alert("Completa todos los campos obligatorios, incluyendo las imágenes.");
         return;
       }
 
@@ -448,7 +446,6 @@ export default function registroDriver() {
       const urlReverso = await uploadImageToCloudinary(reverso);
 
       if (!urlAnverso || !urlReverso) {
-        alert("Error al subir imágenes. Intenta nuevamente.");
         return;
       }
 
