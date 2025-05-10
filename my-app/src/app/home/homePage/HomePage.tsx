@@ -24,10 +24,13 @@ export default function MainHome() {
   } | null>(null);
 
   const [paymentData, setPaymentData] = useState<{
-    cardNumber: string;
-    expiration: string;
-    cvv: string;
-    cardHolder: string;
+    tipo: "card" | "qr" | "cash";
+    cardNumber?: string;
+    expiration?: string;
+    cvv?: string;
+    cardHolder?: string;
+    qrImage?: File | null;
+    efectivoDetalle?: string;
   } | null>(null);
 
   const [showToast, setShowToast] = useState(false);
@@ -59,10 +62,19 @@ export default function MainHome() {
     setActiveModal("paymentData");
   };
 
-  const handlePaymentDataSubmit = (data: { cardNumber: string; expiration: string; cvv: string; cardHolder: string }) => {
-    setPaymentData(data);
-    setActiveModal('completeProfile');
-  };
+  const handlePaymentDataSubmit = (data: {
+  tipo: "card" | "qr" | "cash";
+  cardNumber?: string;
+  expiration?: string;
+  cvv?: string;
+  cardHolder?: string;
+  qrImage?: File | null;
+  efectivoDetalle?: string;
+}) => {
+  setPaymentData(data);
+  setActiveModal('completeProfile');
+};
+
 
   const handleRegistrationComplete = () => {
     setActiveModal(null);
