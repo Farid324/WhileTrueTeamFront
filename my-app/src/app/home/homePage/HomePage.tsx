@@ -12,6 +12,7 @@ import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
 import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleDataModal';
 import PaymentModal from '@/app/components/auth/authRegistroHost/PaymentModal';
 import CompleteProfileModal from '@/app/components/auth/authRegistroHost/CompleteProfileModal';
+import SuccessModal from '@/app/home/Driver/SuccesModal/successModal';
 
 export default function MainHome() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | 'vehicleData' | 'paymentData' | 'completeProfile' | null>(null);
@@ -68,6 +69,14 @@ export default function MainHome() {
     setActiveModal(null);
     displayToast('¡Tu registro como host fue completado exitosamente!');
   };
+  const [showDriverSuccess, setShowDriverSuccess] = useState(false);
+  useEffect(() => {
+    const registroExitosoDriver = localStorage.getItem("registroExitosoDriver");
+    if (registroExitosoDriver) {
+      setShowDriverSuccess(true);
+      localStorage.removeItem("registroExitosoDriver");
+    }
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
@@ -140,6 +149,25 @@ export default function MainHome() {
         <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
           {toastMessage}
         </div>
+      )}
+
+      {showDriverSuccess && (
+        <SuccessModal
+          onClose={() => {
+            setShowDriverSuccess(false);
+            router.push("/home/homePage");
+          }}
+        />
+      )}
+
+      {/* Success Modal for Driver Registration */}
+      {showDriverSuccess && (
+        <SuccessModal
+          onClose={() => {
+            setShowDriverSuccess(false);
+            router.push("/home/homePage");
+          }}
+        />
       )}
     </div>
   );

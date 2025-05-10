@@ -1,8 +1,16 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-export default function SuccessModal() {
+interface SuccessModalProps {
+    onClose: () => void;
+  }
+
+export default function SuccessModal({ onClose }: SuccessModalProps) {
   const router = useRouter();
+
+  const handleClose = () => {
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -23,10 +31,13 @@ export default function SuccessModal() {
           onClick={() => {
             localStorage.removeItem("registroExitosoDriver");
             router.push("/home/homePage");
+            handleClose(); // si querés cerrar el modal antes de redirigir
           }}
+
         >
           Entendido
         </button>
+
       </div>
     </div>
   );

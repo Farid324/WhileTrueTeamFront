@@ -3,6 +3,9 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { debounce } from "lodash";
 import { FiMail, FiPhone, FiSearch, FiPlusCircle, FiX } from "react-icons/fi";
 import NavbarPerfilUsuario from '@/app/components/navbar/NavbarPerfilUsuario';
+import { useRouter } from "next/navigation";
+
+
 
 interface User {
   id_usuario: number;
@@ -20,6 +23,8 @@ const UserBrowser = () => {
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const router = useRouter();
+
 
 
   useEffect(() => {
@@ -126,7 +131,12 @@ const UserBrowser = () => {
       console.log("🧾 Detalle del error:", errorText);
   
       if (!res.ok) throw new Error("Falló el registro");
-      setShowSuccessModal(true); 
+      // ✅ Bandera para activar modal en homePage
+      localStorage.setItem("registroExitosoDriver", "true");
+
+      // ✅ Redirección automática
+      router.push("/home/homePage");
+      // setShowSuccessModal(true); 
       alert("Driver registrado con éxito ✅");
   
       setSelectedUsers([]);
