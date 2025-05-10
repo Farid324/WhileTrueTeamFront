@@ -96,6 +96,7 @@ export default function registroDriver() {
       setCategoriaLicencia(parsed.categoria || '');
       setFechaEmisionState(parsed.fecha_emision || '');
       setFechaVencimientoState(parsed.fecha_vencimiento || '');
+      
     }
   }, []);
 
@@ -181,6 +182,14 @@ export default function registroDriver() {
         setErrorPerfil(errorMsg);
         setPerfil(null);
       }
+      if (tipo === 'anverso') {
+        setAnverso(file);
+        setErrorAnverso('');
+      }
+      if (tipo === 'reverso') {
+        setReverso(file);
+        setErrorReverso('');
+      }
       return;
     }
   
@@ -254,39 +263,38 @@ export default function registroDriver() {
     img.src = URL.createObjectURL(file);
   };
   
-  
 
   
-  
+const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
+  if (tipo === 'anverso') setAnverso(null);
+  if (tipo === 'reverso') setReverso(null);
+  if (tipo === 'perfil') setPerfil(null);
+};
 
-  const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
-    if (tipo === 'anverso') {
-      setAnverso(null);
-      setErrorAnverso(null);
-    } else if (tipo === 'reverso'){
-      setReverso(null);
-      setErrorReverso(null);
-    } else {
-      setPerfil(null);
-      setErrorPerfil(null);
-    }
-  };
 
-  const renderImagePreview = (file: File | null, tipo: 'anverso' | 'reverso' | 'perfil') => {
-    if (!file) return null;
-    const src = URL.createObjectURL(file);
-    return (
-      <div className="relative w-40 h-28 mt-2">
-        <img src={src} alt={tipo} className="object-cover w-full h-full rounded" />
-        <button
-          onClick={() => removeFile(tipo)}
-          className="absolute -top-2 -right-2 bg-[#11295B] text-white rounded-full w-5 h-5 flex items-center justify-center"
-        >
-          <X size={12} />
-        </button>
-      </div>
-    );
-  };
+  const renderImagePreview = (file: File | null | undefined, tipo: 'anverso' | 'reverso' | 'perfil') => {
+  if (!file) return null;
+  if (!(file instanceof File)) {
+    console.error(`❌ El archivo para "${tipo}" no es válido:`, file);
+    return null;
+  }
+
+  const src = URL.createObjectURL(file);
+  return (
+    <div className="relative w-40 h-28 mt-2">
+      <img src={src} alt={tipo} className="object-cover w-full h-full rounded" />
+      <button
+        onClick={() => removeFile(tipo)}
+        className="absolute -top-2 -right-2 bg-[#11295B] text-white rounded-full w-5 h-5 flex items-center justify-center"
+      >
+        <X size={12} />
+      </button>
+    </div>
+  );
+};
+
+
+
 
   const validarTelefono = (telefono: string): boolean => {
     const regex = /^[67]\d{7}$/; 

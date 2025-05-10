@@ -19,6 +19,8 @@ const UserBrowser = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
 
   useEffect(() => {
     // Imprimir los datos del paso 1
@@ -98,6 +100,8 @@ const UserBrowser = () => {
         categoria,
         fecha_emision,
         fecha_vencimiento,
+        anversoUrl,
+        reversoUrl,
       } = JSON.parse(datosPaso1);
   
       const res = await fetch("http://localhost:3001/api/registro-driver", {
@@ -112,6 +116,8 @@ const UserBrowser = () => {
           categoria,
           fecha_emision,
           fecha_vencimiento,
+          anversoUrl,
+          reversoUrl,
           rentersIds: selectedUsers.map((u) => u.id_usuario),
         }),
       });
@@ -120,6 +126,7 @@ const UserBrowser = () => {
       console.log("🧾 Detalle del error:", errorText);
   
       if (!res.ok) throw new Error("Falló el registro");
+      setShowSuccessModal(true); 
       alert("Driver registrado con éxito ✅");
   
       setSelectedUsers([]);
@@ -328,8 +335,9 @@ const UserBrowser = () => {
             </div>
           </div>
         </div>
-      )}
+        )}
       </div>
+      
     </div>
   );
 };
