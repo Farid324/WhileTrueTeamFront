@@ -12,6 +12,28 @@ import Sexo from '@/app/components/Icons/Sexo';
 import { useUser } from '@/hooks/useUser';
 
 
+
+// 👇 Agrega esto antes de tu componente principal
+const uploadImageToCloudinary = async (file: File): Promise<string | null> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "redibo_driver"); // Cambia si usas otro preset
+
+  try {
+    const response = await fetch("https://api.cloudinary.com/v1_1/do94h9rbw/image/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+    return data.secure_url;
+  } catch (error) {
+    console.error("Error al subir a Cloudinary", error);
+    return null;
+  }
+};
+
+
 export default function registroDriver() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -64,6 +86,19 @@ export default function registroDriver() {
     }
   }, [user]);
   
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("registroDriverPaso1");
+    if (savedData) {
+      const parsed = JSON.parse(savedData);
+      setSexo(parsed.sexo || '');
+      setTelefonoUsuario(parsed.telefono || '');
+      setNroLicencia(parsed.nro_licencia || '');
+      setCategoriaLicencia(parsed.categoria || '');
+      setFechaEmisionState(parsed.fecha_emision || '');
+      setFechaVencimientoState(parsed.fecha_vencimiento || '');
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -402,25 +437,36 @@ export default function registroDriver() {
     // Aquí iría la lógica para continuar, guardar datos o avanzar a otro paso
     console.log("Formulario válido. Listo para enviar.");
   };*/}
-  const handleSubmit = () => {
-    const esValido = validarCampos();
-    if (!esValido) return;
-  
-    const data = {
-      sexo: sexo,
-      telefono: telefonoUsuario,
-      nro_licencia: NroLicencia,
-      categoria: categoriaLicencia,
-      fecha_emision: fechaEmision,
-      fecha_vencimiento: fechaVencimiento,
-      anverso: anverso, // tipo File
-      reverso: reverso  // tipo File
+    const handleSubmit = async () => {
+      const esValido = validarCampos();
+      if (!esValido || !anverso || !reverso) {
+        alert("Completa todos los campos obligatorios, incluyendo las imágenes.");
+        return;
+      }
+
+      const urlAnverso = await uploadImageToCloudinary(anverso);
+      const urlReverso = await uploadImageToCloudinary(reverso);
+
+      if (!urlAnverso || !urlReverso) {
+        alert("Error al subir imágenes. Intenta nuevamente.");
+        return;
+      }
+
+      const data = {
+        sexo,
+        telefono: telefonoUsuario,
+        nro_licencia: NroLicencia,
+        categoria: categoriaLicencia,
+        fecha_emision: fechaEmision,
+        fecha_vencimiento: fechaVencimiento,
+        anversoUrl: urlAnverso,
+        reversoUrl: urlReverso
+      };
+
+      localStorage.setItem("registroDriverPaso1", JSON.stringify(data));
+      router.push("/home/Driver/seleccionarRenter");
     };
-  
-    localStorage.setItem("registroDriverPaso1", JSON.stringify(data));
-    router.push("/home/Driver/seleccionarRenter");
-  };
-  
+
 
 
 
@@ -650,11 +696,12 @@ export default function registroDriver() {
                 required
               >
                 <option value="" disabled hidden>Seleccionar</option>
-                <option value="Particular(P)">Particular(P)</option>
+                <option value="Particular P">Particular(P)</option>
                 <option value="Profesional A">Profesional A</option>
                 <option value="Profesional B">Profesional B</option>
                 <option value="Profesional C">Profesional C</option>
-                <option value="Motorista (T)">Motorista (T)</option>
+                <option value="Motorista M">Motorista (M)</option>
+                <option value="Especial F">Especial (F)</option>
               </select>
 
               {errorCategoria && mensajeErrorCategoria && (
@@ -870,7 +917,6 @@ export default function registroDriver() {
                   Continuar
                 </button>
               </div>
-
             </div>
           </div>
         </div>
