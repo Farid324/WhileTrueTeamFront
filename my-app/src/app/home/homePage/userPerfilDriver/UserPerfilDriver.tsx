@@ -13,6 +13,7 @@ import { SolarGalleryOutline } from "@/app/components/Icons/Gallery";
 type DriverData = {
   usuario: {
     nombre_completo: string;
+    foto_perfil?: string;
   };
   sexo: string;
   telefono: string;
@@ -54,8 +55,16 @@ export default function UserPerfilDriver() {
 
         <div className="flex flex-col md:flex-row justify-start gap-10">
           {/* Imagen de perfil */}
-          <div className="bg-gray-100 border border-black rounded-2xl flex items-center justify-center w-[160px] h-[160px] ml-4">
-            <PerfilIcon className="w-24 h-24 text-black" />
+          <div className="bg-gray-100 border border-black rounded-2xl flex items-center justify-center w-[160px] h-[160px] ml-4 overflow-hidden">
+            {driverData?.usuario?.foto_perfil ? (
+              <img
+                src={`http://localhost:3001/uploads/${driverData.usuario.foto_perfil}`}
+                alt="Foto de perfil"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <PerfilIcon className="w-24 h-24 text-black" />
+            )}
           </div>
 
           {/* Formulario */}
@@ -181,12 +190,29 @@ export default function UserPerfilDriver() {
                 Galería de Licencia
               </h2>
               <div className="flex justify-around">
-                <div className="w-60 h-60 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">
-                  IMG
-                </div>
-                <div className="w-60 h-60 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">
-                  IMG
-                </div>
+                {driverData?.anversoUrl ? (
+                  <img
+                    src={driverData.anversoUrl}
+                    alt="Anverso Licencia"
+                    className="w-60 h-60 object-cover rounded shadow"
+                  />
+                ) : (
+                  <div className="w-60 h-60 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">
+                    IMG
+                  </div>
+                )}
+
+                {driverData?.reversoUrl ? (
+                  <img
+                    src={driverData.reversoUrl}
+                    alt="Reverso Licencia"
+                    className="w-60 h-60 object-cover rounded shadow"
+                  />
+                ) : (
+                  <div className="w-60 h-60 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">
+                    IMG
+                  </div>
+                )}
               </div>
               <div className="text-right mt-4">
                 <button
