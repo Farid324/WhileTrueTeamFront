@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavbarPerfilUsuario from "@/app/components/navbar/NavbarPerfilUsuario";
 import PerfilIcon from "@/app/components/Icons/Perfil";
 import UserIcon from "@/app/components/Icons/User";
@@ -10,8 +10,38 @@ import CategoriaIcon from "@/app/components/Icons/Categoria";
 import CalendarIcon from "@/app/components/Icons/Calendar";
 import { SolarGalleryOutline } from "@/app/components/Icons/Gallery";
 
+type DriverData = {
+  usuario: {
+    nombre_completo: string;
+  };
+  sexo: string;
+  telefono: string;
+  nro_licencia: string;
+  categoria: string;
+  fecha_emision: string;
+  fecha_vencimiento: string;
+  anversoUrl: string;
+  reversoUrl: string;
+};
+
 export default function UserPerfilDriver() {
   const [showGallery, setShowGallery] = useState(false);
+  const [driverData, setDriverData] = useState<DriverData | null>(null);
+
+  useEffect(() => {
+    const fetchDriver = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/profile/1", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setDriverData(data);
+      } catch (error) {
+        console.error("Error al cargar datos del driver:", error);
+      }
+    };
+    fetchDriver();
+  }, []);
 
   return (
     <>
@@ -40,8 +70,8 @@ export default function UserPerfilDriver() {
                   <input
                     id="nombre"
                     type="text"
-                    placeholder="Example"
-                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold placeholder:text-gray-400"
+                    value={driverData?.usuario?.nombre_completo || ""}
+                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                     readOnly
                   />
                   <UserIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -54,8 +84,8 @@ export default function UserPerfilDriver() {
                 <input
                   id="sexo"
                   type="text"
-                  placeholder="M o F"
-                  className="w-full py-2 px-4 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold placeholder:text-gray-400"
+                  value={driverData?.sexo || ""}
+                  className="w-full py-2 px-4 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                   readOnly
                 />
               </div>
@@ -67,8 +97,8 @@ export default function UserPerfilDriver() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="77777777"
-                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold placeholder:text-gray-400"
+                  value={driverData?.telefono || ""}
+                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                   readOnly
                 />
                 <PhoneIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -84,8 +114,8 @@ export default function UserPerfilDriver() {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Example"
-                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold placeholder:text-gray-400"
+                    value={driverData?.nro_licencia || ""}
+                    className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                     readOnly
                   />
                   <LicenciaConductorIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -105,8 +135,8 @@ export default function UserPerfilDriver() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="A,B,C,P"
-                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold placeholder:text-gray-400"
+                  value={driverData?.categoria || ""}
+                  className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                   readOnly
                 />
                 <CategoriaIcon className="absolute left-2 top-2.5 w-5 h-5 text-[#11295B]" />
@@ -120,7 +150,7 @@ export default function UserPerfilDriver() {
                 <div className="relative">
                   <input
                     type="date"
-                    placeholder="dd/mm/aaaa"
+                    value={driverData?.fecha_emision?.split("T")[0] || ""}
                     className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                     readOnly
                   />
@@ -132,7 +162,7 @@ export default function UserPerfilDriver() {
                 <div className="relative">
                   <input
                     type="date"
-                    placeholder="dd/mm/aaaa"
+                    value={driverData?.fecha_vencimiento?.split("T")[0] || ""}
                     className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                     readOnly
                   />
