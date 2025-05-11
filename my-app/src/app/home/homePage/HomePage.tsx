@@ -25,10 +25,13 @@ export default function MainHome() {
   } | null>(null);
 
   const [paymentData, setPaymentData] = useState<{
-    cardNumber: string;
-    expiration: string;
-    cvv: string;
-    cardHolder: string;
+    tipo: "card" | "qr" | "cash";
+    cardNumber?: string;
+    expiration?: string;
+    cvv?: string;
+    cardHolder?: string;
+    qrImage?: File | null;
+    efectivoDetalle?: string;
   } | null>(null);
 
   const [showToast, setShowToast] = useState(false);
@@ -60,10 +63,19 @@ export default function MainHome() {
     setActiveModal("paymentData");
   };
 
-  const handlePaymentDataSubmit = (data: { cardNumber: string; expiration: string; cvv: string; cardHolder: string }) => {
-    setPaymentData(data);
-    setActiveModal('completeProfile');
-  };
+  const handlePaymentDataSubmit = (data: {
+  tipo: "card" | "qr" | "cash";
+  cardNumber?: string;
+  expiration?: string;
+  cvv?: string;
+  cardHolder?: string;
+  qrImage?: File | null;
+  efectivoDetalle?: string;
+}) => {
+  setPaymentData(data);
+  setActiveModal('completeProfile');
+};
+
 
 
   const handleRegistrationComplete = () => {
@@ -75,7 +87,9 @@ export default function MainHome() {
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
       <header className="border-t border-b border-[rgba(215, 30, 30, 0.1)] shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
-        <NavbarInicioSesion onBecomeHost={() => setActiveModal('vehicleData')} />
+        <NavbarInicioSesion onBecomeHost={() => setActiveModal('vehicleData')} onBecomeDriver={function (): void {
+          throw new Error('Function not implemented.');
+        } } />
       </header>
 
       <header className="/* headerFilters */">
