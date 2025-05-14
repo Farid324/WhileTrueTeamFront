@@ -68,6 +68,7 @@ export default function UserPerfilPage() {
                   initialValue={user.nombre_completo}
                   campoEnEdicion={campoEnEdicion} // 👈 NUEVO
                   setCampoEnEdicion={setCampoEnEdicion} // 👈 NUEVO
+                  edicionesUsadas={user.ediciones_nombre || 0}
                 />
               )}
 
@@ -90,7 +91,8 @@ export default function UserPerfilPage() {
                   initialValue={user.fecha_nacimiento?.split("T")[0] || ""}
                   campoEnEdicion={campoEnEdicion}
                   setCampoEnEdicion={setCampoEnEdicion}
-                  setFechaVisual={(nuevaFecha) => user.fecha_nacimiento = nuevaFecha} // 👈 si quieres reflejarlo localmente
+                  setFechaVisual={(nuevaFecha) => user.fecha_nacimiento = nuevaFecha}
+                  edicionesUsadas={user.ediciones_fecha || 0} // ✅ CORRECTO
                   />
                 )}
                 </div>
@@ -101,6 +103,7 @@ export default function UserPerfilPage() {
                     initialValue={user.telefono?.toString() || ''}
                     campoEnEdicion={campoEnEdicion} // 👈 NUEVO
                     setCampoEnEdicion={setCampoEnEdicion} // 👈 NUEVO
+                    edicionesUsadas={user.ediciones_telefono || 0}
                   />
                 )}
               </div>
