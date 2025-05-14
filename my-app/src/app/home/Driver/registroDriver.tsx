@@ -397,10 +397,15 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
       setErrorFechaEmision(true);
       setMensajeErrorFechaEmision('La fecha no puede ser posterior a hoy');
       valido = false;
+    } else if (new Date(fechaEmision).getFullYear() > 9999) {
+      setErrorFechaEmision(true);
+      setMensajeErrorFechaEmision('El año no puede exceder los 4 dígitos');
+      valido = false;
     } else {
       setErrorFechaEmision(false);
       setMensajeErrorFechaEmision('');
-    }    
+    }
+
 
     if (!fechaVencimiento) {
       setErrorFechaVencimiento(true);
@@ -410,10 +415,14 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
       setErrorFechaVencimiento(true);
       setMensajeErrorFechaVencimiento('La fecha debe ser posterior a hoy');
       valido = false;
+    } else if (new Date(fechaVencimiento).getFullYear() > 9999) {
+      setErrorFechaVencimiento(true);
+      setMensajeErrorFechaVencimiento('El año no puede exceder los 4 dígitos');
+      valido = false;
     } else {
       setErrorFechaVencimiento(false);
       setMensajeErrorFechaVencimiento('');
-    }    
+    }
 
     if (!anverso) {
       setErrorAnverso('Debe subir la imagen del anverso de la licencia');
@@ -821,16 +830,22 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => {
                     e.preventDefault();
-                    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                      const droppedFile = e.dataTransfer.files[0];
-                      const fakeEvent = {
-                        target: {
-                          files: [droppedFile]
-                        }
-                      } as unknown as React.ChangeEvent<HTMLInputElement>;                      
-                      handleFileChange(fakeEvent, 'anverso');
+                    const file = e.dataTransfer.files?.[0];
+                    if (!file) return;
+
+                    if (file.type !== "image/png") {
+                      setErrorAnverso("Solo se permiten imágenes en formato PNG.");
+                      setAnverso(null);
+                      return;
                     }
+
+                    const fakeEvent = {
+                      target: { files: [file] }
+                    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+                    handleFileChange(fakeEvent, "anverso");
                   }}
+
                 >
                   <span className="text-[#11295B] font-semibold z-10 relative">
                     {anverso ? 'Cambiar imagen' : 'Subir imagen / Arrastrar aquí'}
@@ -863,16 +878,22 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
                   onClick={() => reversoRef.current?.click()}
                   onDrop={(e) => {
                     e.preventDefault();
-                    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                      const droppedFile = e.dataTransfer.files[0];
-                      const fakeEvent = {
-                        target: {
-                          files: [droppedFile]
-                        }
-                      } as unknown as React.ChangeEvent<HTMLInputElement>;
-                      handleFileChange(fakeEvent, 'reverso');
+                    const file = e.dataTransfer.files?.[0];
+                    if (!file) return;
+
+                    if (file.type !== "image/png") {
+                      setErrorReverso("Solo se permiten imágenes en formato PNG.");
+                      setReverso(null);
+                      return;
                     }
+
+                    const fakeEvent = {
+                      target: { files: [file] }
+                    } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+                    handleFileChange(fakeEvent, "reverso");
                   }}
+
                   onDragOver={(e) => e.preventDefault()}
                 >
                   <span className="text-[#11295B] font-semibold z-10 relative">
