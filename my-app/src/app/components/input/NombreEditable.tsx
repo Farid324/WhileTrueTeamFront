@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { MdiPencil } from '@/app/components/Icons/Pencil';
+import  MdiPencil  from '@/app/components/Icons/Pencil';
+
 import { updateUserField } from '@/libs/userService';
 import UserIcon from '@/app/components/Icons/User';
 
@@ -77,7 +78,7 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
       }
       console.log('✅ Nombre actualizado en la base de datos:', response);
 
-      setFeedback('Teléfono actualizado exitosamente.');
+      setFeedback('Nombre actualizado exitosamente.');
 
       if (response.edicionesRestantes === 0) {
         setBloqueado(true);
