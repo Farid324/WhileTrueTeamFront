@@ -27,6 +27,7 @@ type DriverData = {
 
 export default function UserPerfilDriver() {
   const [showGallery, setShowGallery] = useState(false);
+  const [zoomUrl, setZoomUrl] = useState<string | null>(null);
   const [driverData, setDriverData] = useState<DriverData | null>(null);
 
   useEffect(() => {
@@ -194,7 +195,8 @@ export default function UserPerfilDriver() {
                   <img
                     src={driverData.anversoUrl}
                     alt="Anverso Licencia"
-                    className="w-60 h-60 object-cover rounded shadow"
+                    className="w-60 h-60 object-contain rounded shadow cursor-pointer"
+                    onClick={() => setZoomUrl(driverData.anversoUrl)}
                   />
                 ) : (
                   <div className="w-60 h-60 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">
@@ -206,7 +208,8 @@ export default function UserPerfilDriver() {
                   <img
                     src={driverData.reversoUrl}
                     alt="Reverso Licencia"
-                    className="w-60 h-60 object-cover rounded shadow"
+                    className="w-60 h-60 object-contain rounded shadow cursor-pointer"
+                    onClick={() => setZoomUrl(driverData.reversoUrl)}
                   />
                 ) : (
                   <div className="w-60 h-60 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl">
@@ -223,6 +226,20 @@ export default function UserPerfilDriver() {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Modal de zoom de imagen */}
+        {zoomUrl && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999]"
+            onClick={() => setZoomUrl(null)}
+          >
+            <img
+              src={zoomUrl}
+              alt="Imagen ampliada"
+              className="max-w-[90vw] max-h-[90vh] object-contain rounded shadow-lg"
+            />
           </div>
         )}
       </main>
