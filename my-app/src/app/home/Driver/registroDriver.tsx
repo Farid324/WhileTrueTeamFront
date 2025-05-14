@@ -393,36 +393,44 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
       setErrorFechaEmision(true);
       setMensajeErrorFechaEmision('Seleccione una fecha');
       valido = false;
-    } else if (!validarFechaEmision(fechaEmision)) {
-      setErrorFechaEmision(true);
-      setMensajeErrorFechaEmision('La fecha no puede ser posterior a hoy');
-      valido = false;
-    } else if (new Date(fechaEmision).getFullYear() > 9999) {
-      setErrorFechaEmision(true);
-      setMensajeErrorFechaEmision('El año no puede exceder los 4 dígitos');
-      valido = false;
     } else {
-      setErrorFechaEmision(false);
-      setMensajeErrorFechaEmision('');
+      const añoEmision = new Date(fechaEmision).getFullYear();
+      if (añoEmision > 9999) {
+        setErrorFechaEmision(true);
+        setMensajeErrorFechaEmision('El año no puede exceder 9999');
+        valido = false;
+      } else if (!validarFechaEmision(fechaEmision)) {
+        setErrorFechaEmision(true);
+        setMensajeErrorFechaEmision('La fecha no puede ser posterior a hoy');
+        valido = false;
+      } else {
+        setErrorFechaEmision(false);
+        setMensajeErrorFechaEmision('');
+      }
     }
+
 
 
     if (!fechaVencimiento) {
       setErrorFechaVencimiento(true);
       setMensajeErrorFechaVencimiento('Seleccione una fecha');
       valido = false;
-    } else if (!validarFechaVencimiento(fechaVencimiento)) {
-      setErrorFechaVencimiento(true);
-      setMensajeErrorFechaVencimiento('La fecha debe ser posterior a hoy');
-      valido = false;
-    } else if (new Date(fechaVencimiento).getFullYear() > 9999) {
-      setErrorFechaVencimiento(true);
-      setMensajeErrorFechaVencimiento('El año no puede exceder los 4 dígitos');
-      valido = false;
     } else {
-      setErrorFechaVencimiento(false);
-      setMensajeErrorFechaVencimiento('');
+      const añoVencimiento = new Date(fechaVencimiento).getFullYear();
+      if (añoVencimiento > 9999) {
+        setErrorFechaVencimiento(true);
+        setMensajeErrorFechaVencimiento('El año no puede exceder 9999');
+        valido = false;
+      } else if (!validarFechaVencimiento(fechaVencimiento)) {
+        setErrorFechaVencimiento(true);
+        setMensajeErrorFechaVencimiento('La fecha debe ser posterior a hoy');
+        valido = false;
+      } else {
+        setErrorFechaVencimiento(false);
+        setMensajeErrorFechaVencimiento('');
+      }
     }
+
 
     if (!anverso) {
       setErrorAnverso('Debe subir la imagen del anverso de la licencia');
@@ -480,6 +488,22 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
       localStorage.setItem("registroDriverPaso1", JSON.stringify(data));
       router.push("/home/Driver/seleccionarRenter");
     };
+
+    const limitarAñoMaximo = (e: React.FormEvent<HTMLInputElement>) => {
+      const input = e.currentTarget;
+      const value = input.value;
+
+      const partes = value.split("-");
+      if (partes.length === 3) {
+        const año = partes[0];
+        if (año.length > 4 || parseInt(año) > 2099) {
+          input.value = "0000-01-01"; 
+          const changeEvent = new Event('input', { bubbles: true });
+          input.dispatchEvent(changeEvent);
+        }
+      }
+    };
+
 
 
   return (
@@ -729,6 +753,9 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
                 </div>
                 <input
                   type="date"
+                  min="1900-01-01"
+                  max="2099-12-31"
+                  onInput={limitarAñoMaximo}
                   id="fechaEmision"
                   value={fechaEmision}
                   onChange={(e) => {
@@ -775,6 +802,9 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
                 </div>
                 <input
                   type="date"
+                  min="1900-01-01"
+                  max="2099-12-31"
+                  onInput={limitarAñoMaximo}
                   id="fechaVencimiento"
                   name="fechaVencimiento"
                   value={fechaVencimiento}
