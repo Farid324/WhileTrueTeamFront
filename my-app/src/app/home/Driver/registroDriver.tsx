@@ -87,7 +87,10 @@ export default function registroDriver() {
   
 
   useEffect(() => {
-    const savedData = localStorage.getItem("registroDriverPaso1");
+    const email = user?.email;
+    if (!email) return;
+
+    const savedData = localStorage.getItem(`registroDriverPaso1_${email}`);
     if (savedData) {
       const parsed = JSON.parse(savedData);
       setSexo(parsed.sexo || '');
@@ -96,9 +99,9 @@ export default function registroDriver() {
       setCategoriaLicencia(parsed.categoria || '');
       setFechaEmisionState(parsed.fecha_emision || '');
       setFechaVencimientoState(parsed.fecha_vencimiento || '');
-      
     }
-  }, []);
+  }, [user]);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -376,6 +379,10 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
       setErrorLicencia(true);
       setMensajeErrorLicencia('Este campo no puede estar vacío');
       valido = false;
+    } else if (NroLicencia.length < 6) {
+      setErrorLicencia(true);
+      setMensajeErrorLicencia('Debe tener mínimo 6 dígitos');
+      valido = false;
     } else if (!validarNroLicencia(NroLicencia)) {
       setErrorLicencia(true);
       setMensajeErrorLicencia('Debe tener hasta 8 caracteres alfanuméricos');
@@ -383,7 +390,8 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
     } else {
       setErrorLicencia(false);
       setMensajeErrorLicencia('');
-    }    
+    }
+  
 
     if (!categoriaLicencia) {
       setErrorCategoria(true);
@@ -490,7 +498,11 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
         reversoUrl: urlReverso
       };
 
-      localStorage.setItem("registroDriverPaso1", JSON.stringify(data));
+      if (user?.email) {
+        localStorage.setItem(`registroDriverPaso1_${user.email}`, JSON.stringify(data));
+      }
+
+
       router.push("/home/Driver/seleccionarRenter");
     };
 
@@ -967,15 +979,20 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
 
               <div className="flex justify-end gap-8 mt-1 px-6">
                 <button
-                  onClick={() => router.push('/home/homePage')}
-                  className="min-w-[160px] bg-[#E0E0E0] hover:bg-[#d6d6d6] text-[#11295B] font-semibold px-10 py-3 rounded-full transition duration-200 ease-in-out"
+                  onClick={() => {
+                    if (user?.email) {
+                      localStorage.removeItem(`registroDriverPaso1_${user.email}`);
+                    }
+                    router.push('/home/homePage');
+                  }}
+                  className="px-6 py-2 bg-[#E0E0E0] text-[#11295B] rounded-full text-sm font-semibold hover:bg-[#d6d6d6] transition"
                 >
                   Atrás
                 </button>
 
                 <button
                   onClick={handleSubmit}
-                  className="min-w-[160px] bg-[#FFD180] hover:bg-[#ffc86c] text-white font-semibold px-10 py-3 rounded-full transition duration-200 ease-in-out"
+                  className="px-6 py-2 bg-[#FFA800] text-white rounded-full text-sm font-semibold hover:bg-[#e19900] transition"
                 >
                   Continuar
                 </button>
