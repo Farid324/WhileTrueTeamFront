@@ -1,7 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
+
 import { useUser } from '@/hooks/useUser';
+
 import Link from 'next/link';
 
 
@@ -92,6 +95,7 @@ export default function NavbarInicioSesion({ onBecomeHost, onBecomeDriver }: { o
               )}
           </div>
 
+            {/* Componente menú */}
           {isMenuOpen && (
             <ProfileMenu onLogout={handleLogout} router={router} onBecomeHost={onBecomeHost} onBecomeDriver={onBecomeDriver} user={user}/>
           )}
