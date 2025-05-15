@@ -96,10 +96,8 @@ export default function registroDriver() {
   
 
   useEffect(() => {
-    const email = user?.email;
-    if (!email) return;
+    const savedData = localStorage.getItem("registroDriverPaso1");
 
-    const savedData = localStorage.getItem(`registroDriverPaso1_${email}`);
     if (savedData) {
       const parsed = JSON.parse(savedData);
       setSexo(parsed.sexo || '');
@@ -508,7 +506,7 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
       };
 
       if (user?.email) {
-        localStorage.setItem(`registroDriverPaso1_${user.email}`, JSON.stringify(data));
+        localStorage.setItem("registroDriverPaso1", JSON.stringify(data));
       }
 
 
@@ -1010,9 +1008,7 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
               <div className="flex justify-end gap-8 mt-1 px-6">
                 <button
                   onClick={() => {
-                    if (user?.email) {
-                      localStorage.removeItem(`registroDriverPaso1_${user.email}`);
-                    }
+                    localStorage.removeItem("registroDriverPaso1");
                     router.push('/home/homePage');
                   }}
                   className="px-6 py-2 bg-[#E0E0E0] text-[#11295B] rounded-full text-sm font-semibold hover:bg-[#d6d6d6] transition"
