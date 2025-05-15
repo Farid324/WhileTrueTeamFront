@@ -10,6 +10,7 @@ interface User {
   ediciones_nombre: number; // 👈 AÑADIR ESTO
   ediciones_telefono: number;
   ediciones_fecha: number;
+  host: boolean
 }
 
 export const useUser = () => {
