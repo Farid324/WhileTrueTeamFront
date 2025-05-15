@@ -9,6 +9,7 @@ import LicenciaConductorIcon from "@/app/components/Icons/LicenciaConductor";
 import CategoriaIcon from "@/app/components/Icons/Categoria";
 import CalendarIcon from "@/app/components/Icons/Calendar";
 import { SolarGalleryOutline } from "@/app/components/Icons/Gallery";
+import { useUser } from '@/hooks/useUser';
 
 // Tipo para los datos del driver
 type DriverData = {
@@ -32,6 +33,9 @@ export default function UserPerfilDriver() {
   const [driverData, setDriverData] = useState<DriverData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const user = useUser();
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -71,13 +75,21 @@ export default function UserPerfilDriver() {
     fetchDriver();
   }, []);
 
+  useEffect(() => {
+    if (user?.foto_perfil) {
+      setImagePreviewUrl(`http://localhost:3001${user.foto_perfil}`);
+      console.log('✅ Foto cargada:', `http://localhost:3001${user.foto_perfil}`);
+    }
+  }, [user]);
+  if (!user) return null;
+
   return (
     <>
       <NavbarPerfilUsuario />
 
       <main className="min-h-screen bg-white text-[#11295B] px-10 py-10">
         <h1 className="text-center text-2xl font-bold mb-10">
-          INFORMACION PERSONAL DRIVER
+          INFORMACION PERSONAL CONDUCTOR
         </h1>
 
         {loading ? (
@@ -86,18 +98,22 @@ export default function UserPerfilDriver() {
           <p className="text-center text-red-500 text-lg">{error}</p>
         ) : (
           driverData && (
-            <div className="flex flex-col md:flex-row justify-start gap-10">
+            <main className="min-h-screen bg-white text-gray-900 flex justify-center px-4 sm:px-6 lg:px-6 py-6">
+              <div className="flex flex-col md:flex-row w-full max-w-5xl items-start gap-10 mt-1">
+      
               {/* Imagen de perfil */}
-              <div className="bg-gray-100 border border-black rounded-2xl flex items-center justify-center w-[160px] h-[160px] ml-4 overflow-hidden">
-                {driverData.usuario.foto_perfil ? (
-                  <img
-                    src={`http://localhost:3001/uploads/${driverData.usuario.foto_perfil}`}
-                    alt="Foto de perfil"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <PerfilIcon className="w-24 h-24 text-black" />
-                )}
+              <div className="w-full md:w-[160px] flex-shrink-0 flex justify-center md:justify-start">
+                <div className="border-2 border-gray-300 rounded-2xl overflow-hidden w-[120px] h-[120px]">
+                  {imagePreviewUrl ? (
+                    <img
+                      src={imagePreviewUrl}
+                      alt="Foto de perfil"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <PerfilIcon className="w-full h-full text-gray-500 p-4" />
+                  )}
+                </div>
               </div>
 
               {/* Formulario */}
@@ -214,6 +230,7 @@ export default function UserPerfilDriver() {
                 </div>
               </div>
             </div>
+          </main>
           )
         )}
 
