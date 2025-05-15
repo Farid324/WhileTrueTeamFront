@@ -13,9 +13,13 @@ import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleData
 import PaymentModal from '@/app/components/auth/authRegistroHost/PaymentModal';
 import CompleteProfileModal from '@/app/components/auth/authRegistroHost/CompleteProfileModal';
 import SuccessModal from '@/app/home/Driver/SuccesModal/successModal';
+import ModalLoginExitoso from '@/app/components/modals/ModalLoginExitoso';
+
 
 export default function MainHome() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | 'vehicleData' | 'paymentData' | 'completeProfile' | 'succesModal' | null>(null);
+
+  const [showLoginSuccessModal, setShowLoginSuccessModal] = useState(false);
 
   const [vehicleData, setVehicleData] = useState<{
     placa: string;
@@ -46,6 +50,14 @@ export default function MainHome() {
       router.push('/');
     }
   }, [user, router]);
+  
+  useEffect(() => {
+    const loginSuccess = localStorage.getItem('loginSuccess');
+    if (loginSuccess === 'true') {
+      setShowLoginSuccessModal(true);
+      localStorage.removeItem('loginSuccess');
+    }
+  }, []);
 
   const displayToast = (message: string) => {
     setToastMessage(message);
@@ -154,6 +166,9 @@ export default function MainHome() {
         <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[9999]">
           {toastMessage}
         </div>
+      )}
+      {showLoginSuccessModal && (
+        <ModalLoginExitoso onClose={() => setShowLoginSuccessModal(false)} />
       )}
     </div>
   );
