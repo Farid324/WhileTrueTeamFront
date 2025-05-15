@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
+
 import { useUser } from '@/hooks/useUser';
+
 import Link from 'next/link';
 
 export default function NavbarInicioSesion({ onBecomeHost, onBecomeDriver }: { onBecomeHost: () => void; onBecomeDriver: () => void; }) {
@@ -87,6 +90,7 @@ export default function NavbarInicioSesion({ onBecomeHost, onBecomeDriver }: { o
             )}
           </div>
 
+            {/* Componente menú */}
           {isMenuOpen && (
             <ProfileMenu 
               onLogout={handleLogout} 
@@ -133,12 +137,14 @@ function ProfileMenu({
       </button>
       )}  
 
+      {!user?.host && (
       <button 
         className="block w-full text-left px-4 py-2 text-[var(--naranja)] hover:bg-[var(--naranja-46)]"
         onClick={onBecomeHost}
       >
         <h2 className="hover:text-[var(--blanco)]">Quiero ser Host</h2>
       </button>
+      )}
 
       {!user?.driverBool && (
       <button 

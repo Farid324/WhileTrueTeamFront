@@ -12,6 +12,7 @@ interface User {
   ediciones_fecha: number;
 
   driverBool: boolean;
+  host: boolean
 }
 
 export const useUser = () => {

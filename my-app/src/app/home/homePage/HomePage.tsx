@@ -13,9 +13,13 @@ import RegisterModal from '@/app/components/auth/authregistro/RegisterModal';
 import VehicleDataModal from '@/app/components/auth/authRegistroHost/VehicleDataModal';
 import PaymentModal from '@/app/components/auth/authRegistroHost/PaymentModal';
 import CompleteProfileModal from '@/app/components/auth/authRegistroHost/CompleteProfileModal';
+import ModalLoginExitoso from '@/app/components/modals/ModalLoginExitoso';
+
 
 export default function MainHome() {
   const [activeModal, setActiveModal] = useState<'login' | 'register' | 'vehicleData' | 'paymentData' | 'completeProfile' | 'succesModal' | null>(null);
+
+  const [showLoginSuccessModal, setShowLoginSuccessModal] = useState(false);
 
   const [vehicleData, setVehicleData] = useState<{
     placa: string;
@@ -46,6 +50,14 @@ export default function MainHome() {
       router.push('/');
     }
   }, [user, router]);
+  
+  useEffect(() => {
+    const loginSuccess = localStorage.getItem('loginSuccess');
+    if (loginSuccess === 'true') {
+      setShowLoginSuccessModal(true);
+      localStorage.removeItem('loginSuccess');
+    }
+  }, []);
 
   const displayToast = (message: string) => {
     setToastMessage(message);
@@ -76,8 +88,6 @@ export default function MainHome() {
   setActiveModal('completeProfile');
 };
 
-
-
   const handleRegistrationComplete = () => {
     setActiveModal(null);
     displayToast('¡Tu registro como host fue completado exitosamente!');
@@ -98,7 +108,6 @@ export default function MainHome() {
   }, [searchParams]);
 
   
-
   return (
     <div className="flex flex-col min-h-screen bg-[var(--background-principal)]">
       <header className="border-t border-b border-[rgba(215, 30, 30, 0.1)] shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
@@ -216,6 +225,9 @@ export default function MainHome() {
 
 
       
+      {showLoginSuccessModal && (
+        <ModalLoginExitoso onClose={() => setShowLoginSuccessModal(false)} />
+      )}
     </div>
   );
 }
