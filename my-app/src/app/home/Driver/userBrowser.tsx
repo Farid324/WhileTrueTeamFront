@@ -145,9 +145,9 @@ const UserBrowser = () => {
       localStorage.setItem("registroExitosoDriver", "true");
 
       // ✅ Redirección automática
-      router.push("/home/homePage");
+      router.push("/home/homePage?registroExitoso=1");
       // setShowSuccessModal(true); 
-      alert("Driver registrado con éxito ✅");
+      //alert("Driver registrado con éxito ✅");
 
       //window.location.href = "/home/homePage?success=driver";
 
