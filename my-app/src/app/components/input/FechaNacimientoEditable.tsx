@@ -1,12 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import  MdiPencil  from '@/app/components/Icons/Pencil';
-=======
 import {MdiPencil }  from '@/app/components/Icons/Pencil';
->>>>>>> c97254601c0f1f1507c5c6864529eba9f95c6591
-
+//import {MdiPencil }  from '@/app/components/Icons/Pencil';
 import CalendarIcon from '@/app/components/Icons/Calendar';
 import { updateUserField } from '@/libs/userService';
 

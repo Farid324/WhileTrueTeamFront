@@ -74,6 +74,8 @@ export default function registroDriver() {
   const perfilRef = useRef<HTMLInputElement>(null);
 
   const user = useUser();
+  //const [telefonoUsuario, setTelefonoUsuario] = useState('');
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -84,6 +86,13 @@ export default function registroDriver() {
       setIsLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (user?.telefono) {
+      setTelefonoUsuario(String(user.telefono)); // fuerza a texto
+    }
+  }, [user]);
+
   
 
   useEffect(() => {
@@ -619,50 +628,71 @@ const removeFile = (tipo: 'anverso' | 'reverso' | 'perfil') => {
               <div className="absolute left-4 top-4">
                 <Phone className={`w-6 h-6 ${errorTelefono ? 'text-red-500' : 'text-[#11295B]'}`} />
               </div>
-              <input
-                type="text"
-                id="telefono"
-                name="telefono"
-                value={telefonoUsuario}
-                placeholder="77777777"
-                onChange={(e) => {
-                  const input = e.target.value;
 
-                  if (!/^\d*$/.test(input)) return;
+              {user?.telefono !== undefined && user?.telefono !== null ? (
+                // 📱 Teléfono ya registrado → solo mostrarlo, desactivado, sin fondo gris
+                <>
+                  <input
+                    type="text"
+                    value={String(user.telefono)}
+                    disabled
+                    className="w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50"
+                  />
+                  <span className="absolute left-12 top-[0.4rem] text-xs font-bold px-1 text-[#11295B]">
+                    Teléfono
+                  </span>
+                </>
+              ) : (
+                // 🆕 No hay teléfono → input editable con validaciones
+                <>
+                  <input
+                    type="text"
+                    id="telefono"
+                    name="telefono"
+                    value={telefonoUsuario}
+                    placeholder="77777777"
+                    onChange={(e) => {
+                      const input = e.target.value;
 
-                  if (input.length > 8) return;
+                      if (!/^\d*$/.test(input)) return;
+                      if (input.length > 8) return;
+                      if (input.length === 1 && !/^[67]$/.test(input)) return;
 
-                  if (input.length === 1 && !/^[67]$/.test(input)) return;
+                      setTelefonoUsuario(input);
 
-                  setTelefonoUsuario(input);
-
-                  if (input === '') {
-                    setErrorTelefono(true);
-                    setMensajeErrorTelefono('Este campo no puede estar vacío');
-                  } else if (!/^[67]/.test(input)) {
-                    setErrorTelefono(true);
-                    setMensajeErrorTelefono('El número debe comenzar con 6 o 7');
-                  } else if (input.length < 8) {
-                    setErrorTelefono(true);
-                    setMensajeErrorTelefono('El número debe tener exactamente 8 dígitos');
-                  } else {
-                    setErrorTelefono(false);
-                    setMensajeErrorTelefono('');
-                  }
-                }}
-                className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
-                  errorTelefono
-                    ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
-                    : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
-                }`}
-              />
-              {errorTelefono && (
-                <p className="text-sm text-red-500 mt-1">{mensajeErrorTelefono}</p>
+                      if (input === '') {
+                        setErrorTelefono(true);
+                        setMensajeErrorTelefono('Este campo no puede estar vacío');
+                      } else if (!/^[67]/.test(input)) {
+                        setErrorTelefono(true);
+                        setMensajeErrorTelefono('El número debe comenzar con 6 o 7');
+                      } else if (input.length < 8) {
+                        setErrorTelefono(true);
+                        setMensajeErrorTelefono('El número debe tener exactamente 8 dígitos');
+                      } else {
+                        setErrorTelefono(false);
+                        setMensajeErrorTelefono('');
+                      }
+                    }}
+                    className={`w-full pl-12 pr-4 pt-6 pb-2 rounded-lg border focus:outline-none focus:ring-1 ${
+                      errorTelefono
+                        ? 'border-red-500 text-red-500 placeholder:text-red-400 focus:ring-red-500'
+                        : 'border-[#11295B] text-[#11295B] placeholder:text-[#11295B]/50 focus:ring-[#11295B]'
+                    }`}
+                  />
+                  {errorTelefono && (
+                    <p className="text-sm text-red-500 mt-1">{mensajeErrorTelefono}</p>
+                  )}
+                  <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 ${
+                    errorTelefono ? 'text-red-500' : 'text-[#11295B]'
+                  }`}>
+                    Teléfono
+                  </span>
+                </>
               )}
-              <span className={`absolute left-12 top-[0.4rem] text-xs font-bold px-1 ${errorTelefono ? 'text-red-500' : 'text-[#11295B]'}`}>
-                Teléfono
-              </span>
             </div>
+
+
 
 
 
