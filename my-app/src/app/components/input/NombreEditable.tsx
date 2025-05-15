@@ -78,7 +78,7 @@ export default function NombreEditable({ initialValue, campoEnEdicion, setCampoE
       }
       console.log('✅ Nombre actualizado en la base de datos:', response);
 
-      setFeedback('Teléfono actualizado exitosamente.');
+      setFeedback('Nombre actualizado exitosamente.');
 
       if (response.edicionesRestantes === 0) {
         setBloqueado(true);
