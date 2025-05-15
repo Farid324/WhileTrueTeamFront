@@ -155,7 +155,7 @@ export default function UserPerfilDriver() {
                   <div className="relative">
                     <input
                       type="text"
-                      value={driverData.telefono || ""}
+                      value={user.telefono || ""}
                       className="w-full pl-10 py-2 border-2 border-black rounded shadow-[0_4px_2px_-2px_rgba(0,0,0,0.6)] text-[#11295B] font-semibold"
                       readOnly
                     />
