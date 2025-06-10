@@ -56,7 +56,7 @@ class NotificationService {
       
       try {
         console.log(`Intentando conectar SSE para usuario ${this.usuarioId}`);
-        const url = `http://localhost:3001/api/notificaciones/sse/${this.usuarioId}`;
+        const url = `https://site--fronted-redibo--pnmmfvfj8jpw.code.run/api/notificaciones/sse/${this.usuarioId}`;
         console.log('URL de conexión SSE:', url);
         
         this.eventSource = new EventSource(url);

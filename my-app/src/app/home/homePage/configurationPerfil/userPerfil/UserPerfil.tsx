@@ -26,7 +26,7 @@ export default function UserPerfilPage() {
   useEffect(() => {
     if (user?.fotoPerfil) {
       setImagePreviewUrl(user.fotoPerfil);
-      console.log('✅ Foto cargada:', `http://localhost:3001${user.fotoPerfil}`);
+      console.log('✅ Foto cargada:', `https://site--fronted-redibo--pnmmfvfj8jpw.code.run${user.fotoPerfil}`);
     }
   }, [user]);
   if (!user) return null;

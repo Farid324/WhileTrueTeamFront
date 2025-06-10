@@ -17,7 +17,7 @@ export const useDrivers = () => {
       if (!token) return;
 
       try {
-        const res = await fetch('http://localhost:3001/api/drivers-by-renter', {
+        const res = await fetch('https://site--fronted-redibo--pnmmfvfj8jpw.code.run/api/drivers-by-renter', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

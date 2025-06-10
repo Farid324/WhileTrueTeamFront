@@ -322,7 +322,7 @@ export default function UserPerfilDriver() {
       }
 
       try {
-        const response = await fetch("http://localhost:3001/api/driver/renters", {
+        const response = await fetch("https://site--fronted-redibo--pnmmfvfj8jpw.code.run/api/driver/renters", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -387,7 +387,7 @@ export default function UserPerfilDriver() {
           return;
         }
 
-        const res = await fetch("http://localhost:3001/api/profile", {
+        const res = await fetch("https://site--fronted-redibo--pnmmfvfj8jpw.code.run/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -523,7 +523,7 @@ export default function UserPerfilDriver() {
         formData.append('reverso', reversoFile);
       }
 
-      const res = await fetch("http://localhost:3001/api/profile", {
+      const res = await fetch("https://site--fronted-redibo--pnmmfvfj8jpw.code.run/api/profile", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

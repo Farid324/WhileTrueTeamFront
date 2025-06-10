@@ -157,7 +157,7 @@ export default function MainHome(){
           onClose={async () => {
             if (vehicleData?.idAuto) {
               const token = localStorage.getItem("token");
-              await fetch(`http://localhost:3001/api/autos/eliminar-vehiculo/${vehicleData.idAuto}`, {
+              await fetch(`https://site--fronted-redibo--pnmmfvfj8jpw.code.run/api/autos/eliminar-vehiculo/${vehicleData.idAuto}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
               });
