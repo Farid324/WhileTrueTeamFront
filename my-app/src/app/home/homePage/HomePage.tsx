@@ -147,7 +147,7 @@ export default function MainHome(){
       {activeModal === 'vehicleData' && (
         <VehicleDataModal
           onNext={handleVehicleDataSubmit}
-          onClose={() => setActiveModal(null)}
+          onClose={async () => setActiveModal(null)}
         />
       )}
 
